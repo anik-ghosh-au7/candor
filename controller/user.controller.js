@@ -9,9 +9,6 @@ const user_controller = {
     createUser: async (req, res) => {
     
     const errors = validationResult(req);
-
-    console.log(errors);
-    console.log('inside controller');
     
     if (!errors.isEmpty()) {
         return res.status(422).json({errors: errors.array()});
@@ -21,7 +18,9 @@ const user_controller = {
         let hashed_password = await bcrypt.hash(req.body.password, 5);
         let entry = new User({
             username: req.body.username,
-            password: hashed_password
+            password: hashed_password,
+            email: req.body.email,
+            phone: req.body.phone
         });
         entry.save(function (err) {
             if (err) {

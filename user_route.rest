@@ -11,3 +11,17 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/
+
+###
+
+POST http://localhost:3000/users/createuser
+Content-Type: application/json
+
+{
+    "username": "anik_ghosh",
+    "password": "helloworld",
+    "email": "anik@gmail.com",
+    "phone": 9809809800
+}
+
+###
