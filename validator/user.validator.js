@@ -16,18 +16,18 @@ const User = require('../model/user.model');
 //         };
 //     });
 // }
-const is_unique = (data,type) => {
+const is_unique = (data, type) => {
     if (type === 'email') {
-        obj = {email:data};
+        obj = { email:data };
     } else if (type === 'username') {
-        obj = {username:data};
+        obj = { username:data };
     }
     User.findOne(obj, (err, data) => {
         if (err) {
             // Internal server error
             res.status(500).send({msg: "Internal Server Error"});
         } else {
-            if (!data) {
+            if (data) {
                 return false;
             }
             else {
@@ -41,7 +41,7 @@ const user_validator = {};
 user_validator.check_username = () => {
     return check('username').not().isEmpty().custom(username => {
         if (!is_unique(username,'username')) {
-            throw new Error('Username already taken')
+            return new Error('Username already taken')
           }
     })
 }
@@ -49,7 +49,7 @@ user_validator.check_username = () => {
 user_validator.check_email = () => {
     return check('email').not().isEmpty().isEmail().custom(email => {
         if (!is_unique(email,'email')) {
-        throw new Error('Email already registered')
+        return new Error('Email already registered')
       }
     })
 }
