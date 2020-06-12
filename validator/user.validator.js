@@ -40,16 +40,18 @@ const user_validator = {};
 
 user_validator.check_username = () => {
     return check('username').not().isEmpty().custom(username => {
-        if (!is_unique(username,'username')) {
-            return new Error('Username already taken')
+        if (is_unique(username,'username') === false) {
+            console.log('1-->', is_unique(username,'username'));
+            throw new Error('Username already taken')
           }
     })
 }
 
 user_validator.check_email = () => {
     return check('email').not().isEmpty().isEmail().custom(email => {
-        if (!is_unique(email,'email')) {
-        return new Error('Email already registered')
+        if (is_unique(email,'email') === false) {
+            console.log('2-->', is_unique(email,'email'));
+        throw new Error('Email already registered')
       }
     })
 }

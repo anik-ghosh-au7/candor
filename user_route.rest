@@ -7,3 +7,7 @@ Content-Type: application/json
     "email": "atul@gmail.com",
     "phone": 9809809800
 }
+
+###
+
+GET http://localhost:3000/

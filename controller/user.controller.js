@@ -9,6 +9,9 @@ const user_controller = {
     createUser: async (req, res) => {
     
     const errors = validationResult(req);
+
+    console.log(errors);
+    console.log('inside controller');
     
     if (!errors.isEmpty()) {
         return res.status(422).json({errors: errors.array()});
