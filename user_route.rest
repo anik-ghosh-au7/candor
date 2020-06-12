@@ -25,3 +25,13 @@ Content-Type: application/json
 }
 
 ###
+
+POST http://localhost:3000/users/createuser
+Content-Type: application/json
+
+{
+    "username": "ghosh",
+    "password": "anik",
+    "email": "ghosh@gmail.com",
+    "phone": 9809809800
+}
