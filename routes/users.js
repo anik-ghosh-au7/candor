@@ -38,7 +38,7 @@ router.post('/createuser',authenticateTokenLogin, [userValidator.check_username(
 
 router.post('/login',authenticateTokenLogin, user_controller.login);
 
-router.get('/logout',user_controller.logout);
+// router.get('/logout',user_controller.logout);
 
 // router.post('/getposts', authenticateToken, user_controller.getposts)
 
