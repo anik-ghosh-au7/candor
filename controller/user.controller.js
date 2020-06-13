@@ -30,7 +30,7 @@ const user_controller = {
                 res.status(406).send(err.message);
             } else {
                 // created
-                res.status(201).send('User created successfully');
+                res.render('login');
             }
     });
     } catch {
@@ -55,8 +55,8 @@ const user_controller = {
                         if (await bcrypt.compare(password, data.password)) {
                             const accessToken = jwt.sign({name: username}, 'verysecretkey')
                             // res.status(200).json({accessToken});
-                            res.status(200).send({token: accessToken});
                             res.cookie('awtToken',accessToken, { maxAge: 900000, httpOnly: true })
+                            return res.redirect('/users/loginPage');
                         } else {
                             res.status(401).send('Unauthorized access');
                         }
@@ -72,30 +72,24 @@ const user_controller = {
         });
     },
 
-    // logout:(req,res)=>{
-    //     req.
-    //
-    // }
+    loginPage:(req,res)=>{
+        console.log('loginRedirect',req.user)
+        if(req.user){
 
-    // getposts: (req, res) => {
-    //     let username = req.user.name;
-    //     Todo.find({username}, (err, data) => {
-    //         if (err) {
-    //             // Internal server error
-    //             res.status(500).send({msg: "Internal Server Error"});
-    //         } else {
-    //             // OK
-    //             if (data.length !== 0) {
-    //                 // ok
-    //                 res.status(200).send(data)
-    //             }
-    //             else {
-    //                 // no data
-    //                 res.status(204).send(data);
-    //             }
-    //         };
-    //     });
-    // }
+            return res.redirect('/');
+        }
+        res.render('login');
+    },
+    signPage:(req,res)=>{
+        if(req.user){
+            return res.redirect('/');
+        }
+        res.render('signUp');
+    },
+    logout:(req,res)=>{
+        res.clearCookie('awtToken')
+        res.redirect('/users/loginPage')
+    }
 };
 
 module.exports = user_controller;

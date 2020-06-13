@@ -9,13 +9,14 @@ const authenticateToken = (req, res, next) => {
   jwt.verify(token, 'verysecretkey', (err, user) => {
     if (err) return res.status(403).send({msg: 'Unauthorized Forbidden'});
     req.user = user;
+    console.log('auth',user);
     next()
   });
 };
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.send(req.user);
+router.get('/',authenticateToken, function(req, res, next) {
+  res.render('home',req.user);
 });
 
 router.get('/webpage/:url',authenticateToken, function(req, res, next) {
