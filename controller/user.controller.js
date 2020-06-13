@@ -55,7 +55,7 @@ const user_controller = {
                         if (await bcrypt.compare(password, data.password)) {
                             const accessToken = jwt.sign({name: username}, 'verysecretkey')
                             // res.status(200).json({accessToken});
-                            res.cookie('awtToken',accessToken, { maxAge: 900000, httpOnly: true})
+                            res.cookie('awtToken',accessToken, { maxAge: 900000, httpOnly: true, sameSite: 'strict', secure: true});
                             return res.redirect('/');
                         } else {
                             res.status(401).send('Unauthorized access');
