@@ -5,8 +5,7 @@ require('dotenv').config();
 const userValidator = require('../validator/user.validator');
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = req.cookies['awtToken'];
   if (!token) res.status(401).send({msg: 'Unauthorized Access'});
 
   jwt.verify(token, process.env.jwt_key, (err, user) => {
@@ -16,8 +15,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 const authenticateTokenLogin = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = req.cookies['awtToken'];
   if (!token) {
     next()
   }else{
@@ -37,6 +35,8 @@ const router = express.Router();
 router.post('/createuser',authenticateTokenLogin, [userValidator.check_username(), userValidator.check_email(), userValidator.check_password(), userValidator.check_phone()], user_controller.createUser);
 
 router.post('/login',authenticateTokenLogin, user_controller.login);
+
+router.get('/login',authenticateTokenLogin, user_controller.login);
 
 // router.get('/logout',user_controller.logout);
 

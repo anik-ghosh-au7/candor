@@ -1,5 +1,4 @@
 const User = require('../model/user.model');
-// const Todo = require('../model/todo.model');
 const { validationResult } = require('express-validator');
 const  bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -57,6 +56,7 @@ const user_controller = {
                             const accessToken = jwt.sign({name: username}, 'verysecretkey')
                             // res.status(200).json({accessToken});
                             res.status(200).send({token: accessToken});
+                            res.cookie('awtToken',accessToken, { maxAge: 900000, httpOnly: true })
                         } else {
                             res.status(401).send('Unauthorized access');
                         }
