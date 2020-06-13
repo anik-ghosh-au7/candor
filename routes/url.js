@@ -4,8 +4,9 @@ var jwt = require('jsonwebtoken');
 
 const authenticateToken = (req, res, next) => {
   const token = req.cookies['awtToken'];
-  if (!token) res.status(401).send({msg: 'Unauthorized Access'});
-
+  if (!token) {
+    return res.redirect('/users/loginPage');
+  }
   jwt.verify(token, 'verysecretkey', (err, user) => {
     if (err) return res.status(403).send({msg: 'Unauthorized Forbidden'});
     req.user = user;
