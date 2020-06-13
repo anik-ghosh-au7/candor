@@ -7,9 +7,12 @@ const jwt = require('jsonwebtoken');
 const user_controller = {
 
     createUser: async (req, res) => {
-    
+        if(req.user){
+            return res.redirect('/');
+        }
+
     const errors = validationResult(req);
-    
+
     if (!errors.isEmpty()) {
         return res.status(422).json({errors: errors.array()});
     };
@@ -37,6 +40,9 @@ const user_controller = {
     },
 
     login: (req, res) => {
+        if(req.user){
+            return res.redirect('/');
+        }
         let username = req.body.username;
         let password = req.body.password;
         User.findOne({username}, async (err, data) => {
@@ -65,6 +71,11 @@ const user_controller = {
             };
         });
     },
+
+    // logout:(req,res)=>{
+    //     req.
+    //
+    // }
 
     // getposts: (req, res) => {
     //     let username = req.user.name;

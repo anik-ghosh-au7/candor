@@ -16,7 +16,7 @@ const authenticateToken = (req, res, next) => {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.send(req.user);
 });
 
 router.get('/webpage/:url',authenticateToken, function(req, res, next) {

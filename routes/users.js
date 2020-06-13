@@ -15,13 +15,30 @@ const authenticateToken = (req, res, next) => {
     next()
   });
 };
+const authenticateTokenLogin = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    next()
+  }else{
+    jwt.verify(token, process.env.jwt_key, (err, user) => {
+    if (err) return res.status(403).send({msg: 'Unauthorized Forbidden'});
+    req.user = user;
+    next()
+  });
+  }
+
+
+};
 
 const router = express.Router();
 
 
-router.post('/createuser', [userValidator.check_username(), userValidator.check_email(), userValidator.check_password(), userValidator.check_phone()], user_controller.createUser);
+router.post('/createuser',authenticateTokenLogin, [userValidator.check_username(), userValidator.check_email(), userValidator.check_password(), userValidator.check_phone()], user_controller.createUser);
 
-router.post('/login', user_controller.login);
+router.post('/login',authenticateTokenLogin, user_controller.login);
+
+router.get('/logout',user_controller.logout);
 
 // router.post('/getposts', authenticateToken, user_controller.getposts)
 

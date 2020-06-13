@@ -1,2 +1,4 @@
 POST http://localhost:3000/users/getposts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2hvc2hBbmlrIiwiaWF0IjoxNTkxNjI4MTgwfQ.q-cd58Y4i5dk2S9bntuCoRRRg6cdBWqyeNBNON-U2mY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYW5payIsImlhdCI6MTU5MjAyOTY3M30.Aee6Kit4f04mUXYrm3d1NvosTRZebGrGbwfqoKWnud4"
+
+

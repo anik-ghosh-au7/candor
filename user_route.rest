@@ -44,7 +44,7 @@ Content-Type: application/json
 {
     "username": "anik",
     "password": "anik",
-    "email": "hello@gmail.com",
+    "email": "helloo@gmail.com",
     "phone": 9809809800
 }
 
@@ -67,3 +67,5 @@ Content-Type: application/json
     "username": "anik",
     "password": "anikgh"
 }
+
+###
