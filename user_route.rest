@@ -30,44 +30,40 @@ POST http://localhost:3000/users/createuser
 Content-Type: application/json
 
 {
-    "username": "ravi",
-    "password": "helloworld",
-    "email": "ravi@gmail.com",
-    "phone": 980943234
+    "username": "ghosh",
+    "password": "anik",
+    "email": "ghosh@gmail.com",
+    "phone": 9809809800
 }
 
 ###
+
 POST http://localhost:3000/users/createuser
 Content-Type: application/json
 
 {
-    "username": "ravi_nagraj",
-    "password": "helloworld",
-    "email": "ravinagraj@gmail.com",
-    "phone": 980943234
+    "username": "anik",
+    "password": "anik",
+    "email": "hello@gmail.com",
+    "phone": 9809809800
 }
 
 ###
-POST http://localhost:3000/users/createuser
+
+POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "username": "aravinaaa",
-    "password": "helloworld",
-    "email": "aravinaaa@gmail.com",
-    "phone": 980943234
+    "username": "anik",
+    "password": "anik"
 }
 
 ###
-POST http://localhost:3000/users/createuser
+
+POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "username": "erahull",
-    "password": "helloworld",
-    "email": "erahull@gmail.com",
-    "phone": 980943234
+    "username": "anik",
+    "password": "anikgh"
 }
-
-###
-
