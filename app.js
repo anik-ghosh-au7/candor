@@ -9,7 +9,7 @@ mongoose.connect('mongodb://localhost/Candor', { useNewUrlParser: true, useUnifi
   .then(console.log('DB connected successfully'))
   .catch(err => console.log(err));
 
-var indexRouter = require('./routes/index');
+var urlRouter = require('./routes/url');
 var usersRouter = require('./routes/users');
 
 var app = express();
@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/', urlRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

@@ -49,10 +49,13 @@ const user_controller = {
                     try {
                         if (await bcrypt.compare(password, data.password)) {
                             const accessToken = jwt.sign({name: username}, 'verysecretkey')
-                            res.status(200).json({accessToken});
+                            // res.status(200).json({accessToken});
+                            res.status(200).send({token: accessToken});
+                        } else {
+                            res.status(401).send('Unauthorized access');
                         }
                     } catch {
-                        res.status(401).send('Unauthorized access');
+                        res.status(400).send('Bad request');
                     }
                 }
                 else {
