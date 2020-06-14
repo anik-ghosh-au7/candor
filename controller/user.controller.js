@@ -90,7 +90,7 @@ const user_controller = {
     },
     logout:(req,res)=>{
         res.clearCookie('awtToken')
-        res.redirect('/users/loginPage')
+        res.render('logged_out')
     }
 };
 

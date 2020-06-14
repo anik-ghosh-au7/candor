@@ -43,6 +43,8 @@ router.get('/signPage',authenticateToken, user_controller.signPage);
 
 router.get('/logout',user_controller.logout);
 
+
+
 // router.post('/getposts', authenticateToken, user_controller.getposts)
 
 module.exports = router;
