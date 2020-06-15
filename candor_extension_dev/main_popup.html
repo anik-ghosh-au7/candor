@@ -107,37 +107,43 @@
         <span id="username"></span>
     </h1>
 </div>
-<div class="modal-content">
-    <p>main popup</p>
+<div class="modal-content" style="text-align:center">
+    <p><span >main popup</span></p>
 </div>
 <div class="modal-icons">
-    <table class="table table-striped">
+    <table class="table table-hover">
         <thead>
-          <tr>
-            <th>CONTEXT</th>
-          </tr>
+        <tr>
+            <th style="text-align:center">CONTEXT</th>
+        </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><form action="http://localhost:3000/users/logout" method="GET" target="_blank">
-                <input type="submit" class="btn btn-primary" value="Questions">
-            </form></td></tr><tr>
-            <td><form action="http://localhost:3000/users/logout" method="GET" target="_blank">
-                <input type="submit" class="btn btn-info" value="Admin">
-            </form></td></tr><tr>
-            <td><form action="http://localhost:3000/users/logout" method="GET" target="_blank">
-                <input type="submit" class="btn btn-success" value="Suggestions">
-            </form></td></tr><tr>
-            <td><form action="http://localhost:3000/users/logout" method="GET" target="_blank">
-                <input type="submit" class="btn btn-warning" value="Other Info">
-            </form></td>
-          </tr>
+        <tr>
+            <td style="text-align:center">
+                <a href="">Questions</a>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center">
+                <a href="">Admin</a>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center">
+                <a href="">Related</a>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center">
+                <a href="">Other</a>
+            </td>
+        </tr>
         </tbody>
-      </table>
-    <div class="flex-container">
+    </table>
+    <div class="flex-container" >
         <form action="http://localhost:3000/users/logout" method="GET" target="_blank">
-            <input type="submit" class="btn btn-info" value="Log Out">
+            <input type="submit" class="btn btn-info" value="Log Out" >
         </form>
-</div>
+    </div>
 </body>
 </html>

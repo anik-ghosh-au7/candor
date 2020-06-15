@@ -20,8 +20,4 @@ router.get('/',authenticateToken, function(req, res, next) {
   res.render('home',req.user);
 });
 
-router.get('/webpage/:url',authenticateToken, function(req, res, next) {
-  res.send(req.params.url,req.user);
-});
-
 module.exports = router;
