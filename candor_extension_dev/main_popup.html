@@ -13,6 +13,7 @@
             integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
             crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <style>
         /* Modal Structure */
 
@@ -110,6 +111,29 @@
     <p>main popup</p>
 </div>
 <div class="modal-icons">
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>CONTEXT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><form action="http://localhost:3000/users/logout" method="GET" target="_blank">
+                <input type="submit" class="btn btn-primary" value="Questions">
+            </form></td></tr><tr>
+            <td><form action="http://localhost:3000/users/logout" method="GET" target="_blank">
+                <input type="submit" class="btn btn-info" value="Admin">
+            </form></td></tr><tr>
+            <td><form action="http://localhost:3000/users/logout" method="GET" target="_blank">
+                <input type="submit" class="btn btn-success" value="Suggestions">
+            </form></td></tr><tr>
+            <td><form action="http://localhost:3000/users/logout" method="GET" target="_blank">
+                <input type="submit" class="btn btn-warning" value="Other Info">
+            </form></td>
+          </tr>
+        </tbody>
+      </table>
     <div class="flex-container">
         <form action="http://localhost:3000/users/logout" method="GET" target="_blank">
             <input type="submit" class="btn btn-info" value="Log Out">
