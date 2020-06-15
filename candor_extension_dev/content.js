@@ -14,3 +14,4 @@ if (currentUrl==='http://localhost:3000/users/logout?'){
     chrome.runtime.sendMessage(
         { payload: 'Change to popup.html: logged out' });
 };
+

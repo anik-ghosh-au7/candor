@@ -19,9 +19,10 @@ const authenticateToken = (req, res, next) => {
 // router.post('/',authenticateToken, );
 // router.get('/',authenticateToken, );
 
-router.get('/:category/:url',authenticateToken, function(req, res, next) {
-  res.send(req.params.url,req.user);
+router.get('/:url/:category',authenticateToken, function(req, res, next) {
+
   console.log(req.params.url,req.user,req.params.category)
+  res.send(req.params.url,req.user,req.params.category);
 });
 
 module.exports = router;
