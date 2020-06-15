@@ -4,10 +4,13 @@ var currentUrl = window.location.href;
 if (currentUrl === 'http://localhost:3000/') {
     var username = document.getElementById("username").innerHTML;
     chrome.storage.local.set({username});
-}
+    chrome.runtime.sendMessage(
+        { payload: 'Change to main_popup.html' });
+};
 
 chrome.storage.local.get('username',(result)=>{console.log(result)});
 if (currentUrl==='http://localhost:3000/users/logout?'){
-    // console.log("Logout route");
     chrome.storage.local.clear();
-}
+    chrome.runtime.sendMessage(
+        { payload: 'Change to popup.html: logged out' });
+};
