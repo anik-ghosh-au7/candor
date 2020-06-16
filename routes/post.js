@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+const { request } = require('express');
 
 const authenticateToken = (req, res, next) => {
   const token = req.cookies['awtToken'];
@@ -19,10 +20,11 @@ const authenticateToken = (req, res, next) => {
 // router.post('/',authenticateToken, );
 // router.get('/',authenticateToken, );
 
-router.get('/:url/:category',authenticateToken, function(req, res, next) {
+router.get('/',authenticateToken, function(req, res, next) {
 
-  console.log(req.params.url,req.user,req.params.category)
-  res.send(req.params.url,req.user,req.params.category);
+  console.log("on server", req.query.url,req.user,req.query.category)
+  // res.status(200).send(req.body.url,req.user,req.body.category);
+  
 });
 
 module.exports = router;
