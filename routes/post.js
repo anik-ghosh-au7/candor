@@ -20,10 +20,11 @@ const authenticateToken = (req, res, next) => {
 // router.post('/',authenticateToken, );
 // router.get('/',authenticateToken, );
 
-router.get('/',authenticateToken, function(req, res, next) {
+router.post('/',authenticateToken, function(req, res, next) {
 
-  console.log("on server", req.query.url,req.user,req.query.category)
-  // res.status(200).send(req.body.url,req.user,req.body.category);
+  console.log("on server", req.body.current_url,req.user,req.body.context);
+  // console.log("request : ", req);
+  res.redirect('/');
   
 });
 

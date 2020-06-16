@@ -20,18 +20,41 @@ function update_links() {
 };
 
 
+// function myFunction(type) {
+//     return () => {
+//         var http = new XMLHttpRequest();
+//         var params = {
+//             url: curr_url,
+//             category: type
+//         }
+//         http.open("POST", server_url, true);
+//         http.setRequestHeader('Content-Type', 'application/json');
+//         http.send(JSON.stringify(params));
+//         http.onload = () => {
+//             console.log(http.responseText);
+//          };
+//     };
+// };
+
 function myFunction(type) {
     return () => {
-        var http = new XMLHttpRequest();
-        http.open("GET", server_url + '?url=' + curr_url + '&category=' + type, true);
-        // http.onreadystatechange = function() {
-        //     console.log(http.readyState);
-        //     console.log(http.status);
-        //     if(http.readyState == 4 && http.status == 200) {
-        //         console.log(http.response);
-        //     }
-        // };
-        http.send();
-        
+        var x = document.getElementById("post_form");
+        var createform = document.createElement('form');
+        createform.setAttribute("id", "url_form");
+        createform.setAttribute("action", "http://localhost:3000/post/");
+        createform.setAttribute("method", "post");
+        createform.setAttribute("target", "_blank");
+        var context_element = document.createElement('input');
+        context_element.setAttribute("type", "text");
+        context_element.setAttribute("name", "context");
+        context_element.setAttribute("value", type);
+        var url_element = document.createElement('input');
+        url_element.setAttribute("type", "text");
+        url_element.setAttribute("name", "current_url");
+        url_element.setAttribute("value", curr_url);
+        x.appendChild(createform);
+        createform.append(context_element);
+        createform.append(url_element);
+        document.forms['url_form'].submit();
     };
 };
