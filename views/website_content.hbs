@@ -13,5 +13,20 @@
     Welcome to category {{category}}
     <br>
     You are on context of url- {{website}}
+    <br>
+    <br>
+    <div>
+        <form name="submit_post" action="/post/addpost" method="post">
+<!--            <label for="add_post">-->
+<!--                Add your post here-->
+<!--            </label>-->
+            <input type="hidden" name="url" value={{website}}>
+            <input type="hidden" name="category" value={{category}}>
+            <input type="hidden" name="username" value={{user}}>
+            <input type="text" name="post_body" placeholder="Write your post here"><br>
+            <input type="submit" value="Post">
+
+        </form>
+    </div>
 </body>
 </html>

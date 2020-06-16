@@ -10,7 +10,6 @@ const authenticateToken = (req, res, next) => {
   jwt.verify(token, 'verysecretkey', (err, user) => {
     if (err) return res.status(403).send({msg: 'Unauthorized Forbidden'});
     req.user = user;
-    console.log('auth',user);
     next()
   });
 };

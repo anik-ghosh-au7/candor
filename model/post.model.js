@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { v4 } = require('uuid');
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
@@ -8,20 +7,18 @@ const postSchema = new Schema({
         required: true,
         unique: true
     },
-    post:[{
-        username:String,
-        category:String,
-        post_tags:[String],
-        post_body:String,
-        post_id:v4(),
-        upvote_count:Number,
-        comments:[
+    post: [{
+        username: String,
+        category: String,
+        post_tags: [String],
+        post_body: String,
+        upvote_users: [String],
+        comments: [
             {
-                comment_username:String,
-                comment_id:v4(),
-                comment_body:String,
-                comment_tags:[String],
-                comment_upvote_count:Number
+                comment_username: String,
+                comment_body: String,
+                comment_tags: [String],
+                comment_upvote_users: [String]
             }
         ]
     }]

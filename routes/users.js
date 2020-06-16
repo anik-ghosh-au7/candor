@@ -20,7 +20,6 @@ const authenticateToken = (req, res, next) => {
     next()
   }else{
     jwt.verify(token, process.env.jwt_key, (err, data) => {
-      console.log(data);
     if (err) return res.status(403).send({msg: 'Unauthorized Forbidden'});
     req.user = data.name;
     next()
