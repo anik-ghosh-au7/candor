@@ -24,8 +24,8 @@ router.post('/',authenticateToken, function(req, res, next) {
 
   console.log("on server", req.body.current_url,req.user,req.body.context);
   // console.log("request : ", req);
-  res.redirect('/');
-  
+  res.render('website_content',{category:req.body.context,website:req.body.current_url,user:req.user.name});
+
 });
 
 module.exports = router;
