@@ -10,13 +10,12 @@ const post_controller = {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({errors: errors.array()});
-        }
-        ;
+        };
         Post.findOne({url: req.body.url}, (err, data) => {
             if (err) {
                 res.status(500).send({msg: "Internal Server Error"});
             } else {
-                var tag=req.body.post_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
+                var tag = req.body.post_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
                 if (!data) {
                     let entry = new Post({
                         url: req.body.url,
@@ -29,19 +28,9 @@ const post_controller = {
                     });
                     entry.save(function (err) {
                         if (err) {
-                            // not acceptable
                             res.status(406).send(err.message);
                         } else {
-                            // created
-                            res.json({
-                                url: req.body.url,
-                                post: [{
-                                    username: req.body.username,
-                                    category: req.body.category,
-                                    post_tags: tag,
-                                    post_body: req.body.post_body
-                                }]
-                            });
+                            return res.render('index');
                         }
                     });
                 } else {
@@ -58,7 +47,8 @@ const post_controller = {
                         }, {"new": true},
                         function (err, data) {
                             if (err) console.log(err);
-                            res.json(data)
+                            // res.json(data)
+                            res.redirect('/post')
                         }
                     );
                 }
@@ -66,6 +56,13 @@ const post_controller = {
 
         })
 
+    },
+    allPosts: (req, res) => {
+        Post.aggregate([{$match: {url: req.body.current_url}}, {$unwind: '$post'}, {$match: {'post.category': req.body.context}}])
+            .then((result) => {
+                res.render('index', {posts:result,url: req.body.current_url,viewername:req.user.name,category:req.body.context})
+            })
+            .catch(err => console.log(err));
     }
 };
 module.exports = post_controller;

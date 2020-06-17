@@ -20,8 +20,6 @@ const authenticateToken = (req, res, next) => {
 // router.post('/',authenticateToken, );
 // router.get('/',authenticateToken, );
 
-router.post('/', authenticateToken, function (req, res, next) {
-    res.render('website_content', {category: req.body.context, website: req.body.current_url, user: req.user.name});
-});
+router.post('/', authenticateToken, post_controller.allPosts);
 router.post('/addpost', authenticateToken, post_controller.createPost);
 module.exports = router;
