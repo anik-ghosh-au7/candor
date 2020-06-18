@@ -22,5 +22,7 @@ const authenticateToken = (req, res, next) => {
 // router.get('/',authenticateToken, );
 
 router.post('/addpost', authenticateToken, post_controller.createPost);
+router.post('/addcomment',authenticateToken,post_controller.createComment);
 router.get('/render',authenticateToken,post_controller.renderPost);
+
 module.exports = router;

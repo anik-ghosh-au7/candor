@@ -5,18 +5,17 @@ var app = {};
 
 const post_controller = {
     createPost: (req, res) => {
-        if (!req.user) {
-            return res.redirect('/loginPage');
-        }
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({errors: errors.array()});
         }
         ;
+        let hitUrl = `/post/render?current_url=${encodeURIComponent(req.body.url)}&category=${req.body.category}`;
         Post.findOne({url: req.body.url}, (err, data) => {
             if (err) {
                 res.status(500).send({msg: "Internal Server Error"});
             } else {
+
                 var tag = req.body.post_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
                 if (!data) {
                     let entry = new Post({
@@ -32,7 +31,7 @@ const post_controller = {
                         if (err) {
                             res.status(406).send(err.message);
                         } else {
-                            return res.render('index');
+                            return res.redirect(hitUrl);
                         }
                     });
                 } else {
@@ -50,7 +49,7 @@ const post_controller = {
                         function (err, data) {
                             if (err) console.log(err);
                             // res.json(data)
-                            res.redirect('/post')
+                            res.redirect(hitUrl);
                         }
                     );
                 }
@@ -59,16 +58,38 @@ const post_controller = {
         })
 
     },
+    createComment: (req, res) => {
 
-    renderPost:(req,res)=>{
-        let current_url=decodeURIComponent(req.query.current_url);
-        let category= req.query.category;
-        console.log(current_url,category);
+        let current_url = decodeURIComponent(req.body.url);
+        let post_id = req.body.post_id;
+        var tag = req.body.comment_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
+
+        Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post._id': post_id}},
+            {
+                "$push": {
+                    "comment": {
+                        comment_username: req.body.username,
+                        comment_tags: tag,
+                        comment_body: req.body.comment_body
+                    }
+                }
+            }])
+            .then((result) => {
+                let hitUrl = `/post/render?current_url=${encodeURIComponent(current_url)}&category=${req.body.category}`;
+                res.redirect(hitUrl)
+            })
+            .catch(err => console.log(err));
+
+    },
+    renderPost: (req, res) => {
+        let current_url = decodeURIComponent(req.query.current_url);
+        let category = req.query.category;
+        console.log(current_url, category);
         Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}])
             .then((result) => {
-                res.render('index', {posts:result,url:current_url,viewername:req.user.name,category})
+                res.render('index', {posts: result, url: current_url, viewername: req.user.name, category})
             })
             .catch(err => console.log(err));
     }
 };
-module.exports = {post_controller,app};
+module.exports = {post_controller, app};

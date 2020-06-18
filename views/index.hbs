@@ -69,12 +69,47 @@
                     <div class="card-body">
                         <p class="card-text">
                         <h3>{{this.post.post_body}}</h3></p>
-                        <a href="#" class="btn btn-primary">Read More &rarr;</a>
+
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{#each this.post.post_tags}}
+                            {{this}}
+                        {{/each}}
                     </div>
                     <div class="card-footer text-muted">
                         Posted on January 1, 2017 by
                         <a href="#">{{this.post.username}}</a>
                     </div>
+                    <form action="/post/addcomment" method="post">
+                        <input type="hidden" name="url" value={{url}}>
+                        <input type="hidden" name="category" value={{category}}>
+                        <input type="hidden" name="username" value={{viewername}}>
+                        <input type="hidden" name="post_id" value={{this.post._id}}>
+                        <table style='width:100%;'>
+                            <tr>
+                                <td>
+                                    <input type="text" style='width:130%;' name="comment_body"
+                               placeholder="Add your comment....">
+                                </td>
+                                <td>
+                                    <input type="submit" class="btn btn-primary" value="Comment" style="float:right">
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </form>
+                    {{#each this.post.comment}}
+                        <div class="card-footer text-muted">
+                            {{this.comment_body}}
+                            <br>
+                            {{this.comment_username}}
+                            <br>
+                            {{#each this.comment_tags}}
+                                {{this}}
+                            {{/each}}
+                        </div>
+                    {{/each}}
                 </div>
             {{/each}}
             <div class="card mb-4">
@@ -85,7 +120,8 @@
                             <input type="hidden" name="url" value={{url}}>
                             <input type="hidden" name="category" value={{category}}>
                             <input type="hidden" name="username" value={{viewername}}>
-                            <input type="text" placeholder="Your post goes here....">
+                            <input type="text" style='width:100%;' name="post_body"
+                                   placeholder="Your post goes here....">
                             <input type="submit" class="btn btn-info" value="Submit">
                         </form>
                     </h3>
