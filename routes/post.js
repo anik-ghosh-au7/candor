@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 const {request} = require('express');
-var post_controller = require('../controller/post.controller')
+var {post_controller,app} = require('../controller/post.controller');
+
 
 const authenticateToken = (req, res, next) => {
     const token = req.cookies['awtToken'];
@@ -22,4 +23,5 @@ const authenticateToken = (req, res, next) => {
 
 router.post('/', authenticateToken, post_controller.allPosts);
 router.post('/addpost', authenticateToken, post_controller.createPost);
+router.get('/render',authenticateToken,post_controller.renderPost);
 module.exports = router;
