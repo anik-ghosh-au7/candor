@@ -59,11 +59,7 @@ const post_controller = {
         })
 
     },
-    allPosts: (req, res) => {
-        let redirect_url = `/post/render?current_url=${encodeURIComponent(req.body.current_url)}&category=${req.body.context}`;
-        return res.redirect(redirect_url);
 
-    },
     renderPost:(req,res)=>{
         let current_url=decodeURIComponent(req.query.current_url);
         let category= req.query.category;
