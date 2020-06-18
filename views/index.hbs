@@ -81,9 +81,9 @@
                         <a href="#">{{this.post.username}}</a>
                     </div>
                     <form action="/post/addcomment" method="post">
-                        <input type="hidden" name="url" value={{url}}>
-                        <input type="hidden" name="category" value={{category}}>
-                        <input type="hidden" name="username" value={{viewername}}>
+                        <input type="hidden" name="url" value={{../url}}>
+                        <input type="hidden" name="category" value={{../category}}>
+                        <input type="hidden" name="username" value={{../viewername}}>
                         <input type="hidden" name="post_id" value={{this.post._id}}>
                         <table style='width:100%;'>
                             <tr>

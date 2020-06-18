@@ -1,6 +1,8 @@
 const Post = require('../model/post.model');
 const {validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 var app = {};
 
 const post_controller = {
@@ -60,25 +62,27 @@ const post_controller = {
     },
     createComment: (req, res) => {
 
-        let current_url = decodeURIComponent(req.body.url);
+        let current_url = req.body.url;
         let post_id = req.body.post_id;
+        let category = req.body.category;
         var tag = req.body.comment_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
 
-        Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post._id': post_id}},
-            {
-                "$push": {
-                    "comment": {
-                        comment_username: req.body.username,
-                        comment_tags: tag,
-                        comment_body: req.body.comment_body
-                    }
+        Post.findOneAndUpdate({url: current_url, "post._id": post_id},
+        {
+            "$push": {
+                "post.$.comments": {
+                    comment_username: req.body.username,
+                    comment_tags: tag,
+                    comment_body: req.body.comment_body
                 }
-            }])
-            .then((result) => {
-                let hitUrl = `/post/render?current_url=${encodeURIComponent(current_url)}&category=${req.body.category}`;
-                res.redirect(hitUrl)
-            })
-            .catch(err => console.log(err));
+            }
+        }, {"new": true})
+        .then((result) => {
+            console.log(result);
+            let hitUrl = `/post/render?current_url=${encodeURIComponent(current_url)}&category=${req.body.category}`;
+            res.redirect(hitUrl)
+        })
+        .catch(err => console.log(err));
 
     },
     renderPost: (req, res) => {

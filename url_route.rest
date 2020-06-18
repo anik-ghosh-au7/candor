@@ -1,4 +1,14 @@
 POST http://localhost:3000/users/getposts
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYW5payIsImlhdCI6MTU5MjAyOTY3M30.Aee6Kit4f04mUXYrm3d1NvosTRZebGrGbwfqoKWnud4"
 
+###
+
+POST  http://localhost:3000/users/post/addcomment
+Content-Type: application/json
+
+{
+    "category": "anik_ghosh"
+}
+
+
 
