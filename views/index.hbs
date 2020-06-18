@@ -72,6 +72,7 @@
 
                     </div>
                     <div class="card-footer text-muted">
+                        Tags:
                         {{#each this.post.post_tags}}
                             {{this}}
                         {{/each}}
@@ -89,7 +90,7 @@
                             <tr>
                                 <td>
                                     <input type="text" style='width:130%;' name="comment_body"
-                               placeholder="Add your comment....">
+                                           placeholder="Add your comment....">
                                 </td>
                                 <td>
                                     <input type="submit" class="btn btn-primary" value="Comment" style="float:right">
@@ -99,17 +100,18 @@
 
 
                     </form>
-                    {{#each this.post.comment}}
+                    {{#each this.post.comments}}
                         <div class="card-footer text-muted">
                             {{this.comment_body}}
-                            <br>
+                            <br><u>By</u>
                             {{this.comment_username}}
-                            <br>
+                            <br><u>Tags-</u>
                             {{#each this.comment_tags}}
                                 {{this}}
                             {{/each}}
                         </div>
                     {{/each}}
+
                 </div>
             {{/each}}
             <div class="card mb-4">
