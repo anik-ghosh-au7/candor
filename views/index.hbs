@@ -75,7 +75,7 @@
                         Tags:
                         {{#each this.post.post_tags}}
                             {{this}}
-                        {{/each}}
+                        {{/each}}   
                     </div>
                     <div class="card-footer text-muted">
                         Posted on January 1, 2017 by
@@ -101,12 +101,10 @@
 
                     </form>
                     {{#each this.post.comments}}
-                        <div class="card-footer text-muted">
+                        <div  class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
                             {{this.comment_body}}
-                            <br><u>By</u>
-                            {{this.comment_username}}
-                            <br><u>Tags-</u>
-                            {{#each this.comment_tags}}
+                            <br>By: {{this.comment_username}}
+                            <br>Tags: {{#each this.comment_tags}}
                                 {{this}}
                             {{/each}}
                         </div>
