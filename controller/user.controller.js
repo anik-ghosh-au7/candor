@@ -113,28 +113,21 @@ const user_controller = {
                 service: 'gmail',
                 host: 'smtp.gmail.com',
                 auth: {
-                    user: 'au7wood@gmail.com', // generated ethereal user
+                    user: process.env.email_otp_id, // generated ethereal user
                     port: 465,
                     secure: true,
-                    pass: 'cfor4cat111', // generated ethereal password
+                    pass: process.env.email_otp_password, // generated ethereal password
                 },
             });
 
             // send mail with defined transport object
             let info = await transporter.sendMail({
-                from: '"Fred Foo " <au7wood@gmail.com>', // sender address
+                from: "Candor ", // sender address
                 to: email, // list of receivers
-                subject: "Hello ✔", // Subject line
-                text: `For sign up to Candor, please use this OTP `, // plain text body
-                html: `<b>Hello world?</b>${otp}` // html body
+                subject: "OTP from Candor", // Subject line
+                text: `For sign up to Candor, please use this OTP ${otp}`, // plain text body
+                html: `<b><H2>For sign up, please use this OTP ${otp}</H2></b>` // html body
             });
-
-            console.log("Message sent: %s", info.messageId);
-            // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-            // Preview only available when sending through an Ethereal account
-            console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-            // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
         }
 
         main().then(() => res.send('OTP sent')).catch(()=>{console.error();})
