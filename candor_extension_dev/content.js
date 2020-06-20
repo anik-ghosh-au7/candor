@@ -8,7 +8,6 @@ if (currentUrl === 'http://localhost:3000/') {
         { payload: 'Change to main_popup.html' });
 };
 
-chrome.storage.local.get('username',(result)=>{console.log(result)});
 if (currentUrl==='http://localhost:3000/users/logout?'){
     chrome.storage.local.clear();
     chrome.runtime.sendMessage(

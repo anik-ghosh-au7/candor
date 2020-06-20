@@ -31,6 +31,7 @@ const authenticateToken = (req, res, next) => {
 
 const router = express.Router();
 
+// router.post('/verify')
 
 router.post('/createuser',authenticateToken, [userValidator.check_username(), userValidator.check_email(), userValidator.check_password(), userValidator.check_phone()], user_controller.createUser);
 

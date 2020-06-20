@@ -6,3 +6,6 @@ chrome.storage.local.get('username', (result) => {
     }
 
 });
+window.onload = () => {
+    document.getElementById("exampleInputEmail1").focus();
+};
