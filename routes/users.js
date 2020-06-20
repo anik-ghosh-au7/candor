@@ -31,7 +31,7 @@ const authenticateToken = (req, res, next) => {
 
 const router = express.Router();
 
-// router.post('/verify')
+router.post('/request_otp',user_controller.request_otp);
 
 router.post('/createuser',authenticateToken, [userValidator.check_username(), userValidator.check_email(), userValidator.check_password(), userValidator.check_phone()], user_controller.createUser);
 
@@ -42,6 +42,8 @@ router.get('/loginPage',authenticateToken, user_controller.loginPage);
 router.get('/signPage',authenticateToken, user_controller.signPage);
 
 router.get('/logout',user_controller.logout);
+
+router.get('/submit_otp',user_controller.submit_otp);
 
 
 

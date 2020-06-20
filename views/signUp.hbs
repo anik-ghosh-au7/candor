@@ -26,7 +26,7 @@
         }
 
     </style>
-    <script src="popup.js"></script>
+    <script src="./../otp_verify/otp.js"></script>
 </head>
 
 <body>
@@ -46,9 +46,14 @@
                 <label for="username">Username</label><br>
                 <input type="text" name="username"><br>
                 <label for="email">email</label><br>
-                <input type="text" name="email"><br>
+                <input type="text" name="email" id="email">
+                <button type="button" id="otp_button">Get Otp</button><br>
+                <input type="text" name="OTP" placeholder="Enter OTP" id="otp_input">
+                <button type="button" id='submit_otp'>Verify OTP</button><br>
+                <span id="otp_sent"></span>
                 <label for="phone">Phone</label><br>
-                <input type="tel" name="phone"><br>
+                <input type="tel" name="phone" id="phone"><br>
+
                 <label for="password">Password</label><br>
                 <input type="password" name="password"><br>
                 <input type="submit" class="btn btn-success" value="Sign Up">

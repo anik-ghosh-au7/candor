@@ -21,6 +21,7 @@ chrome.runtime.sendMessage(
 );
 
 
+
 function update_links() {
     document.getElementById("question").addEventListener("click", myFunction('question'));
     document.getElementById("related").addEventListener("click", myFunction('related'));
