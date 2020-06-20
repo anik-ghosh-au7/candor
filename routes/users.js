@@ -4,16 +4,6 @@ const jwt = require ('jsonwebtoken');
 require('dotenv').config();
 const userValidator = require('../validator/user.validator');
 
-// const authenticateToken = (req, res, next) => {
-//   const token = req.cookies['awtToken'];
-//   if (!token) res.status(401).send({msg: 'Unauthorized Access'});
-//
-//   jwt.verify(token, process.env.jwt_key, (err, user) => {
-//     if (err) return res.status(403).send({msg: 'Unauthorized Forbidden'});
-//     req.user = user;
-//     next()
-//   });
-// };
 const authenticateToken = (req, res, next) => {
   const token = req.cookies['awtToken'];
   if (!token) {

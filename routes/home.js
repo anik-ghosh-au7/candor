@@ -1,13 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+require('dotenv').config();
+
 
 const authenticateToken = (req, res, next) => {
   const token = req.cookies['awtToken'];
   if (!token) {
     return res.redirect('/users/loginPage');
   }
-  jwt.verify(token, 'verysecretkey', (err, user) => {
+  jwt.verify(token, process.env.jwt_key, (err, user) => {
     if (err) return res.status(403).send({msg: 'Unauthorized Forbidden'});
     req.user = user;
     next()

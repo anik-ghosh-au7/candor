@@ -4,8 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+require('dotenv').config();
 
-mongoose.connect('mongodb://localhost/Candor', {
+mongoose.connect(process.env.mongo_uri, {
     useFindAndModify: false,
     useNewUrlParser: true,
     useUnifiedTopology: true,

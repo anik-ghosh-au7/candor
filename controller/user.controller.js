@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 var dict = {};
+require('dotenv').config();
+
 //Keys for otp twilio api
 
 const user_controller = {
@@ -61,8 +63,7 @@ const user_controller = {
                 if (data) {
                     try {
                         if (await bcrypt.compare(password, data.password)) {
-                            const accessToken = jwt.sign({name: username}, 'verysecretkey')
-                            // res.status(200).json({accessToken});
+                            const accessToken = jwt.sign({name: username}, process.env.jwt_key);
                             res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
                             return res.redirect('/');
                         } else {
