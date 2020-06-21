@@ -16,7 +16,8 @@
 
     <!-- Custom styles for this template -->
     <link href="css/blog-home.css" rel="stylesheet">
-<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <script src="index.js"></script>
 
 </head>
 
@@ -63,7 +64,7 @@
                 <br>
                 {{category}}
             </h2>
-            <h4><small>{{url}}</small></h4>
+            <h4><small><span id="context_url">{{url}}</span></small></h4>
 
             <!-- Blog Post -->
             {{#each posts}}
@@ -80,9 +81,11 @@
                         {{/each}}
                     </div>
                     <div class="card-footer text-muted">
-                        <a href="/post/like/?post_id={{this.post._id}}&current_url={{../url}}" class="btn btn-info" id="like_button">
+                        <button class="btn " name="like_button" id={{this.post._id}}>
+
                             Like
-                        </a>
+
+                        </button>
                         <span style="font-size: small;">Time : {{this.post.post_time}}</span><br>
                         <a href="#">By : {{this.post.username}}</a>
                     </div>

@@ -87,6 +87,7 @@ const post_controller = {
         let category = req.query.category;
         Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}])
             .then((result) => {
+
                 res.render('index', {posts: result, url: current_url, viewername: req.user.name, category})
             })
             .catch(err => console.log(err));
@@ -109,12 +110,12 @@ const post_controller = {
         res.status(200).send(data);
     },
     updateLike: async (req, res) => {
-        let current_url=req.query.current_url;
+        let current_url=decodeURIComponent(req.query.current_url);
         let post_id=req.query.post_id;
         console.log(req.query.current_url,req.query.post_id,req.user.name);
         let like_search_result = {};
-        
-        const add_like = (url, id, name) => {   
+
+        const add_like = (url, id, name) => {
             Post.findOneAndUpdate({url: url, "post._id": id},
                 {
                     "$push": {
@@ -124,8 +125,9 @@ const post_controller = {
                     }
                 }, {"new": true})
                 .then((result) => {
-                    console.log('add',result);
-                    res.send(`added like by ${name}`);
+                    // console.log('add',result);
+                    // res.send(`added like by ${name}`);
+                    res.send('liked');
                 })
                 .catch(err => console.log(err));
         };
@@ -139,8 +141,9 @@ const post_controller = {
                     }
                 }, {"new": true})
                 .then((result) => {
-                    console.log('del',result);
-                    res.send(`removed like from ${name}`);
+                    // console.log('del',result);
+                    // res.send(`removed like from ${name}`);
+                    res.send('unliked');
                 })
                 .catch(err => console.log(err));
         };

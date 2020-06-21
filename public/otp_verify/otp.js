@@ -6,7 +6,7 @@ window.onload = () => {
         let xhttp = new XMLHttpRequest();
         var body = {
             email: email
-        }
+        };
         xhttp.open("POST", server_url, true);
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify(body));
