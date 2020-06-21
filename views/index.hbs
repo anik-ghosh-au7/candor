@@ -81,14 +81,12 @@
                         {{/each}}
                     </div>
                     <div class="card-footer text-muted">
-                        <button class="btn {{#if this.post.user_like}} btn-info{{/if}}" name="like_button" id={{this.post._id}}>
 
-
-                            Like
-
-                        </button>
                         <span style="font-size: small;">Time : {{this.post.post_time}}</span><br>
-                        <a href="#">By : {{this.post.username}}</a>
+                        <a href="#">By : {{this.post.username}}</a><br>
+                        <button class="btn {{#if this.post.user_like}} btn-info{{/if}}" name="like_button" id={{this.post._id}}>
+                            Like{{#if this.post.user_like}}d{{/if}} {{this.post.like_count}}
+                        </button>
                     </div>
                     <form action="/post/addcomment" method="post">
                         <input type="hidden" name="url" value={{../url}}>

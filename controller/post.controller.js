@@ -169,6 +169,7 @@ function attach_likes(result,name) {
     for(post_outer of result){
         // console.log(post_outer.post.upvote_users);
         post_outer.post.user_like=false;
+        post_outer.post.like_count=post_outer.post.upvote_users.length;
         for(user of post_outer.post.upvote_users){
             if(user.upvote_username===name){
                 post_outer.post.user_like=true;

@@ -16,16 +16,16 @@ window.onload = () => {
                 xhttp.onload = () => {
                     console.log(xhttp.responseText);
                     if(xhttp.responseText==='liked'){
+                        console.log(like_btns[j].innerText.split(' '));
                         like_btns[j].className+=' btn-info';
+                        like_btns[j].innerHTML='Liked '+(parseInt(like_btns[j].innerText.split(" ")[1])+1)
                     }else{
+                        console.log(like_btns[j].innerText.split(' '));
                         like_btns[j].className='btn';
+                        like_btns[j].innerHTML='Like '+(parseInt(like_btns[j].innerText.split(" ")[1])-1)
                     }
                 }
             }
         }
     }
-    var obj={'key':document.getElementById('for_likes').innerHTML};
-    console.log(obj);
-    console.log(eval([ob]));
-
 }
