@@ -84,12 +84,20 @@ const post_controller = {
     renderPost: (req, res) => {
         let current_url = decodeURIComponent(req.query.current_url);
         let category = req.query.category;
-        console.log(current_url, category);
         Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}])
             .then((result) => {
                 res.render('index', {posts: result, url: current_url, viewername: req.user.name, category})
             })
             .catch(err => console.log(err));
+    },
+    getdata: async(req, res) => {
+        let current_url = decodeURIComponent(req.query.current_url);
+        let data = {};
+        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'question'}}]).then(result => {data.question = result.length});
+        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'admin'}}]).then(result => {data.admin = result.length});
+        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'related'}}]).then(result => {data.related = result.length});
+        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'others'}}]).then(result => {data.others = result.length});
+        res.status(200).send(data);
     }
 };
 module.exports = {post_controller, app};

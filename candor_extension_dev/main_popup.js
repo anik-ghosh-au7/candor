@@ -17,8 +17,18 @@ chrome.runtime.sendMessage(
         document.getElementById('context_url').innerHTML = curr_url
 
         update_links();
+        get_data();
     }
 );
+
+const get_data = () => {
+    let http_req = new XMLHttpRequest();
+    http_req.open("GET", server_url + `getdata/?current_url=${curr_url}`, true);
+    http_req.send();
+    http_req.onload = () => {
+            update_data(JSON.parse(http_req.response));
+        }
+}
 
 
 
@@ -27,6 +37,13 @@ function update_links() {
     document.getElementById("related").addEventListener("click", myFunction('related'));
     document.getElementById("admin").addEventListener("click", myFunction('admin'));
     document.getElementById("others").addEventListener("click", myFunction('others'));
+};
+
+function update_data(data) {
+    document.getElementById("question_data").innerHTML = data.question;
+    document.getElementById("related_data").innerHTML = data.related;
+    document.getElementById("admin_data").innerHTML = data.admin;
+    document.getElementById("others_data").innerHTML = data.others;
 };
 
 

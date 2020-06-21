@@ -10,5 +10,9 @@ Content-Type: application/json
     "category": "anik_ghosh"
 }
 
+###
+
+GET http://localhost:3000/post/getdata/?current_url=https://university.attainu.com/dashboard
+
 
 

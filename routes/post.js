@@ -18,12 +18,9 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// router.post('/',authenticateToken, );
-// router.post('/',authenticateToken, );
-// router.get('/',authenticateToken, );
-
 router.post('/addpost', authenticateToken, post_controller.createPost);
 router.post('/addcomment',authenticateToken,post_controller.createComment);
 router.get('/render',authenticateToken,post_controller.renderPost);
+router.get('/getdata', post_controller.getdata);
 
 module.exports = router;
