@@ -81,7 +81,8 @@
                         {{/each}}
                     </div>
                     <div class="card-footer text-muted">
-                        <button class="btn " name="like_button" id={{this.post._id}}>
+                        <button class="btn {{#if this.post.user_like}} btn-info{{/if}}" name="like_button" id={{this.post._id}}>
+
 
                             Like
 

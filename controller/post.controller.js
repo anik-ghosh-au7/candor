@@ -87,7 +87,8 @@ const post_controller = {
         let category = req.query.category;
         Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}])
             .then((result) => {
-
+                // console.log(result);
+                attach_likes(result,req.user.name);
                 res.render('index', {posts: result, url: current_url, viewername: req.user.name, category})
             })
             .catch(err => console.log(err));
@@ -163,3 +164,15 @@ const post_controller = {
     }
 };
 module.exports = {post_controller, app};
+
+function attach_likes(result,name) {
+    for(post_outer of result){
+        // console.log(post_outer.post.upvote_users);
+        post_outer.post.user_like=false;
+        for(user of post_outer.post.upvote_users){
+            if(user.upvote_username===name){
+                post_outer.post.user_like=true;
+            }
+        }
+    }
+}
