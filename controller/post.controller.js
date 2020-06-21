@@ -64,21 +64,21 @@ const post_controller = {
         var tag = req.body.comment_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
 
         Post.findOneAndUpdate({url: current_url, "post._id": post_id},
-        {
-            "$push": {
-                "post.$.comments": {
-                    comment_username: req.body.username,
-                    comment_tags: tag,
-                    comment_body: req.body.comment_body
+            {
+                "$push": {
+                    "post.$.comments": {
+                        comment_username: req.body.username,
+                        comment_tags: tag,
+                        comment_body: req.body.comment_body
+                    }
                 }
-            }
-        }, {"new": true})
-        .then((result) => {
-            console.log(result);
-            let hitUrl = `/post/render?current_url=${encodeURIComponent(current_url)}&category=${req.body.category}`;
-            res.redirect(hitUrl)
-        })
-        .catch(err => console.log(err));
+            }, {"new": true})
+            .then((result) => {
+                console.log(result);
+                let hitUrl = `/post/render?current_url=${encodeURIComponent(current_url)}&category=${req.body.category}`;
+                res.redirect(hitUrl)
+            })
+            .catch(err => console.log(err));
 
     },
     renderPost: (req, res) => {
@@ -90,14 +90,45 @@ const post_controller = {
             })
             .catch(err => console.log(err));
     },
-    getdata: async(req, res) => {
+    getdata: async (req, res) => {
         let current_url = decodeURIComponent(req.query.current_url);
         let data = {};
-        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'question'}}]).then(result => {data.question = result.length});
-        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'admin'}}]).then(result => {data.admin = result.length});
-        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'related'}}]).then(result => {data.related = result.length});
-        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'others'}}]).then(result => {data.others = result.length});
+        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'question'}}]).then(result => {
+            data.question = result.length
+        });
+        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'admin'}}]).then(result => {
+            data.admin = result.length
+        });
+        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'related'}}]).then(result => {
+            data.related = result.length
+        });
+        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'others'}}]).then(result => {
+            data.others = result.length
+        });
         res.status(200).send(data);
+    },
+    updateLike: (req, res) => {
+        let current_url=req.query.current_url;
+        let post_id=req.query.post_id;
+        // console.log(req.query.current_url,req.query.post_id,req.user.name);
+        let like_search_result;
+        Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}])
+            .then((result) => {
+                res.render('index', {posts: result, url: current_url, viewername: req.user.name, category})
+            })
+            .catch(err => console.log(err));
+
+        Post.findOneAndUpdate({url: current_url, "post._id": post_id},
+            {
+                "$push": {
+                    "post.$.upvote_users": req.user.name
+                }
+            }, {"new": true})
+            .then((result) => {
+                console.log(result);
+                res.send("Success");
+            })
+            .catch(err => console.log(err));
     }
 };
 module.exports = {post_controller, app};

@@ -11,10 +11,12 @@
     <title>Candor</title>
 
     <!-- Bootstrap core CSS -->
+
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="css/blog-home.css" rel="stylesheet">
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
 
 </head>
 
@@ -75,9 +77,12 @@
                         Tags:
                         {{#each this.post.post_tags}}
                             {{this}}
-                        {{/each}}   
+                        {{/each}}
                     </div>
                     <div class="card-footer text-muted">
+                        <a href="/post/like/?post_id={{this.post._id}}&current_url={{../url}}" class="btn btn-info" id="like_button">
+                            Like
+                        </a>
                         <span style="font-size: small;">Time : {{this.post.post_time}}</span><br>
                         <a href="#">By : {{this.post.username}}</a>
                     </div>
@@ -101,18 +106,18 @@
 
                     </form>
                     <div class="row">
-                    {{#each this.post.comments}}
-                        <div class="col-sm-6">
-                        <div  class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-                            {{this.comment_body}}
-                            <br><span style="font-size: small;">{{this.comment_time}}</span> 
-                            By: {{this.comment_username}}
-                            <br>Tags: {{#each this.comment_tags}}
-                                {{this}}
-                            {{/each}}
-                        </div>
-                        </div>
-                    {{/each}}
+                        {{#each this.post.comments}}
+                            <div class="col-sm-6">
+                                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                                    {{this.comment_body}}
+                                    <br><span style="font-size: small;">{{this.comment_time}}</span>
+                                    By: {{this.comment_username}}
+                                    <br>Tags: {{#each this.comment_tags}}
+                                    {{this}}
+                                {{/each}}
+                                </div>
+                            </div>
+                        {{/each}}
                     </div>
                 </div>
             {{/each}}
