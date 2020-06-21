@@ -1,5 +1,6 @@
 const Post = require('../model/post.model');
 const {validationResult} = require('express-validator');
+var ObjectId = require('mongodb').ObjectId
 
 var app = {};
 
@@ -107,28 +108,55 @@ const post_controller = {
         });
         res.status(200).send(data);
     },
-    updateLike: (req, res) => {
+    updateLike: async (req, res) => {
         let current_url=req.query.current_url;
         let post_id=req.query.post_id;
-        // console.log(req.query.current_url,req.query.post_id,req.user.name);
-        let like_search_result;
-        Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}])
+        console.log(req.query.current_url,req.query.post_id,req.user.name);
+        let like_search_result = {};
+        
+        const add_like = (url, id, name) => {   
+            Post.findOneAndUpdate({url: url, "post._id": id},
+                {
+                    "$push": {
+                        "post.$.upvote_users": {
+                            upvote_username: name
+                        }
+                    }
+                }, {"new": true})
+                .then((result) => {
+                    console.log('add',result);
+                    res.send(`added like by ${name}`);
+                })
+                .catch(err => console.log(err));
+        };
+        const delete_like = (url, id, name) => {
+            Post.findOneAndUpdate({url: url, "post._id": id},
+                {
+                    "$pull": {
+                        "post.$.upvote_users": {
+                            upvote_username: name
+                        }
+                    }
+                }, {"new": true})
+                .then((result) => {
+                    console.log('del',result);
+                    res.send(`removed like from ${name}`);
+                })
+                .catch(err => console.log(err));
+        };
+
+        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post._id': ObjectId(post_id)}}, {$unwind: '$post.upvote_users'}, {$match: {'post.upvote_users.upvote_username': req.user.name}}])
             .then((result) => {
-                res.render('index', {posts: result, url: current_url, viewername: req.user.name, category})
+                like_search_result[req.user.name] = result;
+                if (like_search_result[req.user.name].length === 0) {
+                    add_like(current_url, post_id, req.user.name);
+                } else {
+                    delete_like(current_url, post_id, req.user.name);
+                };
+                delete like_search_result[req.user.name];
             })
             .catch(err => console.log(err));
 
-        Post.findOneAndUpdate({url: current_url, "post._id": post_id},
-            {
-                "$push": {
-                    "post.$.upvote_users": req.user.name
-                }
-            }, {"new": true})
-            .then((result) => {
-                console.log(result);
-                res.send("Success");
-            })
-            .catch(err => console.log(err));
     }
 };
 module.exports = {post_controller, app};

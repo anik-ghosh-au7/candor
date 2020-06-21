@@ -12,7 +12,9 @@ const postSchema = new Schema({
         category: String,
         post_tags: [String],
         post_body: String,
-        upvote_users: [String],
+        upvote_users: [{
+            upvote_username: String
+        }],
         post_time: {
             type: Date,
             default: Date.now()
