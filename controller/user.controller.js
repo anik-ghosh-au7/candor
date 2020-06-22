@@ -16,7 +16,7 @@ const user_controller = {
         }
         const errors = validationResult(req);
 
-        if (!dict[req.body.email] || dict[req.body.email] !== req.body.OTP) {
+        if (!dict[req.body.email] || dict[req.body.email][0] !== req.body.OTP) {
             return res.status(400).send('Wrong OTP ');
         }
 
@@ -84,7 +84,6 @@ const user_controller = {
     },
 
     loginPage: (req, res) => {
-        console.log('loginRedirect', req.user)
         if (req.user) {
 
             return res.redirect('/');
@@ -98,11 +97,13 @@ const user_controller = {
         res.render('signUp');
     },
     request_otp: (req, res) => {
-        console.log(req.body.email);
         let email = req.body.email;
         let otp = generateOTP();
-        dict[email] = otp;
-        clearOTP(dict, email);
+        if(dict[email]){
+            clearInterval(dict[email][1]);
+            delete dict[email];
+        }
+        dict[email] = [otp,clearOTP(dict,email)];
 
         async function main() {
             // Generate test SMTP service account from ethereal.email
@@ -126,8 +127,8 @@ const user_controller = {
                 from: "Candor ", // sender address
                 to: email, // list of receivers
                 subject: "OTP from Candor", // Subject line
-                text: `For sign up to Candor, please use this OTP ${otp}`, // plain text body
-                html: `<b><H2>For sign up, please use this OTP ${otp}</H2></b>` // html body
+                text: `For sign up to Candor, please use this OTP ${otp}. This OTP will be valid for 30 mins`, // plain text body
+                html: `<b><H2>For sign up, please use this OTP ${otp}</H2><br> OTP will be valid for 30 mins</b>` // html body
             });
         }
 
@@ -136,7 +137,7 @@ const user_controller = {
     submit_otp: (req, res) => {
         let otp = req.query.otp;
         let email = req.query.email;
-        if (dict[email] === otp) {
+        if (dict[email][0] === otp) {
             res.send('otp verified')
         } else {
             res.send('Wrong OTP');
@@ -162,9 +163,9 @@ function generateOTP() {
 }
 
 function clearOTP(dict, key) {
-    setTimeout(() => {
-        delete dict[key];
-    }, 1000 * 60 * 30);
+    return setTimeout(() => {
+            delete dict[key];
+    }, 1000 * 60 *30 );
 }
 
 module.exports = user_controller;
