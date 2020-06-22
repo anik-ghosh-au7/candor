@@ -84,12 +84,21 @@ const post_controller = {
     renderPost: async (req, res) => {
         let current_url = decodeURIComponent(req.query.current_url);
         let category = req.query.category;
-        let limit = 2;
+        let limit = 3;
         let page=parseInt(req.query.page);
         const endIndex = page * limit;
         let total_length;
-        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}]).then(result => total_length=result.length).catch(err => console.log(err)); 
-        let query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}, {$skip: (page - 1) * limit}, {$limit: limit}])
+        let query;
+        let search_by_username = req.query.search_username;
+
+        if (search_by_username) {
+            await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category, 'post.username': search_by_username}}]).then(result => total_length=result.length).catch(err => console.log(err)); 
+            query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category, 'post.username': search_by_username}}, {$skip: (page - 1) * limit}, {$limit: limit}])
+        } 
+        else {
+            await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}]).then(result => total_length=result.length).catch(err => console.log(err)); 
+            query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}, {$skip: (page - 1) * limit}, {$limit: limit}])
+        }
         query.exec()
             .then(result => {
                 if (endIndex >= total_length) {

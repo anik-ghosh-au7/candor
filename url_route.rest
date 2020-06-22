@@ -16,7 +16,7 @@ GET http://localhost:3000/post/getdata/?current_url=https://university.attainu.c
 
 ###
 
-GET http://localhost:3000/post/render?current_url=https%3A%2F%2Funiversity.attainu.com%2Fdashboard&category=question&page=2
+GET http://localhost:3000/post/render?current_url=https%3A%2F%2Funiversity.attainu.com%2Fdashboard&category=question&page=2&search_username=ghosh
 
 ###
 
