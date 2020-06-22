@@ -49,7 +49,7 @@ function update_data(data) {
 
 function myFunction(context_type) {
     return () => {
-        var hitUrl = `http://localhost:3000/post/render?current_url=${encodeURIComponent(curr_url)}&category=${context_type}`;
+        var hitUrl = `http://localhost:3000/post/render?current_url=${encodeURIComponent(curr_url)}&category=${context_type}&page=1`;
         window.open(hitUrl, '_blank');
     };
 };

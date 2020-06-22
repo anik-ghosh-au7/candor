@@ -18,6 +18,21 @@
     <link href="css/blog-home.css" rel="stylesheet">
     <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
     <script src="index.js"></script>
+    <script>
+        window.onload = () => {
+            let url_encoded = encodeURIComponent("{{url}}");
+            prev_link = "http://localhost:3000/post/render?current_url=" + url_encoded + "&category="+
+                "{{category}}"+"&page="+
+                "{{posts.prev_page}}";
+            prev_page = document.getElementById('prev_page');
+            prev_page.setAttribute('href', prev_link);
+            next_link = "http://localhost:3000/post/render?current_url=" + url_encoded + "&category="+
+                "{{category}}"+"&page="+
+                "{{posts.next_page}}";
+            next_page = document.getElementById('next_page');
+            next_page.setAttribute('href', next_link);
+        }
+    </script>
 
 </head>
 
@@ -84,7 +99,8 @@
 
                         <span style="font-size: small;">Time : {{this.post.post_time}}</span><br>
                         <a href="#">By : {{this.post.username}}</a><br>
-                        <button class="btn {{#if this.post.user_like}} btn-info{{/if}}" name="like_button" id={{this.post._id}}>
+                        <button class="btn {{#if this.post.user_like}} btn-info{{/if}}" name="like_button"
+                                id={{this.post._id}}>
                             Like{{#if this.post.user_like}}d{{/if}} {{this.post.like_count}}
                         </button>
                     </div>
@@ -146,12 +162,12 @@
             </div>
 
             <!-- Pagination -->
-            <ul class="pagination justify-content-center mb-4">
-                <li class="page-item">
-                    <a class="page-link" href="#">&larr; Older</a>
+            <ul class="pagination justify-content-center mb-4 ">
+                <li class="page-item {{#unless posts.has_prev}} disabled{{/unless}}">
+                    <a class="page-link" id="prev_page">&larr; Older</a>
                 </li>
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">Newer &rarr;</a>
+                <li class="page-item{{#unless posts.has_next}} disabled{{/unless}}  ">
+                    <a class="page-link" id="next_page">Newer&rarr;</a>
                 </li>
             </ul>
 

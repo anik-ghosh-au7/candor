@@ -20,7 +20,7 @@ const authenticateToken = (req, res, next) => {
 
 router.post('/addpost', authenticateToken, post_controller.createPost);
 router.post('/addcomment',authenticateToken,post_controller.createComment);
-router.get('/render',authenticateToken,post_controller.renderPost);
+router.get('/render',authenticateToken, post_controller.renderPost);
 router.get('/getdata', post_controller.getdata);
 router.get('/like',authenticateToken,post_controller.updateLike);
 

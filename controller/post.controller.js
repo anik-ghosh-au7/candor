@@ -85,10 +85,29 @@ const post_controller = {
     renderPost: (req, res) => {
         let current_url = decodeURIComponent(req.query.current_url);
         let category = req.query.category;
-        Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}])
-            .then((result) => {
+        let limit_ = 2;
+        let page=parseInt(req.query.page);
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        let query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}])
+        query.limit(limit_).skip((page - 1) * limit).exec()
+            .then(async (result) => {
                 // console.log(result);
-                attach_likes(result,req.user.name);
+                if (endIndex >= await query.exec().length) {
+                    results.has_next = false;
+                }else{
+                    result.has_next=true;
+                    result.next_page=page+1
+                }
+                if (page===1){
+                    result.has_prev=false;
+                }else{
+                    result.has_prev=true;
+                    result.prev_page=page-1
+                }
+                console.log(page);
+                console.log(result);
+                attach_likes(result, req.user.name);
                 res.render('index', {posts: result, url: current_url, viewername: req.user.name, category})
             })
             .catch(err => console.log(err));
@@ -111,9 +130,9 @@ const post_controller = {
         res.status(200).send(data);
     },
     updateLike: async (req, res) => {
-        let current_url=decodeURIComponent(req.query.current_url);
-        let post_id=req.query.post_id;
-        console.log(req.query.current_url,req.query.post_id,req.user.name);
+        let current_url = decodeURIComponent(req.query.current_url);
+        let post_id = req.query.post_id;
+        console.log(req.query.current_url, req.query.post_id, req.user.name);
         let like_search_result = {};
 
         const add_like = (url, id, name) => {
@@ -156,7 +175,8 @@ const post_controller = {
                     add_like(current_url, post_id, req.user.name);
                 } else {
                     delete_like(current_url, post_id, req.user.name);
-                };
+                }
+                ;
                 delete like_search_result[req.user.name];
             })
             .catch(err => console.log(err));
@@ -165,14 +185,14 @@ const post_controller = {
 };
 module.exports = {post_controller, app};
 
-function attach_likes(result,name) {
-    for(post_outer of result){
+function attach_likes(result, name) {
+    for (post_outer of result) {
         // console.log(post_outer.post.upvote_users);
-        post_outer.post.user_like=false;
-        post_outer.post.like_count=post_outer.post.upvote_users.length;
-        for(user of post_outer.post.upvote_users){
-            if(user.upvote_username===name){
-                post_outer.post.user_like=true;
+        post_outer.post.user_like = false;
+        post_outer.post.like_count = post_outer.post.upvote_users.length;
+        for (user of post_outer.post.upvote_users) {
+            if (user.upvote_username === name) {
+                post_outer.post.user_like = true;
             }
         }
     }
