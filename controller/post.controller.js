@@ -90,15 +90,28 @@ const post_controller = {
         let total_length;
         let query;
         let search_by_username = req.query.search_username;
+        let sort_likes = req.query.sort_likes;
 
-        if (search_by_username) {
-            await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category, 'post.username': search_by_username}}]).then(result => total_length=result.length).catch(err => console.log(err)); 
-            query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category, 'post.username': search_by_username}}, {$sort: {'post.post_time': -1}}, {$skip: (page - 1) * limit}, {$limit: limit}])
-        } 
-        else {
-            await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}]).then(result => total_length=result.length).catch(err => console.log(err)); 
-            query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}, {$sort: {'post.post_time': -1}}, {$skip: (page - 1) * limit}, {$limit: limit}])
+        if (sort_likes) {
+            if (search_by_username) {
+                await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category, 'post.username': search_by_username}}]).then(result => total_length=result.length).catch(err => console.log(err)); 
+                query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category, 'post.username': search_by_username}}, {$addFields: {upvote_count: {$size: "$post.upvote_users"}}}, {$sort: {"upvote_count":-1, 'post.post_time': -1}}, {$skip: (page - 1) * limit}, {$limit: limit}])
+            } 
+            else {
+                await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}]).then(result => total_length=result.length).catch(err => console.log(err)); 
+                query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}, {$addFields: {upvote_count: {$size: "$post.upvote_users"}}}, {$sort: {"upvote_count":-1, 'post.post_time': -1}}, {$skip: (page - 1) * limit}, {$limit: limit}])
+            }
+        } else {
+            if (search_by_username) {
+                await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category, 'post.username': search_by_username}}]).then(result => total_length=result.length).catch(err => console.log(err)); 
+                query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category, 'post.username': search_by_username}}, {$sort: {'post.post_time': -1}}, {$skip: (page - 1) * limit}, {$limit: limit}])
+            } 
+            else {
+                await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}]).then(result => total_length=result.length).catch(err => console.log(err)); 
+                query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}, {$sort: {'post.post_time': -1}}, {$skip: (page - 1) * limit}, {$limit: limit}])
+            }
         }
+
         query.exec()
             .then(result => {
                 if (endIndex >= total_length) {
@@ -113,6 +126,7 @@ const post_controller = {
                     result.has_prev=true;
                     result.prev_page=page-1
                 }
+                // console.log(result);
                 attach_likes(result, req.user.name);
                 res.render('index', {posts: result, url: current_url, viewername: req.user.name, category})
             })
