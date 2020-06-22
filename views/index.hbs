@@ -19,15 +19,27 @@
     <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
     <script>
         window.onload = () => {
+            var current_url = window.location.href;
+            current_url = new URL(current_url);
+            var search_params = current_url.searchParams.get("search_username");
             let url_encoded = encodeURIComponent("{{url}}");
             prev_link = "http://localhost:3000/post/render?current_url=" + url_encoded + "&category=" +
                     "{{category}}" + "&page=" +
                     "{{posts.prev_page}}";
+            if (search_params){
+                prev_link+="&search_username=" + search_params
+            }
             prev_page = document.getElementById('prev_page');
             prev_page.setAttribute('href', prev_link);
+
+
             next_link = "http://localhost:3000/post/render?current_url=" + url_encoded + "&category=" +
                     "{{category}}" + "&page=" +
                     "{{posts.next_page}}";
+
+            if (search_params){
+                next_link+="&search_username=" + search_params
+            }
             next_page = document.getElementById('next_page');
             next_page.setAttribute('href', next_link);
 
@@ -57,6 +69,18 @@
                         }
                     }
                 }
+            }
+            let normal_url = "http://localhost:3000/post/render?current_url=" + url_encoded + "&category=" +
+                    "{{category}}" + "&page=1";
+            let search_input = document.getElementById('search_input');
+            let search_button = document.getElementById('search_button');
+            search_button.onclick = () => {
+                normal_url += "&search_username=" + search_input.value;
+                window.open(normal_url,'_self');
+            };
+            let back_button= document.getElementById('back');
+            back_button.onclick=()=>{
+                window.open(normal_url,'_self');
             }
         }
 
@@ -209,12 +233,14 @@
                 <h5 class="card-header">Search</h5>
                 <div class="card-body">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for user posts...">
+                        <input type="text" class="form-control" id="search_input"
+                               placeholder="Search for user posts...">
                         <span class="input-group-btn">
-                <button class="btn btn-secondary" type="button">Go!</button>
+                <button class="btn btn-secondary" id="search_button" type="button">Go!</button>
               </span>
-                    </div><br>
-                <span><button class="btn btn-secondary" type="button">Back to all posts!</button></span>
+                    </div>
+                    <br>
+                    <span><button class="btn btn-secondary" type="button" id="back">Back to all posts!</button></span>
                 </div>
             </div>
 
