@@ -11,7 +11,7 @@ const post_controller = {
             return res.status(422).json({errors: errors.array()});
         }
         ;
-        let hitUrl = `/post/render?current_url=${encodeURIComponent(req.body.url)}&category=${req.body.category}`;
+        let hitUrl = `/post/render?current_url=${encodeURIComponent(req.body.url)}&category=${req.body.category}&page=1`;
         Post.findOne({url: req.body.url}, (err, data) => {
             if (err) {
                 res.status(500).send({msg: "Internal Server Error"});
