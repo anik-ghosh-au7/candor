@@ -102,6 +102,7 @@ const user_controller = {
         let email = req.body.email;
         let otp = generateOTP();
         dict[email] = otp;
+        clearOTP(dict, email);
 
         async function main() {
             // Generate test SMTP service account from ethereal.email

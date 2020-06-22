@@ -75,26 +75,25 @@ const post_controller = {
                 }
             }, {"new": true})
             .then((result) => {
-                console.log(result);
                 let hitUrl = `/post/render?current_url=${encodeURIComponent(current_url)}&category=${req.body.category}`;
                 res.redirect(hitUrl)
             })
             .catch(err => console.log(err));
 
     },
-    renderPost: (req, res) => {
+    renderPost: async (req, res) => {
         let current_url = decodeURIComponent(req.query.current_url);
         let category = req.query.category;
-        let limit_ = 2;
+        let limit = 2;
         let page=parseInt(req.query.page);
-        const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-        let query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}])
-        query.limit(limit_).skip((page - 1) * limit).exec()
-            .then(async (result) => {
-                // console.log(result);
-                if (endIndex >= await query.exec().length) {
-                    results.has_next = false;
+        let total_length;
+        await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}]).then(result => total_length=result.length).catch(err => console.log(err)); 
+        let query = Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': category}}, {$skip: (page - 1) * limit}, {$limit: limit}])
+        query.exec()
+            .then(result => {
+                if (endIndex >= total_length) {
+                    result.has_next = false;
                 }else{
                     result.has_next=true;
                     result.next_page=page+1
@@ -105,8 +104,6 @@ const post_controller = {
                     result.has_prev=true;
                     result.prev_page=page-1
                 }
-                console.log(page);
-                console.log(result);
                 attach_likes(result, req.user.name);
                 res.render('index', {posts: result, url: current_url, viewername: req.user.name, category})
             })
@@ -132,7 +129,6 @@ const post_controller = {
     updateLike: async (req, res) => {
         let current_url = decodeURIComponent(req.query.current_url);
         let post_id = req.query.post_id;
-        console.log(req.query.current_url, req.query.post_id, req.user.name);
         let like_search_result = {};
 
         const add_like = (url, id, name) => {
@@ -145,8 +141,6 @@ const post_controller = {
                     }
                 }, {"new": true})
                 .then((result) => {
-                    // console.log('add',result);
-                    // res.send(`added like by ${name}`);
                     res.send('liked');
                 })
                 .catch(err => console.log(err));
@@ -161,8 +155,6 @@ const post_controller = {
                     }
                 }, {"new": true})
                 .then((result) => {
-                    // console.log('del',result);
-                    // res.send(`removed like from ${name}`);
                     res.send('unliked');
                 })
                 .catch(err => console.log(err));
@@ -187,7 +179,6 @@ module.exports = {post_controller, app};
 
 function attach_likes(result, name) {
     for (post_outer of result) {
-        // console.log(post_outer.post.upvote_users);
         post_outer.post.user_like = false;
         post_outer.post.like_count = post_outer.post.upvote_users.length;
         for (user of post_outer.post.upvote_users) {
