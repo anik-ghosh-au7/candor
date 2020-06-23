@@ -85,7 +85,6 @@ const user_controller = {
 
     loginPage: (req, res) => {
         if (req.user) {
-
             return res.redirect('/');
         }
         res.render('login');
@@ -138,7 +137,7 @@ const user_controller = {
         let otp = req.query.otp;
         let email = req.query.email;
         if (dict[email][0] === otp) {
-            res.send('otp verified')
+            res.send('Otp verified')
         } else {
             res.send('Wrong OTP');
         }

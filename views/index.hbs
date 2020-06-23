@@ -22,12 +22,16 @@
             var current_url = window.location.href;
             current_url = new URL(current_url);
             var search_params = current_url.searchParams.get("search_username");
+            var sort_istrue=current_url.searchParams.get('sort_likes');
             let url_encoded = encodeURIComponent("{{url}}");
             prev_link = "http://localhost:3000/post/render?current_url=" + url_encoded + "&category=" +
                     "{{category}}" + "&page=" +
                     "{{posts.prev_page}}";
             if (search_params){
                 prev_link+="&search_username=" + search_params
+            }
+            if(sort_istrue){
+                prev_link+="&sort_likes=true"
             }
             prev_page = document.getElementById('prev_page');
             prev_page.setAttribute('href', prev_link);
@@ -40,6 +44,10 @@
             if (search_params){
                 next_link+="&search_username=" + search_params
             }
+            if(sort_istrue){
+                next_link+="&sort_likes=true"
+            }
+
             next_page = document.getElementById('next_page');
             next_page.setAttribute('href', next_link);
 
@@ -76,11 +84,30 @@
             let search_button = document.getElementById('search_button');
             search_button.onclick = () => {
                 normal_url += "&search_username=" + search_input.value;
+                if(sort_istrue){
+                    normal_url+='&sort_likes=true';
+                }
                 window.open(normal_url,'_self');
             };
             let back_button= document.getElementById('back');
             back_button.onclick=()=>{
                 window.open(normal_url,'_self');
+            }
+
+            let sort_by_like= document.getElementById('sort_likes');
+            sort_by_like.onclick=()=>{
+                normal_url+="&sort_likes=true";
+                if(search_params){
+                    normal_url+="&search_username="+ search_params
+                }
+                window.open(normal_url,'_self');
+            }
+            let sort_by_time= document.getElementById('sort_time');
+            sort_by_time.onclick=()=>{
+                if(search_params){
+                    normal_url+="&search_username="+ search_params
+                }
+                window.open(normal_url,'_self')
             }
         }
 
@@ -284,7 +311,7 @@
                 <h5 class="card-header">Sort Posts</h5>
                 <div class="card-body" style="align-self: center;">
                     <span><button class="btn btn-secondary" type="button" id="sort_time">Sort posts by time!</button></span><br>
-                    <br><span><button class="btn btn-secondary" type="button" id="sort_like">Sort posts by likes!</button></span>
+                    <br><span><button class="btn btn-secondary" type="button" id="sort_likes">Sort posts by likes!</button></span>
                 </div>
             </div>
 
