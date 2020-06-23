@@ -3,10 +3,13 @@ const {validationResult} = require('express-validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-var dict = {};
 require('dotenv').config();
+const cloudinary = require('../utils/cloudinary');
+const buff2Str = require('../utils/convertBuffToStr');
 
-//Keys for otp twilio api
+var dict = {};
+let image_url;
+let imageContent;
 
 const user_controller = {
 
@@ -22,8 +25,17 @@ const user_controller = {
 
         if (!errors.isEmpty()) {
             return res.status(422).json({errors: errors.array()});
-        }
-        ;
+        };
+
+        imageContent = buff2Str(req.file.originalname, req.file.buffer).content;
+        await cloudinary.uploader.upload(imageContent, (err, imageResponse) => {
+            if (err) console.log(err);
+            else {
+                // console.log(imageResponse);
+                image_url = imageResponse.secure_url;
+                console.log('log from cloudinary',image_url)
+            }
+        })
 
         try {
             let hashed_password = await bcrypt.hash(req.body.password, 5);
@@ -31,8 +43,10 @@ const user_controller = {
                 username: req.body.username,
                 password: hashed_password,
                 email: req.body.email,
-                phone: req.body.phone
+                phone: req.body.phone,
+                image_url: image_url
             });
+            console.log(entry);
             entry.save(function (err) {
                 if (err) {
                     // not acceptable
@@ -136,7 +150,7 @@ const user_controller = {
     submit_otp: (req, res) => {
         let otp = req.query.otp;
         let email = req.query.email;
-        if (dict[email][0] === otp) {
+        if (dict[email] && dict[email][0] === otp) {
             res.send('Otp verified')
         } else {
             res.send('Wrong OTP');

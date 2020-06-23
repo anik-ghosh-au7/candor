@@ -20,8 +20,8 @@ const userSchema = new Schema({
         type: Number,
         required: true
     },
-    post_ids: {
-        type: [String]
+    image_url: {
+        type: String
     }
 }, {
    versionKey: false

@@ -42,7 +42,7 @@
 <div class="modal-icons">
     <div class="flex-container">
         <div class="flex">
-            <form action="http://localhost:3000/users/createuser" method="POST">
+            <form action="http://localhost:3000/users/createuser" method="POST" enctype="multipart/form-data">
                 <label for="username">Username</label><br>
                 <input type="text" name="username"><br>
                 <label for="email">email</label><br>
@@ -50,10 +50,11 @@
                 <button type="button" id="otp_button">Get Otp</button><br>
                 <input type="text" name="OTP" placeholder="Enter OTP" id="otp_input">
                 <button type="button" id='submit_otp'>Verify OTP</button><br>
-                <span id="otp_sent"></span>
+                <span id="otp_sent"></span><br>
                 <label for="phone">Phone</label><br>
                 <input type="tel" name="phone" id="phone"><br>
-
+                <label for="image">Profile photo</label><br>
+                <input type="file" name="image" id="image"><br>
                 <label for="password">Password</label><br>
                 <input type="password" name="password"><br>
                 <input type="submit" class="btn btn-success" value="Sign Up">

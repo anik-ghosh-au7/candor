@@ -3,6 +3,7 @@ const user_controller = require ('../controller/user.controller');
 const jwt = require ('jsonwebtoken');
 require('dotenv').config();
 const userValidator = require('../validator/user.validator');
+const cloudUpload = require('../utils/multer');
 
 const authenticateToken = (req, res, next) => {
   const token = req.cookies['awtToken'];
@@ -23,7 +24,7 @@ const router = express.Router();
 
 router.post('/request_otp',user_controller.request_otp);
 
-router.post('/createuser',authenticateToken, [userValidator.check_username(), userValidator.check_email(), userValidator.check_password(), userValidator.check_phone()], user_controller.createUser);
+router.post('/createuser',authenticateToken, cloudUpload, [userValidator.check_username(), userValidator.check_email(), userValidator.check_password(), userValidator.check_phone()], user_controller.createUser);
 
 router.post('/login',authenticateToken, user_controller.login);
 
