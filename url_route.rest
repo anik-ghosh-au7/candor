@@ -24,5 +24,8 @@ GET http://localhost:3000/post/render?current_url=https%3A%2F%2Funiversity.attai
 
 ###
 
+GET http://localhost:3000/post/render?current_url=https%3A%2F%2Funiversity.attainu.com%2Fdashboard&category=question&page=1&search_username=ghosh&sort_likes=true
+
+###
 
 
