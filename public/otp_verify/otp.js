@@ -14,7 +14,6 @@ window.onload = () => {
         xhttp.send(JSON.stringify(body));
         xhttp.onload = () => {
             document.getElementById('otp_sent').innerHTML = xhttp.responseText;
-            console.log(xhttp.responseText);
         };
     };
     let submit_otp = document.getElementById('submit_otp');
@@ -27,7 +26,6 @@ window.onload = () => {
         xhttp.send();
         xhttp.onload = () => {
             document.getElementById('otp_verify').innerHTML = xhttp.responseText;
-            console.log(xhttp.responseText);
         }
     }
 }

@@ -165,7 +165,7 @@ const user_controller = {
         let otp = req.query.otp;
         let email = req.query.email;
         if (dict[email] && dict[email][0] === otp) {
-            res.send('Otp verified')
+            res.send('OTP verified')
         } else {
             res.send('Wrong OTP');
         }

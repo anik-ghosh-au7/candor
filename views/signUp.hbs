@@ -44,35 +44,48 @@
     <script src="./../otp_verify/otp.js"></script>
 </head>
 
-<body>
+<body style="background: #eee;">
 <div class="align-vert">
-    <div class="card" style="width: 18rem;">
-        <!--        <img class="card-img-top" src="..." alt="Card image cap">-->
-        <div class="card-body">
-            <p class="card-text"></p>
-        </div>
+    <div class="card" style="width: 23rem;">
+        <img class="logo-icon  " src="./../images/logo_full.png"
+             style="width: 15rem; align-self: center; margin-top: 15px;"/>
         <form action="http://localhost:3000/users/createuser" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="username">Username</label><br>
                 <input type="text" class="form-control" name="username" id="username"><br>
             </div>
-            <div class="form-group">
-                <label for="email">Email</label><br>
-                <input type="text" class="form-control" name="email" id="email">
-                <button type="button" class="btn btn-primary" style="margin-top: 5px" id="otp_button">Get Otp</button>
-                <br>
-                <span id="otp_sent"></span>
+            <table>
+                <tr>
+                    <div class="form-group">
+                        <label for="email">Email</label><br>
+                        <input type="text" class="form-control" name="email" id="email">
+                        <button type="button" class="btn btn-primary" style="margin-top: 5px;" id="otp_button">Get Otp
+                        </button>
+                        <span id="otp_sent" style="padding-left: 20px;"></span>
 
-            </div>
-            <div class="form-group">
-                <input type="text" name="OTP" class="form-control" placeholder="Enter OTP" id="otp_input">
-                <button type="button" class="btn btn-primary" style="margin-top: 5px" id='submit_otp'>Verify OTP
-                </button>
-                <br>
-                <span id="otp_verify"></span>
+                    </div>
+                </tr>
+                <tr>
+
+                    <div class="form-group">
+                        <td>
+                            <input type="text" name="OTP" class="form-control" placeholder="Enter OTP" id="otp_input">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id='submit_otp' style="width: 104px;">Verify OTP
+                            </button>
+                        </td>
 
 
-            </div>
+                        <br>
+                        <span id="otp_verify"></span>
+
+
+                    </div>
+                </tr>
+
+            </table>
+
             <div class="form-group">
                 <br>
                 <label for="phone">Phone</label><br>
