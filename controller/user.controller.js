@@ -25,17 +25,20 @@ const user_controller = {
 
         if (!errors.isEmpty()) {
             return res.status(422).json({errors: errors.array()});
-        };
+        }
+        ;
+        if (req.file) {
+            imageContent = buff2Str(req.file.originalname, req.file.buffer).content;
+            await cloudinary.uploader.upload(imageContent, (err, imageResponse) => {
+                if (err) console.log(err);
+                else {
+                    // console.log(imageResponse);
+                    image_url = imageResponse.secure_url;
+                    console.log('log from cloudinary', image_url)
+                }
+            });
 
-        imageContent = buff2Str(req.file.originalname, req.file.buffer).content;
-        await cloudinary.uploader.upload(imageContent, (err, imageResponse) => {
-            if (err) console.log(err);
-            else {
-                // console.log(imageResponse);
-                image_url = imageResponse.secure_url;
-                console.log('log from cloudinary',image_url)
-            }
-        });e
+        }
 
         try {
             let hashed_password = await bcrypt.hash(req.body.password, 5);
@@ -46,6 +49,9 @@ const user_controller = {
                 phone: req.body.phone,
                 image_url: image_url
             });
+            if(!entry.image_url){
+                delete entry.image_url;
+            }
             console.log(entry);
             entry.save(function (err) {
                 if (err) {
@@ -77,7 +83,12 @@ const user_controller = {
                 if (data) {
                     try {
                         if (await bcrypt.compare(password, data.password)) {
-                            const accessToken = jwt.sign({name: username}, process.env.jwt_key);
+                            const accessToken = jwt.sign({
+                                name: username,
+                                img: data.image_url,
+                                email: data.email,
+                                phone: data.phone
+                            }, process.env.jwt_key);
                             res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
                             return res.redirect('/');
                         } else {
@@ -112,11 +123,12 @@ const user_controller = {
     request_otp: (req, res) => {
         let email = req.body.email;
         let otp = generateOTP();
-        if(dict[email]){
+        console.log(otp);
+        if (dict[email]) {
             clearInterval(dict[email][1]);
             delete dict[email];
         }
-        dict[email] = [otp,clearOTP(dict,email)];
+        dict[email] = [otp, clearOTP(dict, email)];
 
         async function main() {
             // Generate test SMTP service account from ethereal.email
@@ -145,7 +157,9 @@ const user_controller = {
             });
         }
 
-        main().then(() => res.send('OTP sent')).catch(()=>{console.error();})
+        main().then(() => res.send('OTP sent')).catch(() => {
+            console.error();
+        })
     },
     submit_otp: (req, res) => {
         let otp = req.query.otp;
@@ -177,8 +191,8 @@ function generateOTP() {
 
 function clearOTP(dict, key) {
     return setTimeout(() => {
-            delete dict[key];
-    }, 1000 * 60 *30 );
+        delete dict[key];
+    }, 1000 * 60 * 30);
 }
 
 module.exports = user_controller;

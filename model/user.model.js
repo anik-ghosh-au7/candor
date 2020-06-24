@@ -21,7 +21,8 @@ const userSchema = new Schema({
         required: true
     },
     image_url: {
-        type: String
+        type: String,
+        default:"./../images/default-profile-picture1.jpg"
     }
 }, {
    versionKey: false

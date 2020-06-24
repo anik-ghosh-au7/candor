@@ -1,6 +1,14 @@
 chrome.storage.local.get('username', (result) => {
     document.getElementById("username").innerHTML = "Hello " + result.username;
 });
+chrome.storage.local.get('img',(result)=>{
+    if(result.img){
+        document.getElementById('profile_img').src=result.img;
+    }else{
+        document.getElementById('profile_img').src="images/default-profile-picture1.jpg";
+    }
+
+});
 var curr_url;
 var server_url = "http://localhost:3000/post/";
 chrome.runtime.sendMessage(
