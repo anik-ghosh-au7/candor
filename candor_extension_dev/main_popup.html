@@ -2,112 +2,36 @@
 <html>
 <head>
     <title>Candor</title>
-    <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans"
-            rel="stylesheet"
-            type="text/css"
-    />
-    <link
-            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-            rel="stylesheet"
-            integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-            crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="jquery-3.4.1.min.js"></script>
+
+    <script src="main_popup.js"></script>
     <style>
-        /* Modal Structure */
-
-        html,
         body {
-            font-family: "Open Sans", sans-serif;
-            font-size: 14px;
-            margin: 0;
-            min-height: 180px;
-            padding: 0;
-            width: 384px;
+            padding: 20px;
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
         }
 
-        h1 {
-            font-family: "Menlo", monospace;
-            font-size: 22px;
-            font-weight: 400;
-            margin: 0;
-            color: #2f5876;
-        }
-
-        a:link,
-        a:visited {
-            color: #000000;
-            outline: 0;
-            text-decoration: none;
-        }
-
-        img {
-            width: 30px;
-        }
-
-        .modal-header {
-            align-items: center;
-            border-bottom: 0.5px solid #dadada;
-        }
-
-        .modal-content {
-            padding: 0 22px;
-        }
-
-        .modal-icons {
-            border-top: 0.5px solid #dadada;
-            height: 50px;
-            width: 100%;
-        }
-
-        .logo {
-            padding: 16px;
-        }
-
-        .logo-icon {
-            vertical-align: text-bottom;
-            margin-right: 12px;
-        }
-
-        .version {
-            color: #444;
-            font-size: 18px;
-        }
-
-        .flex-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 22px;
-        }
-
-        .flex {
-            opacity: 1;
-            transition: opacity 0.2s ease-in-out;
-            width: 120px;
-        }
-
-        .flex:hover {
-            opacity: 0.4;
-        }
-
-        .flex .fa {
-            font-size: 40px;
-            color: #2f5876;
+        a {
+            color: #00B7FF;
         }
     </style>
-    <script src="main_popup.js"></script>
 </head>
 
 <body>
-<div class="modal-header">
-    <h1 class="logo">
-        <img class="logo-icon" src="images/icon.png"/>
-        <span id="username"></span>
-    </h1>
+<div class="modal-header" style="padding-top: 0px">
+    <img class="logo-icon" src="images/icon.png"/>
+    <br>
+    <h2>
+    <span id="username"></span>
+    </h2>
 </div>
-<div class="modal-content" style="text-align:center">
-    <p><span id="context_url"></span></p>
+
+<div class="card" style="width: 15rem;">
+    <div class="card-body">
+        <B><h6 class="card-title">Context URL:</h6></B>
+        <p class="card-text" id="context_url"></p>
+    </div>
 </div>
 <div class="modal-icons">
     <table class="table table-hover">
@@ -119,31 +43,32 @@
         <tbody>
         <tr>
             <td style="text-align:center">
-                <a href="#" id="question" >Question : </a> <span id="question_data"></span>
+                <a href="#" id="question">Question : </a> <span id="question_data"></span>
             </td>
         </tr>
         <tr>
             <td style="text-align:center">
-                <a href="#" id="admin" >Admin : </a> <span id="admin_data"></span>
+                <a href="#" id="admin">Admin : </a> <span id="admin_data"></span>
             </td>
         </tr>
         <tr>
             <td style="text-align:center">
-                <a href="#" id="related" >Related : </a> <span id="related_data"></span>
+                <a href="#" id="related">Related : </a> <span id="related_data"></span>
             </td>
         </tr>
         <tr>
             <td style="text-align:center">
-                <a href="#" id="others" >Others : </a> <span id="others_data"></span>
+                <a href="#" id="others">Others : </a> <span id="others_data"></span>
             </td>
         </tr>
         </tbody>
     </table>
     <div id="post_form"></div>
-    <div class="flex-container" >
+    <div class="flex-container">
         <form action="http://localhost:3000/users/logout" method="GET" target="_blank">
-            <input type="submit" class="btn btn-info" value="Log Out" >
+            <input type="submit" class="btn btn-primary btn-lg btn-block" value="Log Out">
         </form>
     </div>
+</div>
 </body>
 </html>

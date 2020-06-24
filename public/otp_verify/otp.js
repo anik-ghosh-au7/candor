@@ -7,6 +7,7 @@ window.onload = () => {
         var body = {
             email: email
         };
+        console.log("sending");
         xhttp.open("POST", server_url, true);
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify(body));
@@ -24,7 +25,7 @@ window.onload = () => {
         xhttp.open("GET", submit_otp_url + `/?otp=${otp}&email=${email}`, true);
         xhttp.send();
         xhttp.onload = () => {
-            document.getElementById('otp_sent').innerHTML = xhttp.responseText;
+            document.getElementById('otp_verify').innerHTML = xhttp.responseText;
             console.log(xhttp.responseText);
         }
     }

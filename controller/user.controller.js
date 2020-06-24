@@ -35,7 +35,7 @@ const user_controller = {
                 image_url = imageResponse.secure_url;
                 console.log('log from cloudinary',image_url)
             }
-        })
+        });e
 
         try {
             let hashed_password = await bcrypt.hash(req.body.password, 5);

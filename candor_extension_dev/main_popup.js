@@ -8,16 +8,19 @@ chrome.runtime.sendMessage(
         curr_url = data;
         let domain = url_domain(curr_url);
         if (domain === 'localhost') {
-            var actual_url=new URL(curr_url).searchParams.get("current_url");
-            actual_url=decodeURIComponent(actual_url);
-            curr_url=actual_url;
+            var actual_url = new URL(curr_url).searchParams.get("current_url");
+            actual_url = decodeURIComponent(actual_url);
+            curr_url = actual_url;
         }
 
+        if (curr_url!="null") {
+            document.getElementById('context_url').innerHTML = curr_url
+            update_links();
+            get_data();
+        }else{
+            document.getElementById('context_url').innerHTML= "We don't serve at this site."
+        }
 
-        document.getElementById('context_url').innerHTML = curr_url
-
-        update_links();
-        get_data();
     }
 );
 
@@ -26,10 +29,9 @@ const get_data = () => {
     http_req.open("GET", server_url + `getdata/?current_url=${curr_url}`, true);
     http_req.send();
     http_req.onload = () => {
-            update_data(JSON.parse(http_req.response));
-        }
+        update_data(JSON.parse(http_req.response));
+    }
 }
-
 
 
 function update_links() {
