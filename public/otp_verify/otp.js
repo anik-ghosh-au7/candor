@@ -1,4 +1,5 @@
 window.onload = () => {
+    document.getElementById("username").focus();
     let btn = document.getElementById('otp_button');
     let server_url = 'http://localhost:3000/users/request_otp';
     btn.onclick = () => {

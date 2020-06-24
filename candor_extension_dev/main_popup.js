@@ -61,3 +61,4 @@ function url_domain(data) {
     a.href = data;
     return a.hostname;
 }
+
