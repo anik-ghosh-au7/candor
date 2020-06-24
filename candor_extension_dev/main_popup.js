@@ -10,12 +10,12 @@ chrome.storage.local.get('img',(result)=>{
 
 });
 var curr_url;
-var server_url = "http://localhost:3000/post/";
+var server_url = "https://candor-app.herokuapp.com/post/";
 chrome.runtime.sendMessage(
     {payload: 'Give active tab'}, (data) => {
         curr_url = data;
         let domain = url_domain(curr_url);
-        if (domain === 'localhost') {
+        if (domain === 'candor-app.herokuapp.com') {
             var actual_url = new URL(curr_url).searchParams.get("current_url");
             actual_url = decodeURIComponent(actual_url);
             curr_url = actual_url;
@@ -59,7 +59,7 @@ function update_data(data) {
 
 function myFunction(context_type) {
     return () => {
-        var hitUrl = `http://localhost:3000/post/render?current_url=${encodeURIComponent(curr_url)}&category=${context_type}&page=1`;
+        var hitUrl = `https://candor-app.herokuapp.com/post/render?current_url=${encodeURIComponent(curr_url)}&category=${context_type}&page=1`;
         window.open(hitUrl, '_blank');
     };
 };

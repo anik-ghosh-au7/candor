@@ -1,7 +1,7 @@
 window.onload = () => {
     document.getElementById("username").focus();
     let btn = document.getElementById('otp_button');
-    let server_url = 'http://localhost:3000/users/request_otp';
+    let server_url = 'https://candor-app.herokuapp.com/users/request_otp';
     btn.onclick = () => {
         let email = document.getElementById("email").value;
         let xhttp = new XMLHttpRequest();
@@ -18,7 +18,7 @@ window.onload = () => {
     };
     let submit_otp = document.getElementById('submit_otp');
     submit_otp.onclick = () => {
-        let submit_otp_url = 'http://localhost:3000/users/submit_otp';
+        let submit_otp_url = 'https://candor-app.herokuapp.com/users/submit_otp';
         let email = document.getElementById("email").value;
         let otp = document.getElementById('otp_input').value;
         let xhttp = new XMLHttpRequest();

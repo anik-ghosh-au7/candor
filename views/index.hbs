@@ -24,7 +24,7 @@
             var search_params = current_url.searchParams.get("search_username");
             var sort_istrue=current_url.searchParams.get('sort_likes');
             let url_encoded = encodeURIComponent("{{url}}");
-            prev_link = "http://localhost:3000/post/render?current_url=" + url_encoded + "&category=" +
+            prev_link = "https://candor-app.herokuapp.com/post/render?current_url=" + url_encoded + "&category=" +
                     "{{category}}" + "&page=" +
                     "{{posts.prev_page}}";
             if (search_params){
@@ -37,7 +37,7 @@
             prev_page.setAttribute('href', prev_link);
 
 
-            next_link = "http://localhost:3000/post/render?current_url=" + url_encoded + "&category=" +
+            next_link = "https://candor-app.herokuapp.com/post/render?current_url=" + url_encoded + "&category=" +
                     "{{category}}" + "&page=" +
                     "{{posts.next_page}}";
 
@@ -61,7 +61,7 @@
                 function like_click(j) {
                     return () => {
                         let xhttp = new XMLHttpRequest();
-                        xhttp.open("GET", `http://localhost:3000/post/like/?post_id=${like_btns[j].id}&current_url=${encodeURIComponent(context_url)}`, true);
+                        xhttp.open("GET", `https://candor-app.herokuapp.com/post/like/?post_id=${like_btns[j].id}&current_url=${encodeURIComponent(context_url)}`, true);
                         xhttp.send();
                         xhttp.onload = () => {
                             console.log(xhttp.responseText);
@@ -78,7 +78,7 @@
                     }
                 }
             }
-            let normal_url = "http://localhost:3000/post/render?current_url=" + url_encoded + "&category=" +
+            let normal_url = "https://candor-app.herokuapp.com/post/render?current_url=" + url_encoded + "&category=" +
                     "{{category}}" + "&page=1";
             let search_input = document.getElementById('search_input');
             let search_button = document.getElementById('search_button');
