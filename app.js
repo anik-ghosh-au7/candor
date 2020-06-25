@@ -4,8 +4,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
-require('dotenv').config();
+const handlebars = require('hbs');
 
+
+require('dotenv').config();
+handlebars.registerHelper('URL',()=>{
+    if(process.env.NODE_ENV === 'devlopment'){
+        return 'http://localhost:3000'
+    }else{
+        return 'https://candor-app.herokuapp.com'
+    }
+})
 mongoose.connect(process.env.mongo_uri, {
     useFindAndModify: false,
     useNewUrlParser: true,
