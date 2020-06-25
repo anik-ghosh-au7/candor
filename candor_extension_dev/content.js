@@ -1,14 +1,15 @@
 // console.log("The URL of this page is: " + window.location.href)
+const {host_name}=require('./host');
 var currentUrl = window.location.href;
 // console.log(currentUrl);
-if (currentUrl === 'https://candor-app.herokuapp.com/') {
+if (currentUrl === host_name+'/') {
     var username = document.getElementById("username").innerHTML;
     var img=document.getElementById('img_url').innerHTML;
     chrome.storage.local.set({username,img});
     chrome.runtime.sendMessage(
         { payload: 'Change to main_popup.html' });
 };
-if (currentUrl==='https://candor-app.herokuapp.com/users/logout?'){
+if (currentUrl===host_name+'/users/logout?'){
     chrome.storage.local.clear();
     chrome.runtime.sendMessage(
         { payload: 'Change to popup.html: logged out' });
