@@ -112,7 +112,8 @@
             xhttp.send();
             xhttp.onload = () => {
                 console.log(xhttp.responseText);
-                document.getElementById('tags').innerText=xhttp.responseText
+                document.getElementById('tags').innerText=xhttp.responseText;
+                {{!-- document.getElementById('tags').innerText=xhttp.responseText.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g, '').replace(/"/g, "\n"); --}}
             };
 
         }

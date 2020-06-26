@@ -198,20 +198,76 @@ const post_controller = {
             .catch(err => console.log(err));
 
     },
-    getTrendingTags:async (req,res)=>{
-        res.send("tags will appear here");
+    getTrendingTags: async (req,res)=>{
+        // res.send("tags will appear here");
+        let current_url = decodeURIComponent(req.query.current_url);
+        let category = req.query.category;
+        let final_result = {};
+        await Post.aggregate([{$match: {url: current_url}}, 
+            {$unwind: '$post'}, 
+            {$match: {'post.category': category}}, 
+            {$match: {'post.post_tags': {"$exists": true, "$ne": null}}},
+            {$unwind: '$post.post_tags'},
+            {$group: {'_id': {'post_tags': '$post.post_tags'},'count': {'$sum': 1}}}])
+            .then(result => {
+                result.forEach(element => {
+                    final_result[element._id.post_tags] = element.count;
+                });
+            })
+            .catch(err => console.log(err))
+
+        await Post.aggregate([{$match: {url: current_url}}, 
+            {$unwind: '$post'}, 
+            {$match: {'post.category': category}}, 
+            {$unwind: '$post.comments'},
+            {$match: {'post.comments.comment_tags': {"$exists": true, "$ne": null}}},
+            {$unwind: '$post.comments.comment_tags'},
+            {$group: {'_id': {'comment_tags': '$post.comments.comment_tags'},'count': {'$sum': 1}}}])
+            .then(result => {
+                result.forEach(element => {
+                    if (!final_result[element._id.comment_tags]) {
+                        final_result[element._id.comment_tags] = element.count;
+                    } else {
+                        final_result[element._id.comment_tags] += element.count;
+                    }
+                });
+                let sortable = [];
+                for (let result in final_result) {
+                    sortable.push([result, final_result[result]]);
+                }
+
+                sortable.sort(function(a, b) {
+                    return b[1] - a[1];
+                });
+                let final_str = '';
+                sortable = sortable.slice(0, 10);
+                sortable.forEach(elem => final_str += `${elem[0]} : ${elem[1]}` + '\n');
+                res.send(final_str)}
+                )
+            .catch(err => console.log(err))
     }
 };
 module.exports = {post_controller, app};
 
 function attach_likes(result, name) {
+    let post_outer;
     for (post_outer of result) {
         post_outer.post.user_like = false;
         post_outer.post.like_count = post_outer.post.upvote_users.length;
+        let user;
         for (user of post_outer.post.upvote_users) {
             if (user.upvote_username === name) {
                 post_outer.post.user_like = true;
             }
         }
+    }
+}
+
+function sortFunction(a, b) {
+    if (a[0] === b[0]) {
+        return 0;
+    }
+    else {
+        return (a[0] < b[0]) ? -1 : 1;
     }
 }

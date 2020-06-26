@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "start": "babel-node ./bin/www",
+    "dev": "nodemon --exec babel-node ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
@@ -24,6 +24,13 @@
     "nodemailer": "^6.4.10"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/node": "^7.10.1",
+    "@babel/plugin-proposal-class-properties": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-watch": "^7.0.0",
     "nodemon": "^2.0.4"
   }
 }
