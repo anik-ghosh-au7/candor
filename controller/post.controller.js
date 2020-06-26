@@ -197,6 +197,9 @@ const post_controller = {
             })
             .catch(err => console.log(err));
 
+    },
+    getTrendingTags:async (req,res)=>{
+        res.send("tags will appear here");
     }
 };
 module.exports = {post_controller, app};

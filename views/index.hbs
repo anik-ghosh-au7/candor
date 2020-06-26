@@ -22,16 +22,16 @@
             var current_url = window.location.href;
             current_url = new URL(current_url);
             var search_params = current_url.searchParams.get("search_username");
-            var sort_istrue=current_url.searchParams.get('sort_likes');
+            var sort_istrue = current_url.searchParams.get('sort_likes');
             let url_encoded = encodeURIComponent("{{url}}");
             prev_link = "{{URL}}/post/render?current_url=" + url_encoded + "&category=" +
                     "{{category}}" + "&page=" +
                     "{{posts.prev_page}}";
-            if (search_params){
-                prev_link+="&search_username=" + search_params
+            if (search_params) {
+                prev_link += "&search_username=" + search_params
             }
-            if(sort_istrue){
-                prev_link+="&sort_likes=true"
+            if (sort_istrue) {
+                prev_link += "&sort_likes=true"
             }
             prev_page = document.getElementById('prev_page');
             prev_page.setAttribute('href', prev_link);
@@ -41,11 +41,11 @@
                     "{{category}}" + "&page=" +
                     "{{posts.next_page}}";
 
-            if (search_params){
-                next_link+="&search_username=" + search_params
+            if (search_params) {
+                next_link += "&search_username=" + search_params
             }
-            if(sort_istrue){
-                next_link+="&sort_likes=true"
+            if (sort_istrue) {
+                next_link += "&sort_likes=true"
             }
 
             next_page = document.getElementById('next_page');
@@ -64,13 +64,10 @@
                         xhttp.open("GET", `{{URL}}/post/like/?post_id=${like_btns[j].id}&current_url=${encodeURIComponent(context_url)}`, true);
                         xhttp.send();
                         xhttp.onload = () => {
-                            console.log(xhttp.responseText);
                             if (xhttp.responseText === 'liked') {
-                                console.log(like_btns[j].innerText.split(' '));
                                 like_btns[j].className += ' btn-info';
                                 like_btns[j].innerHTML = 'Liked ' + (parseInt(like_btns[j].innerText.split(" ")[1]) + 1)
                             } else {
-                                console.log(like_btns[j].innerText.split(' '));
                                 like_btns[j].className = 'btn';
                                 like_btns[j].innerHTML = 'Like ' + (parseInt(like_btns[j].innerText.split(" ")[1]) - 1)
                             }
@@ -84,31 +81,40 @@
             let search_button = document.getElementById('search_button');
             search_button.onclick = () => {
                 normal_url += "&search_username=" + search_input.value;
-                if(sort_istrue){
-                    normal_url+='&sort_likes=true';
+                if (sort_istrue) {
+                    normal_url += '&sort_likes=true';
                 }
-                window.open(normal_url,'_self');
+                window.open(normal_url, '_self');
             };
-            let back_button= document.getElementById('back');
-            back_button.onclick=()=>{
-                window.open(normal_url,'_self');
+            let back_button = document.getElementById('back');
+            back_button.onclick = () => {
+                window.open(normal_url, '_self');
             }
 
-            let sort_by_like= document.getElementById('sort_likes');
-            sort_by_like.onclick=()=>{
-                normal_url+="&sort_likes=true";
-                if(search_params){
-                    normal_url+="&search_username="+ search_params
+            let sort_by_like = document.getElementById('sort_likes');
+            sort_by_like.onclick = () => {
+                normal_url += "&sort_likes=true";
+                if (search_params) {
+                    normal_url += "&search_username=" + search_params
                 }
-                window.open(normal_url,'_self');
+                window.open(normal_url, '_self');
             }
-            let sort_by_time= document.getElementById('sort_time');
-            sort_by_time.onclick=()=>{
-                if(search_params){
-                    normal_url+="&search_username="+ search_params
+            let sort_by_time = document.getElementById('sort_time');
+            sort_by_time.onclick = () => {
+                if (search_params) {
+                    normal_url += "&search_username=" + search_params
                 }
-                window.open(normal_url,'_self')
-            }
+                window.open(normal_url, '_self')
+            };
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "{{URL}}/post/tags?current_url=" + url_encoded + "&category=" +
+                    "{{category}}", true);
+            xhttp.send();
+            xhttp.onload = () => {
+                console.log(xhttp.responseText);
+                document.getElementById('tags').innerText=xhttp.responseText
+            };
+
         }
 
     </script>
@@ -277,7 +283,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-6">
-                            <img  src="{{user.img}}" alt="Profile picture" style="display:block; border-radius: 8px; margin-left: auto; margin-right: auto; width: 50%; padding:1px; border:1px solid #AFAFAF;">
+                            <img src="{{user.img}}" alt="Profile picture"
+                                 style="display:block; border-radius: 8px; margin-left: auto; margin-right: auto; width: 50%; padding:1px; border:1px solid #AFAFAF;">
                         </div>
                         <div class="col-lg-6 my-auto">
                             <ul class="list-unstyled mb-0">
@@ -300,8 +307,16 @@
             <div class="card my-4">
                 <h5 class="card-header">Sort Posts</h5>
                 <div class="card-body" style="align-self: center;">
-                    <span><button class="btn btn-secondary" type="button" id="sort_time">Sort posts by time!</button></span><br>
-                    <br><span><button class="btn btn-secondary" type="button" id="sort_likes">Sort posts by likes!</button></span>
+                    <span><button class="btn btn-secondary" type="button"
+                                  id="sort_time">Sort posts by time!</button></span><br>
+                    <br><span><button class="btn btn-secondary" type="button"
+                                      id="sort_likes">Sort posts by likes!</button></span>
+                </div>
+            </div>
+            <div class="card my-4">
+                <h5 class="card-header">Trending Tags</h5>
+                <div class="card-body" style="align-self: center;">
+                    <div id="tags">Hi there!</div>
                 </div>
             </div>
 
