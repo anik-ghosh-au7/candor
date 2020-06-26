@@ -112,11 +112,12 @@
             xhttp.send();
             xhttp.onload = () => {
                 console.log(xhttp.responseText);
-                document.getElementById('tags').innerText=xhttp.responseText;
-                {{!-- document.getElementById('tags').innerText=xhttp.responseText.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g, '').replace(/"/g, "\n"); --}}
+                document.getElementById('tags').innerText = xhttp.responseText;
             };
 
+
         }
+
 
     </script>
 
@@ -135,18 +136,9 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
+                    <a class="nav-link" href="{{URL}}/users/logout">Log Out
                         <span class="sr-only">(current)</span>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
                 </li>
             </ul>
         </div>
@@ -190,7 +182,7 @@
                             Like{{#if this.post.user_like}}d{{/if}} {{this.post.like_count}}
                         </button>
                     </div>
-                    <form action="/post/addcomment" method="post">
+                    <form action="/post/addcomment" method="post" id="form_{{@index}}">
                         <input type="hidden" name="url" value={{../url}}>
                         <input type="hidden" name="category" value={{../category}}>
                         <input type="hidden" name="username" value={{../viewername}}>
@@ -199,10 +191,12 @@
                             <tr>
                                 <td>
                                     <input type="text" style='width:130%;' name="comment_body"
-                                           placeholder="Add your comment....">
+                                           placeholder="Add your comment...." id="input_{{@index}}"
+                                           onkeyup="stoppedTyping({{@index}})">
                                 </td>
                                 <td>
-                                    <input type="submit" class="btn btn-primary" value="Comment" style="float:right">
+                                    <input type="submit" disabled class="btn btn-primary" value="Comment"
+                                           style="float:right" id="submit_{{@index}}">
                                 </td>
                             </tr>
                         </table>
@@ -234,8 +228,8 @@
                             <input type="hidden" name="category" value={{category}}>
                             <input type="hidden" name="username" value={{viewername}}>
                             <input type="text" style='width:100%;' name="post_body"
-                                   placeholder="Your post goes here....">
-                            <input type="submit" class="btn btn-info" value="Submit">
+                                   placeholder="Your post goes here...." id="input_-1" onkeyup="stoppedTyping('-1')">
+                            <input type="submit" disabled class="btn btn-info" value="Submit" id="submit_-1">
                         </form>
                     </h3>
                     </p>
@@ -332,7 +326,7 @@
 <!-- Footer -->
 <footer class="py-5 bg-dark">
     <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+        <p class="m-0 text-center text-white">Copyright &copy; Candor 2020</p>
     </div>
     <!-- /.container -->
 </footer>
@@ -340,7 +334,17 @@
 <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+<script>
+    function stoppedTyping(ind) {
+        let inp_elem=document.getElementById('input_'+ind);
+        let butn=document.getElementById('submit_' + ind);
+        if(inp_elem.value && inp_elem.value.length>0){
+            butn.disabled=false
+        }else{
+            butn.disabled=true
+        }
+    }
+</script>
 </body>
 
 </html>
