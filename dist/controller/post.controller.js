@@ -640,12 +640,10 @@ var post_controller = {
                   return b[1] - a[1];
                 });
                 var final_str = '<ul class="list-group">';
-                sortable = sortable.slice(0, 10); // sortable.forEach(elem => {
-                //     final_str += `${`${elem[0]} : ${elem[1]}`}\n`
-                // });
+                sortable = sortable.slice(0, 10);
 
                 for (var i = 0; i < sortable.length; i += 1) {
-                  final_str += '<li class="list-group-item d-flex justify-content-between align-items-center" style="display: block; width:100%">' + sortable[i][0] + "<span class=\"badge badge-primary badge-pill\">".concat(sortable[i][1], "</span></li>");
+                  final_str += '<li class="list-group-item d-flex justify-content-between align-items-center">' + sortable[i][0] + "<span class=\"badge badge-primary badge-pill\">".concat(sortable[i][1], "</span></li>");
                 }
 
                 final_str += '</ul>';

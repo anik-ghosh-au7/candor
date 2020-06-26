@@ -273,11 +273,8 @@ const post_controller = {
                     });
                     let final_str = '<ul class="list-group">';
                     sortable = sortable.slice(0, 10);
-                    // sortable.forEach(elem => {
-                    //     final_str += `${`${elem[0]} : ${elem[1]}`}\n`
-                    // });
                     for (let i = 0; i < sortable.length; i += 1) {
-                        final_str += '<li class="list-group-item d-flex justify-content-between align-items-center" style="display: block; width:100%">' +
+                        final_str += '<li class="list-group-item d-flex justify-content-between align-items-center">' +
                             sortable[i][0] +
                             `<span class="badge badge-primary badge-pill">${sortable[i][1]}</span></li>`;
                     }
