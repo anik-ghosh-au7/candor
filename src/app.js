@@ -18,12 +18,38 @@ handlebars.registerHelper('URL',()=>{
 handlebars.registerHelper("printDate", function(date_before) {
 
     let dateUTC = new Date(date_before);
-    dateUTC = dateUTC.getTime();
-    let dateIST = new Date(dateUTC);
-    //date shifting for IST timezone (+5 hours and 30 minutes)
-    dateIST.setHours(dateIST.getHours() + 5);
-    dateIST.setMinutes(dateIST.getMinutes() + 30);
-    return dateIST.toString();
+    // dateUTC = dateUTC.getTime();
+    let curr_date=new Date();
+    let diff= curr_date-dateUTC;
+
+    let  seconds = parseInt(diff / 1000);
+    let minutes = parseInt(seconds / 60);
+    let hours = parseInt(minutes / 60);
+    let days = parseInt(hours / 24);
+    if(days>=1){
+        if(days==1){
+            return days+" day ago"
+        }
+        return days+" days ago"
+    }else if(hours>=1){
+        if(hours==1){
+            return "one hour ago"
+        }
+        return hours+" hours ago"
+    }else if(minutes>=1){
+        if(minutes==1){
+            return  "one minute ago"
+        }
+        return minutes +" minutes ago"
+    }else{
+        return "less than a minute ago"
+    }
+    // return diff.toString();
+    // let dateIST = new Date(dateUTC);
+    // //date shifting for IST timezone (+5 hours and 30 minutes)
+    // dateIST.setHours(dateIST.getHours() + 5);
+    // dateIST.setMinutes(dateIST.getMinutes() + 30);
+    // return dateIST.toString();
 });
 mongoose.connect(process.env.mongo_uri, {
     useFindAndModify: false,

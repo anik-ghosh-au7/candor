@@ -639,11 +639,16 @@ var post_controller = {
                 sortable.sort(function (a, b) {
                   return b[1] - a[1];
                 });
-                var final_str = '';
-                sortable = sortable.slice(0, 10);
-                sortable.forEach(function (elem) {
-                  return final_str += "".concat("".concat(elem[0], " : ").concat(elem[1]), "\n");
-                });
+                var final_str = '<ul class="list-group">';
+                sortable = sortable.slice(0, 10); // sortable.forEach(elem => {
+                //     final_str += `${`${elem[0]} : ${elem[1]}`}\n`
+                // });
+
+                for (var i = 0; i < sortable.length; i += 1) {
+                  final_str += '<li class="list-group-item d-flex justify-content-between align-items-center" style="display: block; width:100%">' + sortable[i][0] + "<span class=\"badge badge-primary badge-pill\">".concat(sortable[i][1], "</span></li>");
+                }
+
+                final_str += '</ul>';
                 res.send(final_str);
               })["catch"](function (err) {
                 return console.log(err);

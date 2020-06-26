@@ -35,13 +35,42 @@ _hbs["default"].registerHelper('URL', function () {
 });
 
 _hbs["default"].registerHelper("printDate", function (date_before) {
-  var dateUTC = new Date(date_before);
-  dateUTC = dateUTC.getTime();
-  var dateIST = new Date(dateUTC); //date shifting for IST timezone (+5 hours and 30 minutes)
+  var dateUTC = new Date(date_before); // dateUTC = dateUTC.getTime();
 
-  dateIST.setHours(dateIST.getHours() + 5);
-  dateIST.setMinutes(dateIST.getMinutes() + 30);
-  return dateIST.toString();
+  var curr_date = new Date();
+  var diff = curr_date - dateUTC;
+  var seconds = parseInt(diff / 1000);
+  var minutes = parseInt(seconds / 60);
+  var hours = parseInt(minutes / 60);
+  var days = parseInt(hours / 24);
+
+  if (days >= 1) {
+    if (days == 1) {
+      return days + " day ago";
+    }
+
+    return days + " days ago";
+  } else if (hours >= 1) {
+    if (hours == 1) {
+      return "one hour ago";
+    }
+
+    return hours + " hours ago";
+  } else if (minutes >= 1) {
+    if (minutes == 1) {
+      return "one minute ago";
+    }
+
+    return minutes + " minutes ago";
+  } else {
+    return "less than a minute ago";
+  } // return diff.toString();
+  // let dateIST = new Date(dateUTC);
+  // //date shifting for IST timezone (+5 hours and 30 minutes)
+  // dateIST.setHours(dateIST.getHours() + 5);
+  // dateIST.setMinutes(dateIST.getMinutes() + 30);
+  // return dateIST.toString();
+
 });
 
 _mongoose["default"].connect(process.env.mongo_uri, {
