@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var jwt = require('jsonwebtoken');
-const {request} = require('express');
-var {post_controller,app} = require('../controller/post.controller');
-require('dotenv').config();
+import express from 'express';
+const router = express.Router();
+import jwt from 'jsonwebtoken';
+import {post_controller} from '../controller/post.controller';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 const authenticateToken = (req, res, next) => {

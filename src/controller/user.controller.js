@@ -1,13 +1,14 @@
-const User = require('../model/user.model');
-const {validationResult} = require('express-validator');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-require('dotenv').config();
-const cloudinary = require('../utils/cloudinary');
-const buff2Str = require('../utils/convertBuffToStr');
+import User from '../model/user.model';
+import {validationResult} from 'express-validator';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+import cloudinary from '../utils/cloudinary';
+import buff2Str from '../utils/convertBuffToStr';
+dotenv.config();
 
-var dict = {};
+let dict = {};
 let image_url;
 let imageContent;
 
@@ -18,7 +19,6 @@ const user_controller = {
             return res.redirect('/');
         }
         const errors = validationResult(req);
-
         if (!dict[req.body.email] || dict[req.body.email][0] !== req.body.OTP) {
             return res.status(400).send('Wrong OTP ');
         }
@@ -32,14 +32,12 @@ const user_controller = {
             await cloudinary.uploader.upload(imageContent, (err, imageResponse) => {
                 if (err) console.log(err);
                 else {
-                    // console.log(imageResponse);
                     image_url = imageResponse.secure_url;
                     console.log('log from cloudinary', image_url)
                 }
             });
 
         }
-
         try {
             let hashed_password = await bcrypt.hash(req.body.password, 5);
             let entry = new User({
@@ -100,11 +98,9 @@ const user_controller = {
                     }
                 } else {
                     // no data
-                    // res.status(204).send(data);
                     res.redirect('/');
                 }
-            }
-            ;
+            };
         });
     },
 
@@ -131,27 +127,22 @@ const user_controller = {
         dict[email] = [otp, clearOTP(dict, email)];
 
         async function main() {
-            // Generate test SMTP service account from ethereal.email
-            // Only needed if you don't have a real mail account for testing
             let testAccount = await nodemailer.createTestAccount();
-
-            // create reusable transporter object using the default SMTP transport
             let transporter = nodemailer.createTransport({
                 service: 'gmail',
                 host: 'smtp.gmail.com',
                 auth: {
-                    user: process.env.email_otp_id, // generated ethereal user
+                    user: process.env.email_otp_id,
                     port: 465,
                     secure: true,
-                    pass: process.env.email_otp_password, // generated ethereal password
+                    pass: process.env.email_otp_password,
                 },
             });
 
-            // send mail with defined transport object
             let info = await transporter.sendMail({
-                from: "Candor ", // sender address
-                to: email, // list of receivers
-                subject: "OTP from Candor", // Subject line
+                from: "Candor ",
+                to: email,
+                subject: "OTP from Candor",
                 text: `For sign up to Candor, please use this OTP ${otp}. This OTP will be valid for 30 mins`, // plain text body
                 html: `<b><H2>For sign up, please use this OTP ${otp}</H2><br> OTP will be valid for 30 mins</b>` // html body
             });
@@ -178,10 +169,7 @@ const user_controller = {
 
 
 function generateOTP() {
-
-    // Declare a digits variable
-    // which stores all digits
-    var digits = '0123456789';
+    let digits = '0123456789';
     let OTP = '';
     for (let i = 0; i < 6; i++) {
         OTP += digits[Math.floor(Math.random() * 10)];

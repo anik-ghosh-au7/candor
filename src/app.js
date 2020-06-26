@@ -1,13 +1,13 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var mongoose = require('mongoose');
-const handlebars = require('hbs');
+import createError from 'http-errors';
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import mongoose from 'mongoose';
+import handlebars from 'hbs';
+import dotenv from 'dotenv';
+dotenv.config();
 
-
-require('dotenv').config();
 handlebars.registerHelper('URL',()=>{
     if(process.env.NODE_ENV === 'devlopment'){
         return 'http://localhost:3000'
@@ -17,9 +17,9 @@ handlebars.registerHelper('URL',()=>{
 })
 handlebars.registerHelper("printDate", function(date_before) {
 
-    var dateUTC = new Date(date_before);
-    var dateUTC = dateUTC.getTime();
-    var dateIST = new Date(dateUTC);
+    let dateUTC = new Date(date_before);
+    dateUTC = dateUTC.getTime();
+    let dateIST = new Date(dateUTC);
     //date shifting for IST timezone (+5 hours and 30 minutes)
     dateIST.setHours(dateIST.getHours() + 5);
     dateIST.setMinutes(dateIST.getMinutes() + 30);
@@ -34,14 +34,11 @@ mongoose.connect(process.env.mongo_uri, {
     .then(console.log('DB connected successfully'))
     .catch(err => console.log(err));
 
-var homeRouter = require('./routes/home');
-var usersRouter = require('./routes/users');
-var postRouter = require('./routes/post');
+import homeRouter from './routes/home';
+import usersRouter from './routes/users';
+import postRouter from './routes/post';
 
-var app = express();
-
-
-
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

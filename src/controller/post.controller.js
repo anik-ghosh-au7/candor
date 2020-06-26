@@ -1,8 +1,8 @@
-const Post = require('../model/post.model');
-const {validationResult} = require('express-validator');
-var ObjectId = require('mongodb').ObjectId
+import Post from '../model/post.model';
+import {validationResult} from 'express-validator';
+import {ObjectId} from 'mongodb';
 
-var app = {};
+const app = {};
 
 const post_controller = {
     createPost: (req, res) => {
@@ -17,7 +17,7 @@ const post_controller = {
                 res.status(500).send({msg: "Internal Server Error"});
             } else {
 
-                var tag = req.body.post_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
+                const tag = req.body.post_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
                 if (!data) {
                     let entry = new Post({
                         url: req.body.url,
@@ -28,7 +28,7 @@ const post_controller = {
                             post_body: req.body.post_body
                         }]
                     });
-                    entry.save(function (err) {
+                    entry.save(err => {
                         if (err) {
                             res.status(406).send(err.message);
                         } else {
@@ -47,7 +47,7 @@ const post_controller = {
                                 }
                             }
                         }, {"new": true},
-                        function (err) {
+                        err => {
                             if (err) console.log(err);
                             res.redirect(hitUrl);
                         }
@@ -62,7 +62,7 @@ const post_controller = {
 
         let current_url = req.body.url;
         let post_id = req.body.post_id;
-        var tag = req.body.comment_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
+        const tag = req.body.comment_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
 
         Post.findOneAndUpdate({url: current_url, "post._id": post_id},
             {
@@ -154,8 +154,6 @@ const post_controller = {
                     result.has_prev = true;
                     result.prev_page = page - 1
                 }
-                // console.log(result);
-
                 attach_likes(result, req.user.name);
 
                 res.render('index', {
@@ -191,7 +189,7 @@ const post_controller = {
         let like_search_result = {};
 
         const add_like = (url, id, name) => {
-            Post.findOneAndUpdate({url: url, "post._id": id},
+            Post.findOneAndUpdate({url, "post._id": id},
                 {
                     "$push": {
                         "post.$.upvote_users": {
@@ -205,7 +203,7 @@ const post_controller = {
                 .catch(err => console.log(err));
         };
         const delete_like = (url, id, name) => {
-            Post.findOneAndUpdate({url: url, "post._id": id},
+            Post.findOneAndUpdate({url, "post._id": id},
                 {
                     "$pull": {
                         "post.$.upvote_users": {
@@ -234,7 +232,6 @@ const post_controller = {
 
     },
     getTrendingTags: async (req, res) => {
-        // res.send("tags will appear here");
         let current_url = decodeURIComponent(req.query.current_url);
         let category = req.query.category;
         let final_result = {};
@@ -271,12 +268,12 @@ const post_controller = {
                         sortable.push([result, final_result[result]]);
                     }
 
-                    sortable.sort(function (a, b) {
+                    sortable.sort((a, b) => {
                         return b[1] - a[1];
                     });
                     let final_str = '';
                     sortable = sortable.slice(0, 10);
-                    sortable.forEach(elem => final_str += `${elem[0]} : ${elem[1]}` + '\n');
+                    sortable.forEach(elem => final_str += `${`${elem[0]} : ${elem[1]}`}\n`);
                     res.send(final_str)
                 }
             )
@@ -296,13 +293,5 @@ function attach_likes(result, name) {
                 post_outer.post.user_like = true;
             }
         }
-    }
-}
-
-function sortFunction(a, b) {
-    if (a[0] === b[0]) {
-        return 0;
-    } else {
-        return (a[0] < b[0]) ? -1 : 1;
     }
 }

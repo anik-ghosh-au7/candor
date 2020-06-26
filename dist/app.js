@@ -1,38 +1,50 @@
 "use strict";
 
-var createError = require('http-errors');
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var express = require('express');
+var _httpErrors = _interopRequireDefault(require("http-errors"));
 
-var path = require('path');
+var _express = _interopRequireDefault(require("express"));
 
-var cookieParser = require('cookie-parser');
+var _path = _interopRequireDefault(require("path"));
 
-var logger = require('morgan');
+var _cookieParser = _interopRequireDefault(require("cookie-parser"));
 
-var mongoose = require('mongoose');
+var _morgan = _interopRequireDefault(require("morgan"));
 
-var handlebars = require('hbs');
+var _mongoose = _interopRequireDefault(require("mongoose"));
 
-require('dotenv').config();
+var _hbs = _interopRequireDefault(require("hbs"));
 
-handlebars.registerHelper('URL', function () {
+var _dotenv = _interopRequireDefault(require("dotenv"));
+
+var _home = _interopRequireDefault(require("./routes/home"));
+
+var _users = _interopRequireDefault(require("./routes/users"));
+
+var _post = _interopRequireDefault(require("./routes/post"));
+
+_dotenv["default"].config();
+
+_hbs["default"].registerHelper('URL', function () {
   if (process.env.NODE_ENV === 'devlopment') {
     return 'http://localhost:3000';
   } else {
     return 'https://candor-app.herokuapp.com';
   }
 });
-handlebars.registerHelper("printDate", function (date_before) {
+
+_hbs["default"].registerHelper("printDate", function (date_before) {
   var dateUTC = new Date(date_before);
-  var dateUTC = dateUTC.getTime();
+  dateUTC = dateUTC.getTime();
   var dateIST = new Date(dateUTC); //date shifting for IST timezone (+5 hours and 30 minutes)
 
   dateIST.setHours(dateIST.getHours() + 5);
   dateIST.setMinutes(dateIST.getMinutes() + 30);
   return dateIST.toString();
 });
-mongoose.connect(process.env.mongo_uri, {
+
+_mongoose["default"].connect(process.env.mongo_uri, {
   useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -41,29 +53,23 @@ mongoose.connect(process.env.mongo_uri, {
   return console.log(err);
 });
 
-var homeRouter = require('./routes/home');
+var app = (0, _express["default"])(); // view engine setup
 
-var usersRouter = require('./routes/users');
-
-var postRouter = require('./routes/post');
-
-var app = express(); // view engine setup
-
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', _path["default"].join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({
+app.use((0, _morgan["default"])('dev'));
+app.use(_express["default"].json());
+app.use(_express["default"].urlencoded({
   extended: false
 }));
-app.use(cookieParser());
-app.use(express["static"](path.join(__dirname, 'public')));
-app.use('/', homeRouter);
-app.use('/users', usersRouter);
-app.use('/post', postRouter); // catch 404 and forward to error handler
+app.use((0, _cookieParser["default"])());
+app.use(_express["default"]["static"](_path["default"].join(__dirname, 'public')));
+app.use('/', _home["default"]);
+app.use('/users', _users["default"]);
+app.use('/post', _post["default"]); // catch 404 and forward to error handler
 
 app.use(function (req, res, next) {
-  next(createError(404));
+  next((0, _httpErrors["default"])(404));
 }); // error handler
 
 app.use(function (err, req, res, next) {

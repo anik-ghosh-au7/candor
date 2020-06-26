@@ -6,23 +6,22 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
+var _post = _interopRequireDefault(require("../model/post.model"));
+
+var _expressValidator = require("express-validator");
+
+var _mongodb = require("mongodb");
+
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-var Post = require('../model/post.model');
-
-var _require = require('express-validator'),
-    validationResult = _require.validationResult;
-
-var ObjectId = require('mongodb').ObjectId;
-
 var app = {};
 var post_controller = {
   createPost: function createPost(req, res) {
-    var errors = validationResult(req);
+    var errors = (0, _expressValidator.validationResult)(req);
 
     if (!errors.isEmpty()) {
       return res.status(422).json({
@@ -32,7 +31,8 @@ var post_controller = {
 
     ;
     var hitUrl = "/post/render?current_url=".concat(encodeURIComponent(req.body.url), "&category=").concat(req.body.category, "&page=1");
-    Post.findOne({
+
+    _post["default"].findOne({
       url: req.body.url
     }, function (err, data) {
       if (err) {
@@ -43,7 +43,7 @@ var post_controller = {
         var tag = req.body.post_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
 
         if (!data) {
-          var entry = new Post({
+          var entry = new _post["default"]({
             url: req.body.url,
             post: [{
               username: req.body.username,
@@ -60,7 +60,7 @@ var post_controller = {
             }
           });
         } else {
-          Post.findOneAndUpdate({
+          _post["default"].findOneAndUpdate({
             url: req.body.url
           }, {
             "$push": {
@@ -85,7 +85,8 @@ var post_controller = {
     var current_url = req.body.url;
     var post_id = req.body.post_id;
     var tag = req.body.comment_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
-    Post.findOneAndUpdate({
+
+    _post["default"].findOneAndUpdate({
       url: current_url,
       "post._id": post_id
     }, {
@@ -131,7 +132,7 @@ var post_controller = {
               }
 
               _context.next = 11;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -149,7 +150,7 @@ var post_controller = {
               });
 
             case 11:
-              query = Post.aggregate([{
+              query = _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -181,7 +182,7 @@ var post_controller = {
 
             case 14:
               _context.next = 16;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -198,7 +199,7 @@ var post_controller = {
               });
 
             case 16:
-              query = Post.aggregate([{
+              query = _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -236,7 +237,7 @@ var post_controller = {
               }
 
               _context.next = 22;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -254,7 +255,7 @@ var post_controller = {
               });
 
             case 22:
-              query = Post.aggregate([{
+              query = _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -279,7 +280,7 @@ var post_controller = {
 
             case 25:
               _context.next = 27;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -296,7 +297,7 @@ var post_controller = {
               });
 
             case 27:
-              query = Post.aggregate([{
+              query = _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -330,8 +331,7 @@ var post_controller = {
                 } else {
                   result.has_prev = true;
                   result.prev_page = page - 1;
-                } // console.log(result);
-
+                }
 
                 attach_likes(result, req.user.name);
                 res.render('index', {
@@ -369,7 +369,7 @@ var post_controller = {
               current_url = decodeURIComponent(req.query.current_url);
               data = {};
               _context2.next = 4;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -385,7 +385,7 @@ var post_controller = {
 
             case 4:
               _context2.next = 6;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -401,7 +401,7 @@ var post_controller = {
 
             case 6:
               _context2.next = 8;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -417,7 +417,7 @@ var post_controller = {
 
             case 8:
               _context2.next = 10;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -460,7 +460,7 @@ var post_controller = {
               like_search_result = {};
 
               add_like = function add_like(url, id, name) {
-                Post.findOneAndUpdate({
+                _post["default"].findOneAndUpdate({
                   url: url,
                   "post._id": id
                 }, {
@@ -479,7 +479,7 @@ var post_controller = {
               };
 
               delete_like = function delete_like(url, id, name) {
-                Post.findOneAndUpdate({
+                _post["default"].findOneAndUpdate({
                   url: url,
                   "post._id": id
                 }, {
@@ -498,7 +498,7 @@ var post_controller = {
               };
 
               _context3.next = 7;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -506,7 +506,7 @@ var post_controller = {
                 $unwind: '$post'
               }, {
                 $match: {
-                  'post._id': ObjectId(post_id)
+                  'post._id': (0, _mongodb.ObjectId)(post_id)
                 }
               }, {
                 $unwind: '$post.upvote_users'
@@ -550,12 +550,11 @@ var post_controller = {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              // res.send("tags will appear here");
               current_url = decodeURIComponent(req.query.current_url);
               category = req.query.category;
               final_result = {};
               _context4.next = 5;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -593,7 +592,7 @@ var post_controller = {
 
             case 5:
               _context4.next = 7;
-              return Post.aggregate([{
+              return _post["default"].aggregate([{
                 $match: {
                   url: current_url
                 }
@@ -643,7 +642,7 @@ var post_controller = {
                 var final_str = '';
                 sortable = sortable.slice(0, 10);
                 sortable.forEach(function (elem) {
-                  return final_str += "".concat(elem[0], " : ").concat(elem[1]) + '\n';
+                  return final_str += "".concat("".concat(elem[0], " : ").concat(elem[1]), "\n");
                 });
                 res.send(final_str);
               })["catch"](function (err) {
@@ -704,14 +703,6 @@ function attach_likes(result, name) {
     _iterator.e(err);
   } finally {
     _iterator.f();
-  }
-}
-
-function sortFunction(a, b) {
-  if (a[0] === b[0]) {
-    return 0;
-  } else {
-    return a[0] < b[0] ? -1 : 1;
   }
 }
 //# sourceMappingURL=post.controller.js.map

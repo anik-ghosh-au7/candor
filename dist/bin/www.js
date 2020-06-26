@@ -16,9 +16,11 @@ var _debug = _interopRequireDefault(require("debug"));
 
 var _http = _interopRequireDefault(require("http"));
 
+var debug = (0, _debug["default"])('candor:server');
 /**
  * Get port from environment and store in Express.
  */
+
 var port = normalizePort(process.env.PORT || '3000');
 
 _app["default"].set('port', port);
@@ -92,6 +94,6 @@ function onError(error) {
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-  (0, _debug["default"])('Listening on ' + bind);
+  debug('Listening on ' + bind);
 }
 //# sourceMappingURL=www.js.map

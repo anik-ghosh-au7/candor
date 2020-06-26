@@ -1,13 +1,16 @@
 "use strict";
 
-var DataUri = require('datauri/parser');
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var path = require('path');
+var _parser = _interopRequireDefault(require("datauri/parser"));
 
-var datauri = new DataUri();
+var _path = _interopRequireDefault(require("path"));
+
+var datauri = new _parser["default"]();
 
 module.exports = function (originalName, buffer) {
-  var extension = path.extname(originalName);
+  var extension = _path["default"].extname(originalName);
+
   return datauri.format(extension, buffer);
 };
 //# sourceMappingURL=convertBuffToStr.js.map

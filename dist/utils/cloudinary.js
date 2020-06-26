@@ -1,8 +1,14 @@
 "use strict";
 
-var cloudinary = require('cloudinary').v2;
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-require('dotenv').config();
+var _cloudinary = _interopRequireDefault(require("cloudinary"));
+
+var _dotenv = _interopRequireDefault(require("dotenv"));
+
+var cloudinary = _cloudinary["default"].v2;
+
+_dotenv["default"].config();
 
 cloudinary.config({
   cloud_name: process.env.cloudinary_cloud_name,

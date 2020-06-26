@@ -1,12 +1,16 @@
 "use strict";
 
-var express = require('express');
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var router = express.Router();
+var _express = _interopRequireDefault(require("express"));
 
-var jwt = require('jsonwebtoken');
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
-require('dotenv').config();
+var _dotenv = _interopRequireDefault(require("dotenv"));
+
+var router = _express["default"].Router();
+
+_dotenv["default"].config();
 
 var authenticateToken = function authenticateToken(req, res, next) {
   var token = req.cookies['awtToken'];
@@ -15,7 +19,7 @@ var authenticateToken = function authenticateToken(req, res, next) {
     return res.redirect('/users/loginPage');
   }
 
-  jwt.verify(token, process.env.jwt_key, function (err, data) {
+  _jsonwebtoken["default"].verify(token, process.env.jwt_key, function (err, data) {
     if (err) return res.status(403).send({
       msg: 'Unauthorized Forbidden'
     });

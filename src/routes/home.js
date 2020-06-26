@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var jwt = require('jsonwebtoken');
-require('dotenv').config();
+import express from 'express';
+const router = express.Router();
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 const authenticateToken = (req, res, next) => {
@@ -17,7 +18,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 /* GET home page. */
-router.get('/',authenticateToken, function(req, res, next) {
+router.get('/',authenticateToken, (req, res, next) => {
   res.render('home',req.user);
 });
 

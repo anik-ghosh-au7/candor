@@ -6,22 +6,23 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
-var User = require('../model/user.model');
+var _user = _interopRequireDefault(require("../model/user.model"));
 
-var _require = require('express-validator'),
-    validationResult = _require.validationResult;
+var _expressValidator = require("express-validator");
 
-var bcrypt = require('bcrypt');
+var _bcrypt = _interopRequireDefault(require("bcrypt"));
 
-var jwt = require('jsonwebtoken');
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
-var nodemailer = require('nodemailer');
+var _nodemailer = _interopRequireDefault(require("nodemailer"));
 
-require('dotenv').config();
+var _dotenv = _interopRequireDefault(require("dotenv"));
 
-var cloudinary = require('../utils/cloudinary');
+var _cloudinary = _interopRequireDefault(require("../utils/cloudinary"));
 
-var buff2Str = require('../utils/convertBuffToStr');
+var _convertBuffToStr = _interopRequireDefault(require("../utils/convertBuffToStr"));
+
+_dotenv["default"].config();
 
 var dict = {};
 var image_url;
@@ -42,7 +43,7 @@ var user_controller = {
               return _context.abrupt("return", res.redirect('/'));
 
             case 2:
-              errors = validationResult(req);
+              errors = (0, _expressValidator.validationResult)(req);
 
               if (!(!dict[req.body.email] || dict[req.body.email][0] !== req.body.OTP)) {
                 _context.next = 5;
@@ -69,11 +70,10 @@ var user_controller = {
                 break;
               }
 
-              imageContent = buff2Str(req.file.originalname, req.file.buffer).content;
+              imageContent = (0, _convertBuffToStr["default"])(req.file.originalname, req.file.buffer).content;
               _context.next = 12;
-              return cloudinary.uploader.upload(imageContent, function (err, imageResponse) {
+              return _cloudinary["default"].uploader.upload(imageContent, function (err, imageResponse) {
                 if (err) console.log(err);else {
-                  // console.log(imageResponse);
                   image_url = imageResponse.secure_url;
                   console.log('log from cloudinary', image_url);
                 }
@@ -82,11 +82,11 @@ var user_controller = {
             case 12:
               _context.prev = 12;
               _context.next = 15;
-              return bcrypt.hash(req.body.password, 5);
+              return _bcrypt["default"].hash(req.body.password, 5);
 
             case 15:
               hashed_password = _context.sent;
-              entry = new User({
+              entry = new _user["default"]({
                 username: req.body.username,
                 password: hashed_password,
                 email: req.body.email,
@@ -140,7 +140,8 @@ var user_controller = {
 
     var username = req.body.username;
     var password = req.body.password;
-    User.findOne({
+
+    _user["default"].findOne({
       username: username
     }, /*#__PURE__*/function () {
       var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(err, data) {
@@ -169,7 +170,7 @@ var user_controller = {
 
                 _context2.prev = 5;
                 _context2.next = 8;
-                return bcrypt.compare(password, data.password);
+                return _bcrypt["default"].compare(password, data.password);
 
               case 8:
                 if (!_context2.sent) {
@@ -177,7 +178,7 @@ var user_controller = {
                   break;
                 }
 
-                accessToken = jwt.sign({
+                accessToken = _jsonwebtoken["default"].sign({
                   name: username,
                   img: data.image_url,
                   email: data.email,
@@ -208,7 +209,6 @@ var user_controller = {
 
               case 23:
                 // no data
-                // res.status(204).send(data);
                 res.redirect('/');
 
               case 24:
@@ -265,32 +265,25 @@ var user_controller = {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return nodemailer.createTestAccount();
+                return _nodemailer["default"].createTestAccount();
 
               case 2:
                 testAccount = _context3.sent;
-                // create reusable transporter object using the default SMTP transport
-                transporter = nodemailer.createTransport({
+                transporter = _nodemailer["default"].createTransport({
                   service: 'gmail',
                   host: 'smtp.gmail.com',
                   auth: {
                     user: process.env.email_otp_id,
-                    // generated ethereal user
                     port: 465,
                     secure: true,
-                    pass: process.env.email_otp_password // generated ethereal password
-
+                    pass: process.env.email_otp_password
                   }
-                }); // send mail with defined transport object
-
+                });
                 _context3.next = 6;
                 return transporter.sendMail({
                   from: "Candor ",
-                  // sender address
                   to: email,
-                  // list of receivers
                   subject: "OTP from Candor",
-                  // Subject line
                   text: "For sign up to Candor, please use this OTP ".concat(otp, ". This OTP will be valid for 30 mins"),
                   // plain text body
                   html: "<b><H2>For sign up, please use this OTP ".concat(otp, "</H2><br> OTP will be valid for 30 mins</b>") // html body
@@ -333,8 +326,6 @@ var user_controller = {
 };
 
 function generateOTP() {
-  // Declare a digits variable
-  // which stores all digits
   var digits = '0123456789';
   var OTP = '';
 

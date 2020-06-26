@@ -1,13 +1,14 @@
-const {check} = require('express-validator');
-const User = require('../model/user.model');
+import {check} from 'express-validator';
+import User from '../model/user.model';
 
 const is_unique = async (data, type) => {
+    let obj;
     if (type === 'email') {
         obj = {email: data};
     } else if (type === 'username') {
         obj = {username: data};
     }
-    result=null
+    let result=null
      await User.findOne(obj, (err, data) => {
         if (err) {
             // Internal server error
@@ -28,7 +29,7 @@ const is_unique = async (data, type) => {
 const user_validator = {};
 user_validator.check_username = () => {
     return check('username').not().isEmpty().custom(async username => {
-        result = await is_unique(username, 'username')
+        let result = await is_unique(username, 'username')
         console.log(result)
         if (!result) {
             console.log('User name taken')
@@ -40,7 +41,7 @@ user_validator.check_username = () => {
 }
 user_validator.check_email = () => {
     return check('email').not().isEmpty().isEmail().custom(async email => {
-        result = await is_unique(email, 'email')
+        let result = await is_unique(email, 'email')
         console.log(result)
         if (!result) {
             console.log('Email taken')

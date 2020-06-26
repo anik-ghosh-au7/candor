@@ -5,7 +5,7 @@ window.onload = () => {
     btn.onclick = () => {
         let email = document.getElementById("email").value;
         let xhttp = new XMLHttpRequest();
-        var body = {
+        let body = {
             email: email
         };
         console.log("sending");

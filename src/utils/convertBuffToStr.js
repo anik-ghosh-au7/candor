@@ -1,5 +1,5 @@
-const DataUri = require('datauri/parser');
-const path = require('path');
+import DataUri from 'datauri/parser';
+import path from 'path';
 
 const datauri = new DataUri();
 

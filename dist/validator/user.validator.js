@@ -6,13 +6,13 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
-var _require = require('express-validator'),
-    check = _require.check;
+var _expressValidator = require("express-validator");
 
-var User = require('../model/user.model');
+var _user = _interopRequireDefault(require("../model/user.model"));
 
 var is_unique = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(data, type) {
+    var obj, result;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -29,7 +29,7 @@ var is_unique = /*#__PURE__*/function () {
 
             result = null;
             _context.next = 4;
-            return User.findOne(obj, function (err, data) {
+            return _user["default"].findOne(obj, function (err, data) {
               if (err) {
                 // Internal server error
                 res.status(500).send({
@@ -67,8 +67,9 @@ var is_unique = /*#__PURE__*/function () {
 var user_validator = {};
 
 user_validator.check_username = function () {
-  return check('username').not().isEmpty().custom( /*#__PURE__*/function () {
+  return (0, _expressValidator.check)('username').not().isEmpty().custom( /*#__PURE__*/function () {
     var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(username) {
+      var result;
       return _regenerator["default"].wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -107,8 +108,9 @@ user_validator.check_username = function () {
 };
 
 user_validator.check_email = function () {
-  return check('email').not().isEmpty().isEmail().custom( /*#__PURE__*/function () {
+  return (0, _expressValidator.check)('email').not().isEmpty().isEmail().custom( /*#__PURE__*/function () {
     var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(email) {
+      var result;
       return _regenerator["default"].wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -147,11 +149,11 @@ user_validator.check_email = function () {
 };
 
 user_validator.check_password = function () {
-  return check('password').not().isEmpty();
+  return (0, _expressValidator.check)('password').not().isEmpty();
 };
 
 user_validator.check_phone = function () {
-  return check('phone').not().isEmpty().isMobilePhone();
+  return (0, _expressValidator.check)('phone').not().isEmpty().isMobilePhone();
 };
 
 module.exports = user_validator;
