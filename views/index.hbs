@@ -175,7 +175,7 @@
                     </div>
                     <div class="card-footer text-muted">
 
-                        <span style="font-size: small;">Time : {{this.post.post_time}}</span><br>
+                        <span style="font-size: small;">Time : {{printDate this.post.post_time}}</span><br>
                         <a href="#">By : {{this.post.username}}</a><br>
                         <button class="btn {{#if this.post.user_like}} btn-info{{/if}}" name="like_button"
                                 id={{this.post._id}}>
