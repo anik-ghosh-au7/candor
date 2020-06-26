@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Candor</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        .card {
+            margin: 0 auto; /* Added */
+            float: none; /* Added */
+            margin-bottom: 10px; /* Added */
+
+        }
+
+        body form {
+            padding: 30px;
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+        }
+
+        a {
+            color: #00B7FF;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .align-vert {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+    </style>
+    <script src="./../otp_verify/otp.js"></script>
+</head>
+
+<body style="background: #eee;">
+<div class="align-vert">
+    <div class="card" style="width: 23rem;">
+        <img class="logo-icon  " src="./../images/logo_full.png"
+             style="width: 15rem; align-self: center; margin-top: 15px;"/>
+        <form action="{{URL}}/users/createuser" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="username">Username</label><br>
+                <input type="text" class="form-control" name="username" id="username"><br>
+            </div>
+            <table>
+                <tr>
+                    <div class="form-group">
+                        <label for="email">Email</label><br>
+                        <input type="text" class="form-control" name="email" id="email">
+                        <button type="button" class="btn btn-primary" style="margin-top: 5px;" id="otp_button">Get Otp
+                        </button>
+                        <span id="otp_sent" style="padding-left: 20px;"></span>
+
+                    </div>
+                </tr>
+                <tr>
+
+                    <div class="form-group">
+                        <td>
+                            <input type="text" name="OTP" class="form-control" placeholder="Enter OTP" id="otp_input">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id='submit_otp' style="width: 104px;">Verify OTP
+                            </button>
+                        </td>
+
+
+                        <br>
+                        <span id="otp_verify"></span>
+
+
+                    </div>
+                </tr>
+
+            </table>
+
+            <div class="form-group">
+                <br>
+                <label for="phone">Phone</label><br>
+                <input type="tel" name="phone" class="form-control" id="phone"><br>
+            </div>
+            <div class="form-group">
+                <label for="image">Profile photo</label><br>
+                <input type="file" name="image" id="image"><br>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label><br>
+                <input type="password" class="form-control" name="password"><br>
+            </div>
+            <input type="submit" class="btn btn-primary" style="float: right;" value="Sign Up">
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

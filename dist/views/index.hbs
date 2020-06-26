@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Candor</title>
+
+    <!-- Bootstrap core CSS -->
+
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/blog-home.css" rel="stylesheet">
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <script>
+        window.onload = () => {
+            var current_url = window.location.href;
+            current_url = new URL(current_url);
+            var search_params = current_url.searchParams.get("search_username");
+            var sort_istrue = current_url.searchParams.get('sort_likes');
+            let url_encoded = encodeURIComponent("{{url}}");
+            prev_link = "{{URL}}/post/render?current_url=" + url_encoded + "&category=" +
+                    "{{category}}" + "&page=" +
+                    "{{posts.prev_page}}";
+            if (search_params) {
+                prev_link += "&search_username=" + search_params
+            }
+            if (sort_istrue) {
+                prev_link += "&sort_likes=true"
+            }
+            prev_page = document.getElementById('prev_page');
+            prev_page.setAttribute('href', prev_link);
+
+
+            next_link = "{{URL}}/post/render?current_url=" + url_encoded + "&category=" +
+                    "{{category}}" + "&page=" +
+                    "{{posts.next_page}}";
+
+            if (search_params) {
+                next_link += "&search_username=" + search_params
+            }
+            if (sort_istrue) {
+                next_link += "&sort_likes=true"
+            }
+
+            next_page = document.getElementById('next_page');
+            next_page.setAttribute('href', next_link);
+
+
+            let like_btns = document.getElementsByName('like_button');
+            let context_url = document.getElementById('context_url').innerHTML;
+            var i;
+            for (i = 0; i < like_btns.length; i++) {
+                like_btns[i].onclick = like_click(i);
+
+                function like_click(j) {
+                    return () => {
+                        let xhttp = new XMLHttpRequest();
+                        xhttp.open("GET", `{{URL}}/post/like/?post_id=${like_btns[j].id}&current_url=${encodeURIComponent(context_url)}`, true);
+                        xhttp.send();
+                        xhttp.onload = () => {
+                            if (xhttp.responseText === 'liked') {
+                                like_btns[j].className += ' btn-info';
+                                like_btns[j].innerHTML = 'Liked ' + (parseInt(like_btns[j].innerText.split(" ")[1]) + 1)
+                            } else {
+                                like_btns[j].className = 'btn';
+                                like_btns[j].innerHTML = 'Like ' + (parseInt(like_btns[j].innerText.split(" ")[1]) - 1)
+                            }
+                        }
+                    }
+                }
+            }
+            let normal_url = "{{URL}}/post/render?current_url=" + url_encoded + "&category=" +
+                    "{{category}}" + "&page=1";
+            let search_input = document.getElementById('search_input');
+            let search_button = document.getElementById('search_button');
+            search_button.onclick = () => {
+                normal_url += "&search_username=" + search_input.value;
+                if (sort_istrue) {
+                    normal_url += '&sort_likes=true';
+                }
+                window.open(normal_url, '_self');
+            };
+            let back_button = document.getElementById('back');
+            back_button.onclick = () => {
+                window.open(normal_url, '_self');
+            }
+
+            let sort_by_like = document.getElementById('sort_likes');
+            sort_by_like.onclick = () => {
+                normal_url += "&sort_likes=true";
+                if (search_params) {
+                    normal_url += "&search_username=" + search_params
+                }
+                window.open(normal_url, '_self');
+            }
+            let sort_by_time = document.getElementById('sort_time');
+            sort_by_time.onclick = () => {
+                if (search_params) {
+                    normal_url += "&search_username=" + search_params
+                }
+                window.open(normal_url, '_self')
+            };
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "{{URL}}/post/tags?current_url=" + url_encoded + "&category=" +
+                    "{{category}}", true);
+            xhttp.send();
+            xhttp.onload = () => {
+                console.log(xhttp.responseText);
+                document.getElementById('tags').innerText = xhttp.responseText;
+            };
+
+
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">Candor</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{URL}}/users/logout">Log Out
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+
+    <div class="row">
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-8">
+
+            <h2 class="my-4">{{viewername}}
+                <br>
+                {{category}}
+            </h2>
+            <h4><small><span id="context_url">{{url}}</span></small></h4>
+
+            <!-- Blog Post -->
+            {{#each posts}}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <p class="card-text">
+                        <h3>{{this.post.post_body}}</h3></p>
+
+                    </div>
+                    <div class="card-footer text-muted">
+                        Tags:
+                        {{#each this.post.post_tags}}
+                            {{this}}
+                        {{/each}}
+                    </div>
+                    <div class="card-footer text-muted">
+
+                        <span style="font-size: small;">Time : {{printDate this.post.post_time}}</span><br>
+                        <a href="#">By : {{this.post.username}}</a><br>
+                        <button class="btn {{#if this.post.user_like}} btn-info{{/if}}" name="like_button"
+                                id={{this.post._id}}>
+                            Like{{#if this.post.user_like}}d{{/if}} {{this.post.like_count}}
+                        </button>
+                    </div>
+                    <form action="/post/addcomment" method="post" id="form_{{@index}}">
+                        <input type="hidden" name="url" value={{../url}}>
+                        <input type="hidden" name="category" value={{../category}}>
+                        <input type="hidden" name="username" value={{../viewername}}>
+                        <input type="hidden" name="post_id" value={{this.post._id}}>
+                        <table style='width:100%;'>
+                            <tr>
+                                <td>
+                                    <input type="text" style='width:130%;' name="comment_body"
+                                           placeholder="Add your comment...." id="input_{{@index}}"
+                                           onkeyup="stoppedTyping({{@index}})">
+                                </td>
+                                <td>
+                                    <input type="submit" disabled class="btn btn-primary" value="Comment"
+                                           style="float:right" id="submit_{{@index}}">
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </form>
+                    <div class="row">
+                        {{#each this.post.comments}}
+                            <div class="col-sm-6">
+                                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                                    {{this.comment_body}}
+                                    <br><span style="font-size: small;">{{this.comment_time}}</span>
+                                    By: {{this.comment_username}}
+                                    <br>Tags: {{#each this.comment_tags}}
+                                    {{this}}
+                                {{/each}}
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+            {{/each}}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <p class="card-text">
+                    <h3>
+                        <form action="/post/addpost" method="post">
+                            <input type="hidden" name="url" value={{url}}>
+                            <input type="hidden" name="category" value={{category}}>
+                            <input type="hidden" name="username" value={{viewername}}>
+                            <input type="text" style='width:100%;' name="post_body"
+                                   placeholder="Your post goes here...." id="input_-1" onkeyup="stoppedTyping('-1')">
+                            <input type="submit" disabled class="btn btn-info" value="Submit" id="submit_-1">
+                        </form>
+                    </h3>
+                    </p>
+
+                </div>
+                <div class="card-footer text-muted">
+                    {{this.post_time}}
+                    <a href="#">{{this.post.username}}</a>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <ul class="pagination justify-content-center mb-4 ">
+                <li class="page-item {{#unless posts.has_prev}} disabled{{/unless}}">
+                    <a class="page-link" id="prev_page">&larr; Newer</a>
+                </li>
+                <li class="page-item{{#unless posts.has_next}} disabled{{/unless}}  ">
+                    <a class="page-link" id="next_page">Older&rarr;</a>
+                </li>
+            </ul>
+
+        </div>
+
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-4">
+
+            <!-- Search Widget -->
+            <div class="card my-4">
+                <h5 class="card-header">Search</h5>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="search_input"
+                               placeholder="Search for user posts...">
+                        <span class="input-group-btn">
+                <button class="btn btn-secondary" id="search_button" type="button">Go!</button>
+              </span>
+                    </div>
+                    <br>
+                    <span><button class="btn btn-secondary" type="button" id="back">Back to all posts!</button></span>
+                </div>
+            </div>
+
+            <!-- Profile Info Widget -->
+            <div class="card my-4">
+                <h5 class="card-header">Profile Information</h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <img src="{{user.img}}" alt="Profile picture"
+                                 style="display:block; border-radius: 8px; margin-left: auto; margin-right: auto; width: 50%; padding:1px; border:1px solid #AFAFAF;">
+                        </div>
+                        <div class="col-lg-6 my-auto">
+                            <ul class="list-unstyled mb-0">
+                                <li>
+                                    <h6 style="font-size: small">{{user.name}}</h6>
+                                </li>
+                                <li>
+                                    <h6 style="font-size: small">{{user.phone}}</h6>
+                                </li>
+                                <li>
+                                    <h6 style="font-size: small">{{user.email}}</h6>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Widget -->
+            <div class="card my-4">
+                <h5 class="card-header">Sort Posts</h5>
+                <div class="card-body" style="align-self: center;">
+                    <span><button class="btn btn-secondary" type="button"
+                                  id="sort_time">Sort posts by time!</button></span><br>
+                    <br><span><button class="btn btn-secondary" type="button"
+                                      id="sort_likes">Sort posts by likes!</button></span>
+                </div>
+            </div>
+            <div class="card my-4">
+                <h5 class="card-header">Trending Tags</h5>
+                <div class="card-body" style="align-self: center;">
+                    <div id="tags">Hi there!</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Candor 2020</p>
+    </div>
+    <!-- /.container -->
+</footer>
+
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+    function stoppedTyping(ind) {
+        let inp_elem=document.getElementById('input_'+ind);
+        let butn=document.getElementById('submit_' + ind);
+        if(inp_elem.value && inp_elem.value.length>0){
+            butn.disabled=false
+        }else{
+            butn.disabled=true
+        }
+    }
+</script>
+</body>
+
+</html>

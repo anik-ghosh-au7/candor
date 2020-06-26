@@ -5,12 +5,9 @@
   "scripts": {
     "start-dev": "babel-node src/bin/www",
     "dev-dev": "nodemon --exec babel-node src/bin/www",
-
-
-
     "start": "npm run build && node ./dist/bin/www",
     "build": "npm run clean && npm run babel-build",
-    "babel-build": "babel -d ./dist ./src -s",
+    "babel-build": "babel -d ./dist ./src -s --copy-files",
     "clean": "rm -rf ./dist && mkdir dist"
   },
   "dependencies": {
@@ -18,6 +15,7 @@
     "@babel/core": "^7.10.2",
     "@babel/node": "^7.10.1",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
+    "@babel/plugin-transform-runtime": "^7.10.3",
     "@babel/preset-env": "^7.10.2",
     "babel-polyfill": "^6.26.0",
     "bcrypt": "^5.0.0",
