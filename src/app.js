@@ -18,7 +18,6 @@ handlebars.registerHelper('URL',()=>{
 handlebars.registerHelper("printDate", function(date_before) {
 
     let dateUTC = new Date(date_before);
-    // dateUTC = dateUTC.getTime();
     let curr_date=new Date();
     let diff= curr_date-dateUTC;
 
@@ -51,6 +50,7 @@ handlebars.registerHelper("printDate", function(date_before) {
     // dateIST.setMinutes(dateIST.getMinutes() + 30);
     // return dateIST.toString();
 });
+
 mongoose.connect(process.env.mongo_uri, {
     useFindAndModify: false,
     useNewUrlParser: true,

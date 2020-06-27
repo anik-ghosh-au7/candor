@@ -136,7 +136,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{URL}}/users/logout?">Log Out
+                    <a class="nav-link" href="{{URL}}/users/logout?">Logout
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
@@ -149,15 +149,19 @@
 <div class="container">
 
     <div class="row">
-
         <!-- Blog Entries Column -->
         <div class="col-md-8">
-
-            <h2 class="my-4">{{viewername}}
+            <h2><span class="badge badge-dark">{{viewername}}</span></h2>
+            <h4><span class="badge badge-dark">{{category}}</span></h4>
+            <div class="card text-white bg-dark" style="width: 45.6rem; margin-bottom: 10px;">
+            <p class="card-text" id="context_url">{{url}}</p>
+            </div>
+            {{!-- <p class="badge badge-dark" id="context_url" style="width:100%;">{{url}}</p> --}}
+            {{!-- <h2 class="my-4">{{viewername}}
                 <br>
                 {{category}}
-            </h2>
-            <h4><small><span id="context_url">{{url}}</span></small></h4>
+            </h2> --}}
+            {{!-- <h4><small><span id="context_url">{{url}}</span></small></h4> --}}
 
             <!-- Blog Post -->
             {{#each posts}}
@@ -176,9 +180,9 @@
                     <div class="card-footer text-muted">
 
                         <span style="font-size: small;">Time : {{printDate this.post.post_time}}</span><br>
-                        <a href="#">By : {{this.post.username}}</a><br>
-                        <button class="btn {{#if this.post.user_like}} btn-info{{/if}}" name="like_button"
-                                id={{this.post._id}}>
+                        <a href="#">By : {{this.post.username}}</a>
+                        <button class="btn {{#if this.post.user_like}}btn-info{{/if}}" name="like_button"
+                                id={{this.post._id}} style="float: right;">
                             Like{{#if this.post.user_like}}d{{/if}} {{this.post.like_count}}
                         </button>
                     </div>
