@@ -35,8 +35,7 @@ _hbs["default"].registerHelper('URL', function () {
 });
 
 _hbs["default"].registerHelper("printDate", function (date_before) {
-  var dateUTC = new Date(date_before); // dateUTC = dateUTC.getTime();
-
+  var dateUTC = new Date(date_before);
   var curr_date = new Date();
   var diff = curr_date - dateUTC;
   var seconds = parseInt(diff / 1000);
