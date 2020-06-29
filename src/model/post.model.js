@@ -17,7 +17,7 @@ const postSchema = new Schema({
         }],
         post_time: {
             type: Date,
-            default: Date.now()
+            default:new Date()
         },
         comments: [
             {

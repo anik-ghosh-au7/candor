@@ -74,7 +74,7 @@ const post_controller = {
                     }
                 }
             }, {"new": true})
-            .then((result) => {
+            .then(() => {
                 let hitUrl = `/post/render?current_url=${encodeURIComponent(current_url)}&category=${req.body.category}`;
                 res.redirect(hitUrl)
             })
