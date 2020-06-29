@@ -99,7 +99,7 @@ var post_controller = {
       }
     }, {
       "new": true
-    }).then(function (result) {
+    }).then(function () {
       var hitUrl = "/post/render?current_url=".concat(encodeURIComponent(current_url), "&category=").concat(req.body.category);
       res.redirect(hitUrl);
     })["catch"](function (err) {

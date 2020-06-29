@@ -19,7 +19,7 @@ var postSchema = new Schema({
     }],
     post_time: {
       type: Date,
-      "default": Date.now()
+      "default": new Date()
     },
     comments: [{
       comment_username: String,
@@ -28,7 +28,7 @@ var postSchema = new Schema({
       comment_upvote_users: [String],
       comment_time: {
         type: Date,
-        "default": Date.now()
+        "default": new Date()
       }
     }]
   }]
