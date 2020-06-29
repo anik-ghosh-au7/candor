@@ -2,7 +2,7 @@
     <img src="https://i.ibb.co/bQwQF68/logo-full.png" alt="Candor logo" title="Aimeos" align="right" height="60" />
 </a>
 
-Candor </br>
+Candor
 Extension
 ======================
 
