@@ -18,7 +18,7 @@ handlebars.registerHelper('URL',()=>{
 handlebars.registerHelper("printDate", function(date_before) {
 
     let dateUTC = new Date(date_before);
-    let curr_date=new Date();
+    let curr_date= Date.now();
     let diff= curr_date-dateUTC;
 
     let  seconds = parseInt(diff / 1000);

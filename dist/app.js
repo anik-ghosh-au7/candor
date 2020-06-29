@@ -36,7 +36,7 @@ _hbs["default"].registerHelper('URL', function () {
 
 _hbs["default"].registerHelper("printDate", function (date_before) {
   var dateUTC = new Date(date_before);
-  var curr_date = new Date();
+  var curr_date = Date.now();
   var diff = curr_date - dateUTC;
   var seconds = parseInt(diff / 1000);
   var minutes = parseInt(seconds / 60);
