@@ -27,7 +27,7 @@ const postSchema = new Schema({
                 comment_upvote_users: [String],
                 comment_time: {
                     type: Date,
-                    default: Date.now()
+                    default: new Date()
                 }
             }
         ]
