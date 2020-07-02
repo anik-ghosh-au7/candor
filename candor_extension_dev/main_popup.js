@@ -1,5 +1,7 @@
+let username;
 chrome.storage.local.get('username', (result) => {
     document.getElementById("username").innerHTML = "Hello " + result.username;
+    username = result.username;
 });
 chrome.storage.local.get('img',(result)=>{
     if(result.img){
@@ -68,5 +70,15 @@ function url_domain(data) {
     var a = document.createElement('a');
     a.href = data;
     return a.hostname;
-}
+};
 
+window.onload = () => {
+    let chat_icon = document.getElementById("chat_element");
+    chat_icon.addEventListener("click", chatFunction());
+};
+function chatFunction() {
+    return () => {
+        let chatUrl = `http://localhost:3000/chat?current_url=${encodeURIComponent(curr_url)}&username=${username}`;
+        window.open(chatUrl, '_blank');
+    };
+};

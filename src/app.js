@@ -63,6 +63,7 @@ mongoose.connect(process.env.mongo_uri, {
 import homeRouter from './routes/home';
 import usersRouter from './routes/users';
 import postRouter from './routes/post';
+import chatRouter from './routes/chat';
 
 const app = express();
 
@@ -79,6 +80,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', homeRouter);
 app.use('/users', usersRouter);
 app.use('/post', postRouter);
+app.use('/chat', chatRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

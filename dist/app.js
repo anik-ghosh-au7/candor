@@ -24,6 +24,8 @@ var _users = _interopRequireDefault(require("./routes/users"));
 
 var _post = _interopRequireDefault(require("./routes/post"));
 
+var _chat = _interopRequireDefault(require("./routes/chat"));
+
 _dotenv["default"].config();
 
 _hbs["default"].registerHelper('URL', function () {
@@ -94,7 +96,8 @@ app.use((0, _cookieParser["default"])());
 app.use(_express["default"]["static"](_path["default"].join(__dirname, 'public')));
 app.use('/', _home["default"]);
 app.use('/users', _users["default"]);
-app.use('/post', _post["default"]); // catch 404 and forward to error handler
+app.use('/post', _post["default"]);
+app.use('/chat', _chat["default"]); // catch 404 and forward to error handler
 
 app.use(function (req, res, next) {
   next((0, _httpErrors["default"])(404));
