@@ -28,6 +28,7 @@ var dict = {};
 var image_url;
 var imageContent;
 var user_controller = {
+  //
   createUser: function () {
     var _createUser = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
       var errors, hashed_password, entry;
@@ -183,10 +184,10 @@ var user_controller = {
                   img: data.image_url,
                   email: data.email,
                   phone: data.phone
-                }, process.env.jwt_key);
+                }, process.env.jwt_key); // res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
+
                 res.cookie('awtToken', accessToken, {
-                  maxAge: 9000000,
-                  httpOnly: true
+                  maxAge: 9000000
                 });
                 return _context2.abrupt("return", res.redirect('/'));
 

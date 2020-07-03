@@ -6,6 +6,14 @@ var _express = _interopRequireDefault(require("express"));
 
 var _dotenv = _interopRequireDefault(require("dotenv"));
 
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
+
+var _http = _interopRequireDefault(require("http"));
+
+var _socket = _interopRequireDefault(require("socket.io"));
+
+var io = (0, _socket["default"])(_http["default"]);
+
 _dotenv["default"].config();
 
 var router = _express["default"].Router();
@@ -17,7 +25,7 @@ var authenticateToken = function authenticateToken(req, res, next) {
     return res.redirect('/users/loginPage');
   }
 
-  jwt.verify(token, process.env.jwt_key, function (err, data) {
+  _jsonwebtoken["default"].verify(token, process.env.jwt_key, function (err, data) {
     if (err) return res.status(403).send({
       msg: 'Unauthorized Forbidden'
     });
@@ -29,7 +37,10 @@ var authenticateToken = function authenticateToken(req, res, next) {
 
 
 router.get('/', authenticateToken, function (req, res, next) {
-  res.render('chat', req.user);
+  console.log('chat url --> ', decodeURIComponent(req.query.current_url));
+  res.render('chat', {
+    room: decodeURIComponent(req.query.current_url)
+  });
 });
 module.exports = router;
 //# sourceMappingURL=chat.js.map

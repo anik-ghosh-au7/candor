@@ -16,11 +16,13 @@ var _debug = _interopRequireDefault(require("debug"));
 
 var _http = _interopRequireDefault(require("http"));
 
+var _chat = _interopRequireDefault(require("../controller/chat.controller"));
+
 var debug = (0, _debug["default"])('candor:server');
+
 /**
  * Get port from environment and store in Express.
  */
-
 var port = normalizePort(process.env.PORT || '3000');
 
 _app["default"].set('port', port);
@@ -30,10 +32,11 @@ _app["default"].set('port', port);
 
 
 var server = _http["default"].createServer(_app["default"]);
+
+(0, _chat["default"])(server);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 
 server.listen(port, function () {
   return console.log('Server started');
