@@ -13,7 +13,7 @@ let image_url;
 let imageContent;
 
 const user_controller = {
-
+    //
     createUser: async (req, res) => {
         if (req.user) {
             return res.redirect('/');
@@ -163,7 +163,7 @@ const user_controller = {
         }
     },
     logout: (req, res) => {
-        res.clearCookie('awtToken')
+        res.clearCookie('awtToken');
         res.render('logged_out')
     }
 };

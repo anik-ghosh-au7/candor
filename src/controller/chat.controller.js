@@ -1,99 +1,111 @@
 import ioLib from 'socket.io';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
+const users = [];
+
+// Join user to chat
+function userJoin( username, room) {
+  const user = { username, room };
+
+  users.push(user);
+}
+
+// User leaves chat
+function userLeave(username) {
+  const index = users.findIndex(user => user.username === username);
+
+  if (index !== -1) {
+    return users.splice(index, 1)[0];
+  }
+}
+
+// Get room users
+function getRoomUsers(room) {
+  return users.filter(user => user.room === room);
+}
 
 function formatMessage(username, text) {
-  return {
-    username,
-    text,
-    time: moment().format('h:mm a')
-  };
+    return {
+        username,
+        text,
+        time: moment().format('h:mm a')
+    };
 }
 
 const botName = 'Candor Admin';
 
 const authenticateToken = (token) => {
+    let username;
     if (!token) {
         return res.redirect('/users/loginPage');
     }
     jwt.verify(token, process.env.jwt_key, (err, user) => {
         if (err) return res.status(403).send({msg: 'Unauthorized Forbidden'});
         console.log(user);
-        return user.name;
+        username=user.name;
+        // return user.name;
     });
+    return username;
 };
 
 const webSocket = (server) => {
     const io = ioLib(server);
-
+    // io.use((socket, next) => {
+    //     let clientId = socket.handshake.headers['x-clientid'];
+    //     console.log('from io');
+    //     let username = authenticateToken(clientId.split('=')[1]);
+    //     let room = socket.handshake.headers['room'];
+    //     next()
+    // });
     // Run when client connects
     io.on('connection', socket => {
-    let username = null;
-    let room = null;
-
-    console.log('new socket connection established');
-
-    io.use((socket, next) => {
         let clientId = socket.handshake.headers['x-clientid'];
-        console.log('from io');
-        username = authenticateToken(clientId.split('=')[1]);
-        room = socket.handshake.headers['room'];
-      });
+        let username = authenticateToken(clientId.split('=')[1]);
+        let room = socket.handshake.headers['room'];
+        console.log('new socket connection established');
+        socket.on('joinRoom', () => {
+            userJoin(username, room);
+            socket.join(room);
+            // Welcome current user
+            socket.emit('message', formatMessage(botName, 'Welcome to Candor!'));
 
-    socket.on('joinRoom', () => {
-        // const user = userJoin(socket.id, username, room);
+            // Broadcast when a user connects
+            socket.broadcast
+                .to(room)
+                .emit(
+                    'message',
+                    formatMessage(botName, `${username} has joined the chat`)
+                );
 
-        let clientId = socket.handshake.headers['x-clientid'];
-        console.log('from socket');
-        username = authenticateToken(clientId.split('=')[1]);
-        room = socket.handshake.headers['room'];
+            // Send users and room info
+            io.to(room).emit('roomUsers', {
+            room: room,
+            users: getRoomUsers(room)
+            });
+        });
 
-        console.log(room);
+        // Listen for chatMessage
+        socket.on('chatMessage', msg => {
+            io.to(room).emit('message', formatMessage(username, msg));
+        });
 
-        socket.join(room);
+        // Runs when client disconnects
+        socket.on('disconnect', () => {
+            const user = userLeave(username);
 
-        // Welcome current user
-        socket.emit('message', formatMessage(botName, 'Welcome to Candor!'));
+            if (user) {
+            io.to(room).emit(
+                'message',
+                formatMessage(botName, `${username} has left the chat`)
+            );
 
-        // Broadcast when a user connects
-        socket.broadcast
-        .to(room)
-        .emit(
-            'message',
-            formatMessage(botName, `${username} has joined the chat`)
-        );
-
-        // Send users and room info
-        // io.to(room).emit('roomUsers', {
-        // room: room,
-        // users: getRoomUsers(room)
-        // });
-    });
-
-    // Listen for chatMessage
-    // socket.on('chatMessage', msg => {
-    //     const user = getCurrentUser(socket.id);
-
-    //     io.to(room).emit('message', formatMessage(username, msg));
-    // });
-
-    // // Runs when client disconnects
-    // socket.on('disconnect', () => {
-    //     const user = userLeave(socket.id);
-
-    //     if (user) {
-    //     io.to(room).emit(
-    //         'message',
-    //         formatMessage(botName, `${username} has left the chat`)
-    //     );
-
-    //     // Send users and room info
-    //     io.to(room).emit('roomUsers', {
-    //         room: room,
-    //         users: getRoomUsers(room)
-    //     });
-    //     }
-    // });
+            // Send users and room info
+            io.to(room).emit('roomUsers', {
+                room: room,
+                users: getRoomUsers(room)
+            });
+            }
+        });
     });
 };
 
