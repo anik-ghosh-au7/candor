@@ -87,7 +87,8 @@ const user_controller = {
                                 email: data.email,
                                 phone: data.phone
                             }, process.env.jwt_key);
-                            res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
+                            // res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
+                            res.cookie('awtToken', accessToken, {maxAge: 9000000});
                             return res.redirect('/');
                         } else {
                             res.status(401).send('Unauthorized access');

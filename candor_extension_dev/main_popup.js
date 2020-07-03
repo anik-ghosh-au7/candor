@@ -78,7 +78,7 @@ window.onload = () => {
 };
 function chatFunction() {
     return () => {
-        let chatUrl = `http://localhost:3000/chat?current_url=${encodeURIComponent(curr_url)}&username=${username}`;
+        let chatUrl = `http://localhost:3000/chat?current_url=${encodeURIComponent(curr_url)}`;
         window.open(chatUrl, '_blank');
     };
 };

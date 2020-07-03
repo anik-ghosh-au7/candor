@@ -22,12 +22,7 @@ const authenticateToken = (req, res, next) => {
   /* GET chat page. */
 router.get('/',authenticateToken, (req, res, next) => {
     console.log('chat url --> ', decodeURIComponent(req.query.current_url));
-    console.log('chat username --> ', req.query.username);
-        res.render('chat',req.user);
-    });
-
-io.on('connection', (socket) => {
-        console.log('a user connected');
+    res.render('chat',{room: decodeURIComponent(req.query.current_url)});
     });
   
   module.exports = router;
