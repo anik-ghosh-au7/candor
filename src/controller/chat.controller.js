@@ -3,8 +3,19 @@ import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import Chat from '../model/chat.model';
 
+const users = [];
+
 // Join user to chat
 function userJoin( username, room) {
+  const user = { username, room };
+
+  users.push(user);
+//   console.log(username, room);
+  userJoinDB(username, room);
+}
+
+// Join user to chat
+function userJoinDB( username, room) {
     Chat.findOneAndUpdate({room_name: room}, 
                 {
                     "$addToSet": {
@@ -19,6 +30,15 @@ function userJoin( username, room) {
 
 // User leaves chat
 function userLeave(username, room) {
+  const index = users.findIndex(user => user.username === username);
+  userLeaveDB(username, room);
+  if (index !== -1) {
+    return users.splice(index, 1)[0];
+  }
+}
+
+// User leaves chat
+function userLeaveDB(username, room) {
     Chat.findOneAndUpdate({room_name: room}, 
         {
             "$pull": {
@@ -29,20 +49,26 @@ function userLeave(username, room) {
             console.log(`${username} left room ${room}`);
         })
         .catch(err => console.log(err));
+  }
+
+// Get room users
+function getRoomUsers(room) {
+    getRoomUsersDB(room);
+  return users.filter(user => user.room === room);
 }
 
 // Get room users
-async function getRoomUsers(room) {
+async function getRoomUsersDB(room) {
     let room_users;
-    await Chat.findOne({room_name:room}).then(result => room_users = result.active_users).catch(err => console.log(err));
-    return room_users;
+    await Chat.find({room_name:room}).then(result => room_users = result[0].active_users).catch(err => console.log(err));
+    console.log(room_users);
   }
 
 function formatMessage(username, text) {
     return {
         username,
         text,
-        time: moment().format('h:mm a DD-MM-yy').toString()
+        time: moment().format('h:mm a DD-MM-YYYY').toString()
     };
 }
 
@@ -64,6 +90,14 @@ const authenticateToken = (token) => {
 
 const webSocket = (server) => {
     const io = ioLib(server);
+    // io.use((socket, next) => {
+    //     let clientId = socket.handshake.headers['x-clientid'];
+    //     console.log('from io');
+    //     let username = authenticateToken(clientId.split('=')[1]);
+    //     let room = socket.handshake.headers['room'];
+    //     next()
+    // });
+    // Run when client connects
     io.on('connection', socket => {
         let clientId = socket.handshake.headers['x-clientid'];
         let username = authenticateToken(clientId.split('=')[1]);
@@ -128,7 +162,7 @@ function saveChatHistory(room, username, body, time) {
                 }
             }
         }, { upsert : true })
-        .then((result) => {
+        .then(() => {
             console.log(`chat history saved`);
         })
         .catch(err => console.log(err));
