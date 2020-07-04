@@ -23,6 +23,9 @@ let socket = io({
 
 socket.emit('joinRoom');
 
+// Leave chatroom
+socket.emit('leaveRoom');
+
 // Get room and users
 socket.on('roomUsers', ({ room, users }) => {
   outputRoomName(room);
@@ -74,4 +77,11 @@ function outputUsers(users) {
   userList.innerHTML = `
     ${users.map(user => `<li>${user.username}</li>`).join('')}
   `;
+}
+
+// close chat window
+function close_window() {
+  if (confirm("Close Forum Window?")) {
+    close();
+  }
 }
