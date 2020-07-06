@@ -7,7 +7,7 @@ function formatMessage(username, text) {
     return {
         username,
         text,
-        time: moment().format('h:mm a DD-MM-yy').toString()
+        time: moment().format('h:mm=ss:S= a DD-MM-yy').toString()
     };
 }
 
@@ -37,7 +37,11 @@ const webSocket = (server) => {
             await dbInterface.userJoin(username, room);
             socket.join(room);
             //Loads chat history
-            socket.emit('load_messages',await dbInterface.getChatHistory(room));
+            // socket.emit('load_messages',await dbInterface.getChatHistory(room));
+
+            let result = await dbInterface.getChatHistory(room);
+            socket.emit('load_messages',result);
+
             // Welcome current user
             socket.emit('message', formatMessage(botName, 'Welcome to Candor!'));
 

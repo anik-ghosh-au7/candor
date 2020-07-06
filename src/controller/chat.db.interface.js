@@ -1,4 +1,5 @@
 import Chat from '../model/chat.model';
+import { contextsKey } from 'express-validator/src/base';
 
 let dbInterface = {
 
@@ -19,15 +20,30 @@ let dbInterface = {
         },
 
         //Load chat history
+        // getChatHistory: async function (room) {
+        //     return await Chat.findOne({room_name: room}, {chat_history: 1}).limit(5).then((res)=>{
+        //         console.log(res,'->from db interface history');
+        //         if(res){
+        //             return res;
+        //         }else{
+        //             return []
+        //         }
+        //     });
+        // },
+
         getChatHistory: async function (room) {
-            return await Chat.findOne({room_name: room}, {chat_history: 1}).limit(5).then((res)=>{
-                console.log(res,'->from db interface history');
-                if(res){
-                    return res;
-                }else{
-                    return []
-                }
-            });
+            return await Chat.aggregate([
+                {$match: {room_name: room}}, 
+                {$unwind: '$chat_history'},
+                {$group: {"_id": null, "chats": { "$push": "$chat_history" }}},
+                {$unwind: '$chats'},
+                {$sort: {'chats.time': -1}},
+                {$limit: 5},
+                {$sort: {'chats.time': 1}}
+            ]).then(res => {
+                console.log("inside DB interface",res);
+                return res
+            }).catch(err => console.log(err));
         },
 
         // Get room users

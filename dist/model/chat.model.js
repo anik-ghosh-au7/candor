@@ -8,7 +8,7 @@ var chatSchema = new Schema({
   chat_history: [{
     username: String,
     time: String,
-    body: String
+    text: String
   }],
   active_users: [String]
 }, {

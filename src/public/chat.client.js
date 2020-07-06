@@ -31,9 +31,8 @@ socket.on('roomUsers', ({room, users}) => {
 });
 
 socket.on('load_messages',message_arr=>{
-    console.log('message_arr',message_arr)
     if(message_arr){
-        message_arr.chat_history.map((message)=>outputMessage(message));
+        message_arr.map((message)=>outputMessage(message.chats));
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
@@ -66,8 +65,10 @@ chatForm.addEventListener('submit', e => {
 // Output message to DOM
 function outputMessage(message) {
     const div = document.createElement('div');
+    let time_arr = message.time.split('=');
+    let time = time_arr[0] + time_arr[2];
     div.classList.add('message');
-    div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
+    div.innerHTML = `<p class="meta">${message.username} <span>${time}</span></p>
   <p class="text">
     ${message.text}
   </p>`;
