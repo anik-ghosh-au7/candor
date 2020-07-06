@@ -36,6 +36,8 @@ const webSocket = (server) => {
         socket.on('joinRoom', async () => {
             await dbInterface.userJoin(username, room);
             socket.join(room);
+            //Loads chat history
+            socket.emit('load_messages',await dbInterface.getChatHistory(room));
             // Welcome current user
             socket.emit('message', formatMessage(botName, 'Welcome to Candor!'));
 

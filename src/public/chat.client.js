@@ -30,6 +30,15 @@ socket.on('roomUsers', ({room, users}) => {
     outputUsers(users);
 });
 
+socket.on('load_messages',message_arr=>{
+    console.log('message_arr',message_arr)
+    if(message_arr){
+        message_arr.chat_history.map((message)=>outputMessage(message));
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+});
+
 // Message from server
 socket.on('message', message => {
     console.log(message);
