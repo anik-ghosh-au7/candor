@@ -24,7 +24,9 @@ chrome.runtime.sendMessage(
         }
 
         if (curr_url!="null") {
-            document.getElementById('context_url').innerHTML = curr_url
+            document.getElementById('context_url').innerHTML = curr_url;
+            document.querySelector("input[name=context]").value = curr_url;
+            document.querySelector("input[name=user]").value = username;
             update_links();
             get_data();
         }else{
@@ -75,6 +77,10 @@ function url_domain(data) {
 window.onload = () => {
     let chat_icon = document.getElementById("chat_element");
     chat_icon.addEventListener("click", chatFunction());
+    let share_icon = document.getElementById("share_element");
+    share_icon.addEventListener("click", shareFunction());
+    let closeDialog = document.getElementById('closeDialog');
+    closeDialog.addEventListener("click", closeDialogBox());
 };
 function chatFunction() {
     return () => {
@@ -82,3 +88,13 @@ function chatFunction() {
         window.open(chatUrl, '_blank');
     };
 };
+function shareFunction() {
+    return () => {
+        document.getElementById("myDialog").showModal();
+    };
+};
+function closeDialogBox() {
+    return () => {
+     document.getElementById('myDialog').close();
+    }
+}
