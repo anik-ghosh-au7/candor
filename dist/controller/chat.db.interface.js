@@ -86,7 +86,7 @@ var dbInterface = {
                   'chats.time': -1
                 }
               }, {
-                $limit: 5
+                $limit: 25
               }, {
                 $sort: {
                   'chats.time': 1

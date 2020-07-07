@@ -1,4 +1,5 @@
 let username;
+let form_data;
 chrome.storage.local.get('username', (result) => {
     document.getElementById("username").innerHTML = "Hello " + result.username;
     username = result.username;
@@ -81,8 +82,11 @@ window.onload = () => {
     share_icon.addEventListener("click", shareFunction());
     let closeDialog = document.getElementById('closeDialog');
     closeDialog.addEventListener("click", closeDialogBox());
-    let form_submit= document.getElementById('form_submit');
-    form_submit.onsubmit=closeSelf();
+    form_data= document.getElementById('form_submit');
+    form_data.addEventListener( "submit", function ( event ) {
+        event.preventDefault();
+        closeSelf();
+      } );
 };
 function chatFunction() {
     return () => {
@@ -98,9 +102,26 @@ function shareFunction() {
 function closeDialogBox() {
     return () => {
      document.getElementById('myDialog').close();
+     document.getElementById('shared_status').innerText = '';
     }
 };
-function closeSelf () {
-    document.getElementById('form_submit').submit();
-     document.getElementById('myDialog').close();
-  }
+
+function closeSelf() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", 'http://localhost:3000/messages', true);
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+    let formData = new FormData(form_data);
+    let send_data = {};
+    for (var [key, value] of formData.entries()) { 
+        send_data[key] = value;
+      }
+    xhttp.send(JSON.stringify(send_data));
+    xhttp.onload = () => {
+        if (xhttp.responseText === 'Message sent') {
+            document.getElementById('share_username').value = '';
+            document.getElementById('comments').value = '';
+        }
+        // document.getElementById('myDialog').close();
+        document.getElementById('shared_status').innerText = xhttp.responseText;
+    };
+};

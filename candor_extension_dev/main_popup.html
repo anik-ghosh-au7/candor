@@ -35,13 +35,14 @@
     </div>
     <dialog id="myDialog">
         <h6 class="card-title">Share URL with : </h6>
-        <form action="http://localhost:3000/messages" method="POST" target="_blank" >
+        <form id="form_submit">
             <div>
-                <input type="text" name="share_username" placeholder="username">
+                <input type="text" name="share_username" id="share_username" placeholder="username">
             </div><br>
             <div>
-                <textarea name="comments" placeholder="comments..."></textarea>
-            </div><br>
+                <textarea name="comments" id="comments" placeholder="comments..."></textarea>
+            </div>
+            <span id="shared_status"></span><br>
             <input hidden type="text" id="context" name="context">
             <input hidden type="text" id="user" name="user">
             <div>
