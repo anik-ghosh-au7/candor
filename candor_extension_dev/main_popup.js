@@ -82,7 +82,7 @@ window.onload = () => {
     let closeDialog = document.getElementById('closeDialog');
     closeDialog.addEventListener("click", closeDialogBox());
     let form_submit= document.getElementById('form_submit');
-    form_submit.onsubmit=closeSelf(form_submit);
+    form_submit.onsubmit=closeSelf();
 };
 function chatFunction() {
     return () => {
