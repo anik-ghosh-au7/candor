@@ -35,7 +35,7 @@
     </div>
     <dialog id="myDialog">
         <h6 class="card-title">Share URL with : </h6>
-        <form action="/" method="POST" target="_blank">
+        <form action="http://localhost:3000/messages" method="POST" onsubmit="return closeSelf(this);" >
             <div>
                 <input type="text" name="share_username" placeholder="username">
             </div><br>

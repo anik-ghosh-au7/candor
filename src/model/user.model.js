@@ -1,4 +1,4 @@
-const mongoose = require ('mongoose');
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
@@ -22,10 +22,20 @@ const userSchema = new Schema({
     },
     image_url: {
         type: String,
-        default:"./../images/default-profile-picture1.jpg"
-    }
-}, {
-   versionKey: false
+        default: "./../images/default-profile-picture1.jpg"
+    },
+    messages:[{
+        sender:String,
+        shared_url:String,
+        msg_body:String,
+        time: {
+            type: Date,
+            default: Date.now,
+        }
+    }]
+},
+    {
+    versionKey: false
 });
 
 module.exports = mongoose.model('user', userSchema, 'user_list');

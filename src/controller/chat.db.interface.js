@@ -33,12 +33,12 @@ let dbInterface = {
 
         getChatHistory: async function (room) {
             return await Chat.aggregate([
-                {$match: {room_name: room}}, 
+                {$match: {room_name: room}},
                 {$unwind: '$chat_history'},
                 {$group: {"_id": null, "chats": { "$push": "$chat_history" }}},
                 {$unwind: '$chats'},
                 {$sort: {'chats.time': -1}},
-                {$limit: 5},
+                {$limit: 25},
                 {$sort: {'chats.time': 1}}
             ]).then(res => {
                 console.log("inside DB interface",res);
