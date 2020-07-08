@@ -17,7 +17,7 @@ const message_controller={
                         console.log("Message saved");
                         res.status(200).send('Message sent')
                     }else{
-                        res.send("Username Doesn't exist")
+                        res.send("Username doesn't exist")
                     }
 
                 })

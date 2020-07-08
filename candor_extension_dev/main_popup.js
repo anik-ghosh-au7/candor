@@ -102,6 +102,8 @@ function shareFunction() {
 function closeDialogBox() {
     return () => {
      document.getElementById('myDialog').close();
+     document.getElementById('share_username').value = '';
+     document.getElementById('comments').value = '';
      document.getElementById('shared_status').innerText = '';
     }
 };
