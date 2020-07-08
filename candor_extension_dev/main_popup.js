@@ -80,6 +80,8 @@ window.onload = () => {
     chat_icon.addEventListener("click", chatFunction());
     let share_icon = document.getElementById("share_element");
     share_icon.addEventListener("click", shareFunction());
+    let openMsg = document.getElementById('msg_element');
+    openMsg.addEventListener("click", openMsgPage());
     let closeDialog = document.getElementById('closeDialog');
     closeDialog.addEventListener("click", closeDialogBox());
     form_data= document.getElementById('form_submit');
@@ -107,6 +109,13 @@ function closeDialogBox() {
      document.getElementById('shared_status').innerText = '';
     }
 };
+
+function openMsgPage() {
+    return () => {
+        let msgUrl = `http://localhost:3000/messages/getmsg`;
+        window.open(msgUrl, '_blank');
+    };
+}
 
 function closeSelf() {
     let xhttp = new XMLHttpRequest();

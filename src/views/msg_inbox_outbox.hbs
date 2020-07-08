@@ -86,13 +86,12 @@
                                     <div class="row">
                                         <div hidden class="col-sm-6" id="msg_received">
                                             {{#each messages.received}}
-                                                <div class="card text-white bg-secondary mb-3"
+                                                <div class="card bg-light mb-3"
                                                      style="width: 200%; padding: 10px; margin:10px;">
                                                     <p class="meta">From {{this.sender}} Time-
                                                         <span>{{this.time}}</span></p>
                                                     <p class="text">
-                                                        Shared URL- {{this.shared_url}}
-
+                                                        Shared URL- <a href="{{this.shared_url}}" target="_blank">{{this.shared_url}}</a>
                                                     </p>
                                                     <p class="text">
                                                         Comments- {{this.msg_body}}
@@ -105,12 +104,12 @@
                                         </div>
                                         <div hidden class="col-sm-6" id="msg_sent">
                                             {{#each messages.sent}}
-                                                <div class="card text-white bg-secondary mb-3"
+                                                <div class="card bg-light mb-3"
                                                      style="width: 200%; padding: 10px; margin:10px;">
                                                     <p class="meta">To {{this.reciever}} Time-
                                                         <span>{{this.time}}</span></p>
                                                     <p class="text">
-                                                        Shared URL- {{this.shared_url}}
+                                                        Shared URL- <a href="{{this.shared_url}}" target="_blank">{{this.shared_url}}</a>
 
                                                     </p>
                                                     <p class="text">
