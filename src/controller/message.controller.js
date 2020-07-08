@@ -43,6 +43,19 @@ const message_controller={
             } else {
                 res.status(400).send("Username doesn't exist");
             }
+    },
+    getmsg:function (req,res) {
+        let messages={};
+        User.findOne({username:req.user.name}).then((result)=>{
+            // console.log(result);
+            messages.received=result.received_messages;
+            messages.sent=result.sent_messages;
+            console.log(messages)
+        });
+            // res.render('msg_inbox_outbox',[{'sent':messages.sent},{'received':messages.received}]);
+        let sent=messages.sent;
+        let received=messages.received;
+        res.render('msg_inbox_outbox',{messages});
     }
 };
 module.exports=message_controller;

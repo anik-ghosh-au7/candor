@@ -11,11 +11,13 @@ const authenticateToken = (req, res, next) => {
     jwt.verify(token, process.env.jwt_key, (err, data) => {
       if (err) return res.status(403).send({msg: 'Unauthorized Forbidden'});
       req.user = data;
+      // console.log(data);
       next();
     });
   };
 const router= express.Router();
 
 router.post('/',authenticateToken,message_controller.handle_messages);
+router.get('/getmsg',authenticateToken,message_controller.getmsg);
 
 module.exports=router;
