@@ -24,10 +24,19 @@ const userSchema = new Schema({
         type: String,
         default: "./../images/default-profile-picture1.jpg"
     },
-    messages:[{
-        sender:String,
-        shared_url:String,
-        msg_body:String,
+    received_messages:[{
+        sender: String,
+        shared_url: String,
+        msg_body: String,
+        time: {
+            type: Date,
+            default: Date.now,
+        }
+    }],
+    sent_messages:[{
+        reciever: String,
+        shared_url: String,
+        msg_body: String,
         time: {
             type: Date,
             default: Date.now,

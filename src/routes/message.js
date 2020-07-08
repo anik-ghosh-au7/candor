@@ -16,6 +16,6 @@ const authenticateToken = (req, res, next) => {
   };
 const router= express.Router();
 
-router.post('/',authenticateToken,message_controller.handle_incoming);
+router.post('/',authenticateToken,message_controller.handle_messages);
 
 module.exports=router;
