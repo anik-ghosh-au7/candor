@@ -50,7 +50,9 @@ handlebars.registerHelper("printDate", function(date_before) {
     // dateIST.setMinutes(dateIST.getMinutes() + 30);
     // return dateIST.toString();
 });
-
+handlebars.registerHelper('json', function(context) {
+    return JSON.stringify(context);
+});
 mongoose.connect(process.env.mongo_uri, {
     useFindAndModify: false,
     useNewUrlParser: true,

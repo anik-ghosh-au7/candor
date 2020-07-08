@@ -1,5 +1,4 @@
-
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -16,9 +15,38 @@
             overflow-y: scroll;
         }
     </style>
+    <script>
+        window.onload = () => {
+            function toggle() {
+                if (document.querySelector("a.active[href='#']").id == 'inbox_button') {
+                    document.getElementById('msg_received').hidden = false;
+                    document.getElementById('msg_sent').hidden = true;
+                } else {
+                    document.getElementById('msg_sent').hidden = false;
+                    document.getElementById('msg_received').hidden = true;
+                }
+            }
+
+            toggle();
+            let outbox_button = document.getElementById('outbox_button');
+            let inbox_button = document.getElementById('inbox_button');
+
+            inbox_button.onclick = () => {
+                outbox_button.classList.remove("active");
+                inbox_button.classList.add("active");
+                toggle();
+                console.log('clicke inbox_button');
+            };
+            outbox_button.onclick = () => {
+                inbox_button.classList.remove("active");
+                outbox_button.classList.add("active");
+                toggle();
+            };
+        };
+
+    </script>
 </head>
 <body>
-{{messages}}{{messages.received}}
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
@@ -27,20 +55,26 @@
 
                     <div class="row" style="vertical-align: middle;">
                         <!-- Left sidebar -->
-                        <div class="col-lg-3 col-md-4"  >
+                        <div class="col-lg-3 col-md-4">
                             <div class="position-relative">
-                                <h2><b>Hello guest!</b></h2>
+                                <h2><b>Hello {{messages.username}}</b></h2>
                             </div>
-                            <div class="card shadow-none mt-3" >
+                            <div class="card shadow-none mt-3">
                                 <div class="list-group shadow-none ">
-                                    <a href="#" class="list-group-item active"><i class="fa fa-inbox mr-2"></i>Inbox <b>(12)</b></a>
-                                    <a href="#" class="list-group-item"><i class="fa fa-paper-plane-o mr-2"></i>Sent Messages</a>
+                                    <a href="#" id="inbox_button" class="list-group-item active"><i
+                                            class="fa fa-inbox mr-2"
+                                    ></i>Inbox
+                                    </a>
+                                    <a href="#" id="outbox_button" class="list-group-item"><i
+                                            class="fa fa-paper-plane-o mr-2"
+                                    ></i>Sent Messages</a>
                                 </div>
-                            </div><br>
-                                    <div class="position-relative has-icon-right">
-                                        <input type="text" class="form-control" placeholder="search mail">
-                                        <i class="fa fa-search text-info"></i>
-                                    </div>
+                            </div>
+                            <br>
+                            <div class="position-relative has-icon-right">
+                                <input type="text" class="form-control" placeholder="search mail">
+                                <i class="fa fa-search text-info"></i>
+                            </div>
                         </div>
                         <!-- End Left sidebar -->
 
@@ -50,39 +84,41 @@
                             <div class="chat-messages">
                                 <div class="card shadow-none mt-3 border border-light">
                                     <div class="row">
-                                        <div class="col-sm-6" id="msg_received">
-                                            {{received}}
-                                            {{#each received}}
-                                            <div class="card text-white bg-secondary mb-3"
-                                                 style="width: 200%; padding: 10px; margin:10px;">
-                                                <p class="meta">From {{this.sender}} Time- <span>{{this.time}}</span></p>
-                                                <p class="text">
-                                                    Shared URL- {{this.shared_url}}
+                                        <div hidden class="col-sm-6" id="msg_received">
+                                            {{#each messages.received}}
+                                                <div class="card text-white bg-secondary mb-3"
+                                                     style="width: 200%; padding: 10px; margin:10px;">
+                                                    <p class="meta">From {{this.sender}} Time-
+                                                        <span>{{this.time}}</span></p>
+                                                    <p class="text">
+                                                        Shared URL- {{this.shared_url}}
 
-                                                </p>
-                                                <p class="text">
-                                                    Comments- {{this.msg_body}}
+                                                    </p>
+                                                    <p class="text">
+                                                        Comments- {{this.msg_body}}
 
-                                                </p>
-                                            </div>
+                                                    </p>
+                                                </div>
+                                                <br>
                                             {{/each}}
 
                                         </div>
-<!--                                        <div class="col-sm-6" id="msg_sent">-->
-<!--                                            {{#each sent}}-->
-<!--                                            <div class="card text-white bg-secondary mb-3"-->
-<!--                                                 style="width: 200%; padding: 10px; margin:10px;">-->
-<!--                                                <p class="meta">To {{this.reciever}} Time- <span>{{this.time}}</span></p>-->
-<!--                                                <p class="text">-->
-<!--                                                    Shared URL- {{this.shared_url}}-->
+                                        <div hidden class="col-sm-6" id="msg_sent">
+                                            {{#each messages.sent}}
+                                                <div class="card text-white bg-secondary mb-3"
+                                                     style="width: 200%; padding: 10px; margin:10px;">
+                                                    <p class="meta">To {{this.reciever}} Time-
+                                                        <span>{{this.time}}</span></p>
+                                                    <p class="text">
+                                                        Shared URL- {{this.shared_url}}
 
-<!--                                                </p>-->
-<!--                                                <p class="text">-->
-<!--                                                    Comments- {{this.msg_body}}-->
+                                                    </p>
+                                                    <p class="text">
+                                                        Comments- {{this.msg_body}}
 
-<!--                                                </p>-->
-<!--                                            </div>-->
-<!--                                            {{/each}}-->
+                                                    </p>
+                                                </div>
+                                            {{/each}}
 
                                         </div>
                                     </div>
