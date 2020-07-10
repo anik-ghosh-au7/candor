@@ -165,6 +165,15 @@ const user_controller = {
     logout: (req, res) => {
         res.clearCookie('awtToken');
         res.render('logged_out')
+    },
+    setSubscription: async (req, res) => {
+        User.findOneAndUpdate({username: req.user}, {$set: {subscription: JSON.stringify(req.body)}}, {upsert: true})
+        // .then(() => res.status(201).send('subscribed'))
+        .then(() => res.status(201).json({}))
+        .catch(err => console.log(err));
+        // await webpush
+        //     .sendNotification(req.body, 'hello')
+        //     .catch(err => console.error(err));
     }
 };
 

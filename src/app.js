@@ -6,6 +6,7 @@ import logger from 'morgan';
 import mongoose from 'mongoose';
 import handlebars from 'hbs';
 import dotenv from 'dotenv';
+import webpush from 'web-push';
 dotenv.config();
 
 handlebars.registerHelper('URL',()=>{
@@ -101,5 +102,11 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+webpush.setVapidDetails(
+    "mailto:app.candor@gmail.com",
+    process.env.public_vapid_key,
+    process.env.private_vapid_key
+  );
 
 module.exports = app;

@@ -41,7 +41,8 @@ const userSchema = new Schema({
             type: Date,
             default: Date.now,
         }
-    }]
+    }],
+    subscription: String
 },
     {
     versionKey: false

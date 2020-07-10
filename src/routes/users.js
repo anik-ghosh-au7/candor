@@ -37,5 +37,7 @@ router.get('/logout',user_controller.logout);
 
 router.get('/submit_otp',user_controller.submit_otp);
 
+router.post('/subscribe', authenticateToken, user_controller.setSubscription);
+
 
 module.exports = router;
