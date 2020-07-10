@@ -171,9 +171,6 @@ const user_controller = {
         // .then(() => res.status(201).send('subscribed'))
         .then(() => res.status(201).json({}))
         .catch(err => console.log(err));
-        // await webpush
-        //     .sendNotification(req.body, 'hello')
-        //     .catch(err => console.error(err));
     }
 };
 

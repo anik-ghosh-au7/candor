@@ -4,7 +4,7 @@ import webpush from 'web-push';
 const message_controller={
     handle_messages: async function (req,res) {
         let flag = false;
-        console.log('body',req.body);
+        // console.log('body',req.body);
         await User.findOneAndUpdate({username:req.body.share_username},{
                     "$push": {
                         "received_messages": {
@@ -18,14 +18,13 @@ const message_controller={
                     if(result){
                         console.log("receiver message saved");
                         // res.status(200).send('Message sent');
+                        let message = req.body.comments.length < 30 ? req.body.comments : req.body.comments.slice(0, 29) + '...';
                         let payload = JSON.stringify({ 
-                        title: "New notification", 
-                        // sender: req.body.user,
-                        // shared_url: req.body.context,
-                        // msg_body: req.body.comments 
+                        title: `New message from ${req.body.user}`,
+                        msg_body: message
                     });
                     User.findOne({username: req.body.share_username}).then(result => {
-                        console.log('sub_obj : ', JSON.parse(result.subscription));
+                        // console.log('sub_obj : ', JSON.parse(result.subscription));
                         webpush.sendNotification(JSON.parse(result.subscription), payload)
                     }).catch(err => console.error(err));
                         flag = true;
