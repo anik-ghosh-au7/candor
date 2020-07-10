@@ -18,6 +18,8 @@ var _hbs = _interopRequireDefault(require("hbs"));
 
 var _dotenv = _interopRequireDefault(require("dotenv"));
 
+var _webPush = _interopRequireDefault(require("web-push"));
+
 var _home = _interopRequireDefault(require("./routes/home"));
 
 var _users = _interopRequireDefault(require("./routes/users"));
@@ -76,6 +78,10 @@ _hbs["default"].registerHelper("printDate", function (date_before) {
 
 });
 
+_hbs["default"].registerHelper('json', function (context) {
+  return JSON.stringify(context);
+});
+
 _mongoose["default"].connect(process.env.mongo_uri, {
   useFindAndModify: false,
   useNewUrlParser: true,
@@ -114,5 +120,8 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+_webPush["default"].setVapidDetails("mailto:app.candor@gmail.com", process.env.public_vapid_key, process.env.private_vapid_key);
+
 module.exports = app;
 //# sourceMappingURL=app.js.map

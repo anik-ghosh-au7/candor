@@ -323,7 +323,42 @@ var user_controller = {
   logout: function logout(req, res) {
     res.clearCookie('awtToken');
     res.render('logged_out');
-  }
+  },
+  setSubscription: function () {
+    var _setSubscription = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res) {
+      return _regenerator["default"].wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _user["default"].findOneAndUpdate({
+                username: req.user
+              }, {
+                $set: {
+                  subscription: JSON.stringify(req.body)
+                }
+              }, {
+                upsert: true
+              }) // .then(() => res.status(201).send('subscribed'))
+              .then(function () {
+                return res.status(201).json({});
+              })["catch"](function (err) {
+                return console.log(err);
+              });
+
+            case 1:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    function setSubscription(_x5, _x6) {
+      return _setSubscription.apply(this, arguments);
+    }
+
+    return setSubscription;
+  }()
 };
 
 function generateOTP() {

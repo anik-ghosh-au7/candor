@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link href="/post/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        .chat-messages {
+            padding: 30px;
+            max-height: 550px;
+            overflow-y: scroll;
+        }
+    </style>
+    <script>
+        window.onload = () => {
+            function toggle() {
+                if (document.querySelector("a.active[href='#']").id == 'inbox_button') {
+                    document.getElementById('msg_received').hidden = false;
+                    document.getElementById('msg_sent').hidden = true;
+                } else {
+                    document.getElementById('msg_sent').hidden = false;
+                    document.getElementById('msg_received').hidden = true;
+                }
+            }
+
+            toggle();
+            let outbox_button = document.getElementById('outbox_button');
+            let inbox_button = document.getElementById('inbox_button');
+
+            inbox_button.onclick = () => {
+                outbox_button.classList.remove("active");
+                inbox_button.classList.add("active");
+                toggle();
+                console.log('clicke inbox_button');
+            };
+            outbox_button.onclick = () => {
+                inbox_button.classList.remove("active");
+                outbox_button.classList.add("active");
+                toggle();
+            };
+        };
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row" style="vertical-align: middle;">
+                        <!-- Left sidebar -->
+                        <div class="col-lg-3 col-md-4">
+                            <div class="position-relative">
+                                <h2><b>Hello {{messages.username}}</b></h2>
+                            </div>
+                            <div class="card shadow-none mt-3">
+                                <div class="list-group shadow-none ">
+                                    <a href="#" id="inbox_button" class="list-group-item active"><i
+                                            class="fa fa-inbox mr-2"
+                                    ></i>Inbox
+                                    </a>
+                                    <a href="#" id="outbox_button" class="list-group-item"><i
+                                            class="fa fa-paper-plane-o mr-2"
+                                    ></i>Sent Messages</a>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="position-relative has-icon-right">
+                                <input type="text" class="form-control" placeholder="search mail">
+                                <i class="fa fa-search text-info"></i>
+                            </div>
+                        </div>
+                        <!-- End Left sidebar -->
+
+                        <!-- Right Sidebar -->
+                        <div class="col-lg-9 col-md-8">
+
+                            <div class="chat-messages">
+                                <div class="card shadow-none mt-3 border border-light">
+                                    <div class="row">
+                                        <div hidden class="col-sm-6" id="msg_received">
+                                            {{#each messages.received}}
+                                                <div class="card bg-light mb-3"
+                                                     style="width: 200%; padding: 10px; margin:10px;">
+                                                    <p class="meta">From {{this.sender}} Time-
+                                                        <span>{{this.time}}</span></p>
+                                                    <p class="text">
+                                                        Shared URL- <a href="{{this.shared_url}}" target="_blank">{{this.shared_url}}</a>
+                                                    </p>
+                                                    <p class="text">
+                                                        Comments- {{this.msg_body}}
+
+                                                    </p>
+                                                </div>
+                                                <br>
+                                            {{/each}}
+
+                                        </div>
+                                        <div hidden class="col-sm-6" id="msg_sent">
+                                            {{#each messages.sent}}
+                                                <div class="card bg-light mb-3"
+                                                     style="width: 200%; padding: 10px; margin:10px;">
+                                                    <p class="meta">To {{this.reciever}} Time-
+                                                        <span>{{this.time}}</span></p>
+                                                    <p class="text">
+                                                        Shared URL- <a href="{{this.shared_url}}" target="_blank">{{this.shared_url}}</a>
+
+                                                    </p>
+                                                    <p class="text">
+                                                        Comments- {{this.msg_body}}
+
+                                                    </p>
+                                                </div>
+                                            {{/each}}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--                                <div class="chat-messages">-->
+                            <!--                                    <p class="meta">message.username <span>time</span></p>-->
+                            <!--                                    <p class="text">-->
+                            <!--                                        message.text-->
+                            <!--                                    </p>-->
+                            <!--                                </div>-->
+
+                        </div> <!-- card -->
+                    </div> <!-- end Col-9 -->
+
+                </div><!-- End row -->
+
+            </div>
+        </div>
+    </div>
+</div><!-- End row -->
+
+</div>
+</body>
+</html>

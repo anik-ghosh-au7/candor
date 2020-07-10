@@ -23,13 +23,15 @@ var authenticateToken = function authenticateToken(req, res, next) {
     if (err) return res.status(403).send({
       msg: 'Unauthorized Forbidden'
     });
-    req.user = data;
+    req.user = data; // console.log(data);
+
     next();
   });
 };
 
 var router = _express["default"].Router();
 
-router.post('/', authenticateToken, _message["default"].handle_incoming);
+router.post('/', authenticateToken, _message["default"].handle_messages);
+router.get('/getmsg', authenticateToken, _message["default"].getmsg);
 module.exports = router;
 //# sourceMappingURL=message.js.map

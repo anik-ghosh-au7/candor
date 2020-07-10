@@ -41,5 +41,6 @@ router.get('/loginPage', authenticateToken, _user["default"].loginPage);
 router.get('/signPage', authenticateToken, _user["default"].signPage);
 router.get('/logout', _user["default"].logout);
 router.get('/submit_otp', _user["default"].submit_otp);
+router.post('/subscribe', authenticateToken, _user["default"].setSubscription);
 module.exports = router;
 //# sourceMappingURL=users.js.map
