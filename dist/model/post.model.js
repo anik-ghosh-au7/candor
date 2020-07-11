@@ -37,7 +37,8 @@ var postSchema = new Schema({
         "default": Date.now
       }
     }]
-  }]
+  }],
+  favourite_users: [String]
 });
 module.exports = mongoose.model('post', postSchema, 'post_list');
 //# sourceMappingURL=post.model.js.map

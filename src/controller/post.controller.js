@@ -292,11 +292,13 @@ const post_controller = {
         let flag = false;
         await Post.findOne({url}).then(result => {
             // console.log('result findOne', result.favourite_users);
+            if (result) {
             result.favourite_users.forEach(elem => {
                 if(elem === username) {
                     flag = true;
                 }
-            })
+            });
+            };
         });
 
         if (flag) {

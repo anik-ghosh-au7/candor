@@ -665,6 +665,82 @@ var post_controller = {
     }
 
     return getTrendingTags;
+  }(),
+  favouriteUsers: function () {
+    var _favouriteUsers = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(req, res) {
+      var username, url, flag;
+      return _regenerator["default"].wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              // console.log(req.body);
+              username = req.user.name;
+              url = req.body.current_url;
+              flag = false;
+              _context5.next = 5;
+              return _post["default"].findOne({
+                url: url
+              }).then(function (result) {
+                // console.log('result findOne', result.favourite_users);
+                if (result) {
+                  result.favourite_users.forEach(function (elem) {
+                    if (elem === username) {
+                      flag = true;
+                    }
+                  });
+                }
+
+                ;
+              });
+
+            case 5:
+              if (flag) {
+                // console.log('inside if --> ', flag);
+                _post["default"].findOneAndUpdate({
+                  url: url
+                }, {
+                  "$pull": {
+                    "favourite_users": username
+                  }
+                }, {
+                  "new": true
+                }).then(function () {
+                  console.log("".concat(username, " removed from ").concat(url, " favourites!!!"));
+                  res.send("removed from favourites!!!");
+                })["catch"](function (err) {
+                  return console.log(err);
+                });
+              } else {
+                // console.log('inside else --> ', flag);
+                _post["default"].findOneAndUpdate({
+                  url: url
+                }, {
+                  "$push": {
+                    "favourite_users": username
+                  }
+                }, {
+                  upsert: true
+                }).then(function () {
+                  console.log("".concat(username, " added to ").concat(url, " favourites!!!"));
+                  res.send("added to favourites!!!");
+                })["catch"](function (err) {
+                  return console.log(err);
+                });
+              }
+
+            case 6:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }));
+
+    function favouriteUsers(_x9, _x10) {
+      return _favouriteUsers.apply(this, arguments);
+    }
+
+    return favouriteUsers;
   }()
 };
 module.exports = {
