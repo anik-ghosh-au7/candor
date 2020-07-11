@@ -59,6 +59,12 @@ function update_data(data) {
     document.getElementById("related_data").innerHTML = data.related;
     document.getElementById("admin_data").innerHTML = data.admin;
     document.getElementById("others_data").innerHTML = data.others;
+    
+    if (data.fav){
+        let star_icon = document.getElementById('star_element');
+        star_icon.classList.remove('far');
+        star_icon.classList.add('fas');
+    }
 };
 
 
@@ -116,6 +122,14 @@ function favFunction() {
         xhttp.send(JSON.stringify(body));
         xhttp.onload = () => {
             console.log(xhttp.responseText);
+            let star_icon = document.getElementById('star_element');
+            if (xhttp.responseText === 'added to favourites!!!') {
+                star_icon.classList.remove('far');
+                star_icon.classList.add('fas');
+            } else {
+                star_icon.classList.remove('fas');
+                star_icon.classList.add('far');
+            }
         }
     };
 };

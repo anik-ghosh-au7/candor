@@ -169,6 +169,7 @@ const post_controller = {
     getdata: async (req, res) => {
         let current_url = decodeURIComponent(req.query.current_url);
         let data = {};
+        data.fav = false;
         await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'question'}}]).then(result => {
             data.question = result.length
         });
@@ -180,6 +181,15 @@ const post_controller = {
         });
         await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'others'}}]).then(result => {
             data.others = result.length
+        });
+        await Post.findOne({url: current_url}).then(result => {
+            if (result) {
+            result.favourite_users.forEach(elem => {
+                if(elem === req.user.name) {
+                    data.fav = true;
+                }
+            });
+            };
         });
         res.status(200).send(data);
     },
