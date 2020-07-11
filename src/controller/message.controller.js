@@ -18,10 +18,10 @@ const message_controller={
                     if(result){
                         console.log("receiver message saved");
                         // res.status(200).send('Message sent');
-                        let message = req.body.comments.length < 30 ? req.body.comments : req.body.comments.slice(0, 29) + '...';
+                        // let message = req.body.comments.length < 30 ? req.body.comments : req.body.comments.slice(0, 29) + '...';
                         let payload = JSON.stringify({ 
                         title: `New message from ${req.body.user}`,
-                        msg_body: message
+                        msg_body: req.body.comments
                     });
                     User.findOne({username: req.body.share_username}).then(result => {
                         // console.log('sub_obj : ', JSON.parse(result.subscription));
@@ -55,7 +55,7 @@ const message_controller={
             }
     },
 
-    handle_post_messages : function (receiver, sender, url, body) {
+    handle_post_comment_messages : function (receiver, sender, url, body, title) {
         User.findOneAndUpdate({username:receiver},{
                     "$push": {
                         "received_messages": {
@@ -70,10 +70,11 @@ const message_controller={
                         console.log("receiver message saved");
                         let message = body.length < 30 ? body : body.slice(0, 29) + '...';
                         let payload = JSON.stringify({ 
-                        title: `New post from ${sender}`,
+                        title: title,
                         msg_body: message
                     });
                     User.findOne({username: receiver}).then(result => {
+                        console.log(`sending notification to ${result.username} -->     `, JSON.parse(result.subscription));
                         webpush.sendNotification(JSON.parse(result.subscription), payload)
                         return;
                     }).catch(err => console.error(err));

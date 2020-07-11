@@ -55,9 +55,10 @@ const post_controller = {
                     );
                 }
                 if (data.favourite_users) {
-                    let message = `(Post in ${req.body.category}) ` + req.body.post_body;
+                    let title = `New post from ${req.body.username}`
+                    let message = `(Post in ${req.body.category}): ` + req.body.post_body;
                     data.favourite_users.forEach(elem => {
-                        messageController.handle_post_messages(elem, req.body.username, req.body.url, message);
+                        messageController.handle_post_comment_messages(elem, req.body.username, req.body.url, message, title);
                     })
                 }
             }
@@ -69,6 +70,8 @@ const post_controller = {
 
         let current_url = req.body.url;
         let post_id = req.body.post_id;
+        let post_author = req.body.post_author;
+        let post_body = req.body.post_body;
         const tag = req.body.comment_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
 
         Post.findOneAndUpdate({url: current_url, "post._id": post_id},
@@ -82,11 +85,15 @@ const post_controller = {
                 }
             }, {"new": true})
             .then(() => {
+                post_body = post_body.length > 30 ? post_body.slice(0, 30)+ '...' : post_body;
+                let message = `(Comment in ${post_body}): ` + req.body.comment_body;
+                let title = `New comment from ${req.body.username}`
+                messageController.handle_post_comment_messages(post_author, req.body.username, current_url, message, title);
+
                 let hitUrl = `/post/render?current_url=${encodeURIComponent(current_url)}&category=${req.body.category}`;
                 res.redirect(hitUrl)
             })
             .catch(err => console.log(err));
-
     },
     renderPost: async (req, res) => {
         let current_url = decodeURIComponent(req.query.current_url);
