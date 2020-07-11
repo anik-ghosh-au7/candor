@@ -12,6 +12,8 @@ var _expressValidator = require("express-validator");
 
 var _mongodb = require("mongodb");
 
+var _message = _interopRequireDefault(require("../controller/message.controller"));
+
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -76,6 +78,13 @@ var post_controller = {
           }, function (err) {
             if (err) console.log(err);
             res.redirect(hitUrl);
+          });
+        }
+
+        if (data.favourite_users) {
+          var message = "(Post in ".concat(req.body.category, ") ") + req.body.post_body;
+          data.favourite_users.forEach(function (elem) {
+            _message["default"].handle_post_messages(elem, req.body.username, req.body.url, message);
           });
         }
       }
@@ -368,7 +377,8 @@ var post_controller = {
             case 0:
               current_url = decodeURIComponent(req.query.current_url);
               data = {};
-              _context2.next = 4;
+              data.fav = false;
+              _context2.next = 5;
               return _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -383,8 +393,8 @@ var post_controller = {
                 data.question = result.length;
               });
 
-            case 4:
-              _context2.next = 6;
+            case 5:
+              _context2.next = 7;
               return _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -399,8 +409,8 @@ var post_controller = {
                 data.admin = result.length;
               });
 
-            case 6:
-              _context2.next = 8;
+            case 7:
+              _context2.next = 9;
               return _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -415,8 +425,8 @@ var post_controller = {
                 data.related = result.length;
               });
 
-            case 8:
-              _context2.next = 10;
+            case 9:
+              _context2.next = 11;
               return _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -431,10 +441,26 @@ var post_controller = {
                 data.others = result.length;
               });
 
-            case 10:
+            case 11:
+              _context2.next = 13;
+              return _post["default"].findOne({
+                url: current_url
+              }).then(function (result) {
+                if (result) {
+                  result.favourite_users.forEach(function (elem) {
+                    if (elem === req.user.name) {
+                      data.fav = true;
+                    }
+                  });
+                }
+
+                ;
+              });
+
+            case 13:
               res.status(200).send(data);
 
-            case 11:
+            case 14:
             case "end":
               return _context2.stop();
           }

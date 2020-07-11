@@ -95,6 +95,40 @@ var message_controller = {
 
     return handle_messages;
   }(),
+  handle_post_messages: function handle_post_messages(receiver, sender, url, body) {
+    _user["default"].findOneAndUpdate({
+      username: receiver
+    }, {
+      "$push": {
+        "received_messages": {
+          sender: sender,
+          shared_url: url,
+          msg_body: body
+        }
+      }
+    }).then(function (result) {
+      if (result) {
+        console.log("receiver message saved");
+        var message = body.length < 30 ? body : body.slice(0, 29) + '...';
+        var payload = JSON.stringify({
+          title: "New post from ".concat(sender),
+          msg_body: message
+        });
+
+        _user["default"].findOne({
+          username: receiver
+        }).then(function (result) {
+          _webPush["default"].sendNotification(JSON.parse(result.subscription), payload);
+
+          return;
+        })["catch"](function (err) {
+          return console.error(err);
+        });
+      }
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  },
   getmsg: function getmsg(req, res) {
     var messages = {};
 

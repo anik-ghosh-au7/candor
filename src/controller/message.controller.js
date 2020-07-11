@@ -54,6 +54,34 @@ const message_controller={
                 res.status(400).send("Username doesn't exist");
             }
     },
+
+    handle_post_messages : function (receiver, sender, url, body) {
+        User.findOneAndUpdate({username:receiver},{
+                    "$push": {
+                        "received_messages": {
+                            sender: sender,
+                            shared_url: url,
+                            msg_body: body
+                        }
+                    }
+                })
+                .then((result) => {
+                    if(result){
+                        console.log("receiver message saved");
+                        let message = body.length < 30 ? body : body.slice(0, 29) + '...';
+                        let payload = JSON.stringify({ 
+                        title: `New post from ${sender}`,
+                        msg_body: message
+                    });
+                    User.findOne({username: receiver}).then(result => {
+                        webpush.sendNotification(JSON.parse(result.subscription), payload)
+                        return;
+                    }).catch(err => console.error(err));
+                    }
+                })
+                .catch(err => console.log(err));
+            },
+
     getmsg: function (req,res) {
         let messages={};
         User.findOne({username:req.user.name}).then((result)=>{

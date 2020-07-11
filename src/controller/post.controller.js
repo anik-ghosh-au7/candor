@@ -1,6 +1,7 @@
 import Post from '../model/post.model';
 import {validationResult} from 'express-validator';
 import {ObjectId} from 'mongodb';
+import messageController from '../controller/message.controller';
 
 const app = {};
 
@@ -52,6 +53,12 @@ const post_controller = {
                             res.redirect(hitUrl);
                         }
                     );
+                }
+                if (data.favourite_users) {
+                    let message = `(Post in ${req.body.category}) ` + req.body.post_body;
+                    data.favourite_users.forEach(elem => {
+                        messageController.handle_post_messages(elem, req.body.username, req.body.url, message);
+                    })
                 }
             }
 
