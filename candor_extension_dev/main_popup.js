@@ -78,10 +78,16 @@ function url_domain(data) {
 window.onload = () => {
     let chat_icon = document.getElementById("chat_element");
     chat_icon.addEventListener("click", chatFunction());
+
     let share_icon = document.getElementById("share_element");
     share_icon.addEventListener("click", shareFunction());
+
+    let star_icon = document.getElementById("star_element");
+    star_icon.addEventListener("click", favFunction());
+
     let openMsg = document.getElementById('msg_element');
     openMsg.addEventListener("click", openMsgPage());
+
     let closeDialog = document.getElementById('closeDialog');
     closeDialog.addEventListener("click", closeDialogBox());
     form_data= document.getElementById('form_submit');
@@ -96,6 +102,24 @@ function chatFunction() {
         window.open(chatUrl, '_blank');
     };
 };
+
+function favFunction() {
+    return () => {
+        let body = {
+            "current_url": curr_url
+        };
+        console.log('curr_url', curr_url);
+        console.log("body_url",body);
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("POST", 'http://localhost:3000/post/addfav', true);
+        xhttp.setRequestHeader('Content-Type', 'application/json');
+        xhttp.send(JSON.stringify(body));
+        xhttp.onload = () => {
+            console.log(xhttp.responseText);
+        }
+    };
+};
+
 function shareFunction() {
     return () => {
         document.getElementById("myDialog").showModal();

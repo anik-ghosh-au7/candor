@@ -283,6 +283,47 @@ const post_controller = {
                 }
             )
             .catch(err => console.log(err))
+    },
+
+    favouriteUsers: async (req, res) => {
+        // console.log(req.body);
+        let username = req.user.name;
+        let url = req.body.current_url;
+        let flag = false;
+        await Post.findOne({url}).then(result => {
+            // console.log('result findOne', result.favourite_users);
+            result.favourite_users.forEach(elem => {
+                if(elem === username) {
+                    flag = true;
+                }
+            })
+        });
+
+        if (flag) {
+            // console.log('inside if --> ', flag);
+            Post.findOneAndUpdate({url}, {
+                "$pull": {
+                    "favourite_users": username
+                }
+            }, {"new": true})
+            .then(() => {
+                console.log(`${username} removed from ${url} favourites!!!`);
+                res.send(`removed from favourites!!!`);
+            })
+            .catch(err => console.log(err));
+        } else {
+            // console.log('inside else --> ', flag);
+            Post.findOneAndUpdate({url}, {
+                "$push": {
+                    "favourite_users": username
+                }
+            }, {upsert: true})
+            .then(() => {
+                console.log(`${username} added to ${url} favourites!!!`);
+                res.send(`added to favourites!!!`);
+            })
+            .catch(err => console.log(err));
+        }
     }
 };
 module.exports = {post_controller, app};

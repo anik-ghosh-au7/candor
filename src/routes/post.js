@@ -24,4 +24,5 @@ router.get('/render',authenticateToken, post_controller.renderPost);
 router.get('/getdata', post_controller.getdata);
 router.get('/like',authenticateToken,post_controller.updateLike);
 router.get('/tags',post_controller.getTrendingTags);
+router.post('/addfav', authenticateToken, post_controller.favouriteUsers);
 module.exports = router;
