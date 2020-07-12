@@ -54,6 +54,12 @@ handlebars.registerHelper("printDate", function(date_before) {
 handlebars.registerHelper('json', function(context) {
     return JSON.stringify(context);
 });
+
+handlebars.registerHelper("inc", function(value, options)
+{
+    return parseInt(value) + 1;
+});
+
 mongoose.connect(process.env.mongo_uri, {
     useFindAndModify: false,
     useNewUrlParser: true,

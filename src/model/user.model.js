@@ -42,6 +42,7 @@ const userSchema = new Schema({
             default: Date.now,
         }
     }],
+    favourite_urls: [String],
     subscription: String
 },
     {

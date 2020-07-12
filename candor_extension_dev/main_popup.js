@@ -91,6 +91,9 @@ window.onload = () => {
     let star_icon = document.getElementById("star_element");
     star_icon.addEventListener("click", favFunction());
 
+    let favList_icon = document.getElementById("list_element");
+    favList_icon.addEventListener("click", getfavFunction());
+
     let openMsg = document.getElementById('msg_element');
     openMsg.addEventListener("click", openMsgPage());
 
@@ -102,6 +105,13 @@ window.onload = () => {
         closeSelf();
       } );
 };
+function getfavFunction() {
+    return () => {
+        let getFavUrl = `http://localhost:3000/users/favourites`;
+        window.open(getFavUrl, '_blank');
+    };
+};
+
 function chatFunction() {
     return () => {
         let chatUrl = `http://localhost:3000/chat?current_url=${encodeURIComponent(curr_url)}`;

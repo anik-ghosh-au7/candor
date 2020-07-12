@@ -34,11 +34,11 @@ var message_controller = {
               }).then(function (result) {
                 if (result) {
                   console.log("receiver message saved"); // res.status(200).send('Message sent');
+                  // let message = req.body.comments.length < 30 ? req.body.comments : req.body.comments.slice(0, 29) + '...';
 
-                  var message = req.body.comments.length < 30 ? req.body.comments : req.body.comments.slice(0, 29) + '...';
                   var payload = JSON.stringify({
                     title: "New message from ".concat(req.body.user),
-                    msg_body: message
+                    msg_body: req.body.comments
                   });
 
                   _user["default"].findOne({
@@ -95,7 +95,7 @@ var message_controller = {
 
     return handle_messages;
   }(),
-  handle_post_messages: function handle_post_messages(receiver, sender, url, body) {
+  handle_post_comment_messages: function handle_post_comment_messages(receiver, sender, url, body, title) {
     _user["default"].findOneAndUpdate({
       username: receiver
     }, {
@@ -111,13 +111,15 @@ var message_controller = {
         console.log("receiver message saved");
         var message = body.length < 30 ? body : body.slice(0, 29) + '...';
         var payload = JSON.stringify({
-          title: "New post from ".concat(sender),
+          title: title,
           msg_body: message
         });
 
         _user["default"].findOne({
           username: receiver
         }).then(function (result) {
+          console.log("sending notification to ".concat(result.username, " -->     "), JSON.parse(result.subscription));
+
           _webPush["default"].sendNotification(JSON.parse(result.subscription), payload);
 
           return;

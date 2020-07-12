@@ -171,6 +171,35 @@ const user_controller = {
         // .then(() => res.status(201).send('subscribed'))
         .then(() => res.status(201).json({}))
         .catch(err => console.log(err));
+    },
+    addFavourites: (username, url) => {
+        User.findOneAndUpdate({username}, {
+            "$push": {
+                "favourite_urls": url
+            }
+        }, {upsert: true})
+        .then(() => {
+            console.log(`${url} added to ${username}'s favourites!!!`);
+            return;
+        })
+        .catch(err => console.log(err));
+    },
+    removeFavourites: (username, url) => {
+        User.findOneAndUpdate({username}, {
+                "$pull": {
+                    "favourite_urls": url
+                }
+            }, {new: true})
+            .then(() => {
+                console.log(`${url} removed from ${username}'s favourites!!!`);
+                return;
+            })
+            .catch(err => console.log(err));
+    },
+    getFavourites: (req, res) => {
+        User.findOne({username: req.user}).then(result => {
+            res.render('favourites', {username:  req.user, favourites: result.favourite_urls});
+        }).catch(err => console.error(err));
     }
 };
 

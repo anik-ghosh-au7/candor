@@ -82,6 +82,10 @@ _hbs["default"].registerHelper('json', function (context) {
   return JSON.stringify(context);
 });
 
+_hbs["default"].registerHelper("inc", function (value, options) {
+  return parseInt(value) + 1;
+});
+
 _mongoose["default"].connect(process.env.mongo_uri, {
   useFindAndModify: false,
   useNewUrlParser: true,

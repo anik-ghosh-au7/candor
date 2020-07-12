@@ -14,6 +14,8 @@ var _mongodb = require("mongodb");
 
 var _message = _interopRequireDefault(require("../controller/message.controller"));
 
+var _user = _interopRequireDefault(require("../controller/user.controller"));
+
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -82,9 +84,10 @@ var post_controller = {
         }
 
         if (data.favourite_users) {
-          var message = "(Post in ".concat(req.body.category, ") ") + req.body.post_body;
+          var title = "New post from ".concat(req.body.username);
+          var message = "(Post in ".concat(req.body.category, "): ") + req.body.post_body;
           data.favourite_users.forEach(function (elem) {
-            _message["default"].handle_post_messages(elem, req.body.username, req.body.url, message);
+            _message["default"].handle_post_comment_messages(elem, req.body.username, req.body.url, message, title);
           });
         }
       }
@@ -93,6 +96,8 @@ var post_controller = {
   createComment: function createComment(req, res) {
     var current_url = req.body.url;
     var post_id = req.body.post_id;
+    var post_author = req.body.post_author;
+    var post_body = req.body.post_body;
     var tag = req.body.comment_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
 
     _post["default"].findOneAndUpdate({
@@ -109,6 +114,12 @@ var post_controller = {
     }, {
       "new": true
     }).then(function () {
+      post_body = post_body.length > 30 ? post_body.slice(0, 30) + '...' : post_body;
+      var message = "(Comment in ".concat(post_body, "): ") + req.body.comment_body;
+      var title = "New comment from ".concat(req.body.username);
+
+      _message["default"].handle_post_comment_messages(post_author, req.body.username, current_url, message, title);
+
       var hitUrl = "/post/render?current_url=".concat(encodeURIComponent(current_url), "&category=").concat(req.body.category);
       res.redirect(hitUrl);
     })["catch"](function (err) {
@@ -731,6 +742,8 @@ var post_controller = {
                 }, {
                   "new": true
                 }).then(function () {
+                  _user["default"].removeFavourites(username, url);
+
                   console.log("".concat(username, " removed from ").concat(url, " favourites!!!"));
                   res.send("removed from favourites!!!");
                 })["catch"](function (err) {
@@ -747,6 +760,8 @@ var post_controller = {
                 }, {
                   upsert: true
                 }).then(function () {
+                  _user["default"].addFavourites(username, url);
+
                   console.log("".concat(username, " added to ").concat(url, " favourites!!!"));
                   res.send("added to favourites!!!");
                 })["catch"](function (err) {

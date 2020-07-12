@@ -2,6 +2,7 @@ import Post from '../model/post.model';
 import {validationResult} from 'express-validator';
 import {ObjectId} from 'mongodb';
 import messageController from '../controller/message.controller';
+import userController from '../controller/user.controller';
 
 const app = {};
 
@@ -333,6 +334,7 @@ const post_controller = {
                 }
             }, {"new": true})
             .then(() => {
+                userController.removeFavourites(username, url);
                 console.log(`${username} removed from ${url} favourites!!!`);
                 res.send(`removed from favourites!!!`);
             })
@@ -345,6 +347,7 @@ const post_controller = {
                 }
             }, {upsert: true})
             .then(() => {
+                userController.addFavourites(username, url);
                 console.log(`${username} added to ${url} favourites!!!`);
                 res.send(`added to favourites!!!`);
             })

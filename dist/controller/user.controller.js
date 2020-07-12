@@ -358,7 +358,51 @@ var user_controller = {
     }
 
     return setSubscription;
-  }()
+  }(),
+  addFavourites: function addFavourites(username, url) {
+    _user["default"].findOneAndUpdate({
+      username: username
+    }, {
+      "$push": {
+        "favourite_urls": url
+      }
+    }, {
+      upsert: true
+    }).then(function () {
+      console.log("".concat(url, " added to ").concat(username, "'s favourites!!!"));
+      return;
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  },
+  removeFavourites: function removeFavourites(username, url) {
+    _user["default"].findOneAndUpdate({
+      username: username
+    }, {
+      "$pull": {
+        "favourite_urls": url
+      }
+    }, {
+      "new": true
+    }).then(function () {
+      console.log("".concat(url, " removed from ").concat(username, "'s favourites!!!"));
+      return;
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  },
+  getFavourites: function getFavourites(req, res) {
+    _user["default"].findOne({
+      username: req.user
+    }).then(function (result) {
+      res.render('favourites', {
+        username: req.user,
+        favourites: result.favourite_urls
+      });
+    })["catch"](function (err) {
+      return console.error(err);
+    });
+  }
 };
 
 function generateOTP() {
