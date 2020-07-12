@@ -39,7 +39,7 @@ chrome.runtime.sendMessage(
 
 const get_data = () => {
     let http_req = new XMLHttpRequest();
-    http_req.open("GET", server_url + `getdata/?current_url=${curr_url}`, true);
+    http_req.open("GET", server_url + `getdata/?current_url=${encodeURIComponent(curr_url)}`, true);
     http_req.send();
     http_req.onload = () => {
         update_data(JSON.parse(http_req.response));

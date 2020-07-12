@@ -55,7 +55,7 @@ const post_controller = {
                         }
                     );
                 }
-                if (data.favourite_users) {
+                if (data && data.favourite_users) {
                     let title = `New post from ${req.body.username}`
                     let message = `(Post in ${req.body.category}): ` + req.body.post_body;
                     data.favourite_users.forEach(elem => {
