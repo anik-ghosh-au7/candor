@@ -20,14 +20,15 @@ chrome.runtime.sendMessage(
         let domain = url_domain(curr_url);
         if (domain === 'localhost') {
             var actual_url = new URL(curr_url).searchParams.get("current_url");
-            actual_url = decodeURIComponent(actual_url);
+            // actual_url = decodeURIComponent(actual_url);
             curr_url = actual_url;
         }
 
         if (curr_url!="null") {
-            document.getElementById('context_url').innerHTML = curr_url;
+            document.getElementById('context_url').innerText= curr_url;
             document.querySelector("input[name=context]").value = curr_url;
             document.querySelector("input[name=user]").value = username;
+
             update_links();
             get_data();
         }else{
@@ -59,7 +60,7 @@ function update_data(data) {
     document.getElementById("related_data").innerHTML = data.related;
     document.getElementById("admin_data").innerHTML = data.admin;
     document.getElementById("others_data").innerHTML = data.others;
-    
+
     if (data.fav){
         let star_icon = document.getElementById('star_element');
         star_icon.classList.remove('far');
@@ -70,6 +71,7 @@ function update_data(data) {
 
 function myFunction(context_type) {
     return () => {
+
         var hitUrl = `http://localhost:3000/post/render?current_url=${encodeURIComponent(curr_url)}&category=${context_type}&page=1`;
         window.open(hitUrl, '_blank');
     };
@@ -171,7 +173,7 @@ function closeSelf() {
     xhttp.setRequestHeader('Content-Type', 'application/json');
     let formData = new FormData(form_data);
     let send_data = {};
-    for (var [key, value] of formData.entries()) { 
+    for (var [key, value] of formData.entries()) {
         send_data[key] = value;
       }
     xhttp.send(JSON.stringify(send_data));

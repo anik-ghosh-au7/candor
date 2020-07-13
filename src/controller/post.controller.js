@@ -97,8 +97,11 @@ const post_controller = {
             .catch(err => console.log(err));
     },
     renderPost: async (req, res) => {
-        let current_url = decodeURIComponent(req.query.current_url);
+        // let current_url = decodeURIComponent(req.query.current_url);
+        let current_url=req.query.current_url;
+        console.log('111',current_url);
         let category = req.query.category;
+
         let limit = 3;
         let page = parseInt(req.query.page);
         const endIndex = page * limit;
@@ -170,10 +173,10 @@ const post_controller = {
                     result.prev_page = page - 1
                 }
                 attach_likes(result, req.user.name);
-
+                console.log('222',current_url);
                 res.render('index', {
                     posts: result,
-                    url: current_url,
+                    url: current_url.toString(),
                     viewername: req.user.name,
                     category,
                     user: req.user
@@ -182,7 +185,7 @@ const post_controller = {
             .catch(err => console.log(err));
     },
     getdata: async (req, res) => {
-        let current_url = decodeURIComponent(req.query.current_url);
+        let current_url = req.query.current_url;
         let data = {};
         data.fav = false;
         await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'question'}}]).then(result => {
@@ -209,7 +212,8 @@ const post_controller = {
         res.status(200).send(data);
     },
     updateLike: async (req, res) => {
-        let current_url = decodeURIComponent(req.query.current_url);
+        let current_url = req.query.current_url;
+
         let post_id = req.query.post_id;
         let like_search_result = {};
 
@@ -257,8 +261,10 @@ const post_controller = {
 
     },
     getTrendingTags: async (req, res) => {
-        let current_url = decodeURIComponent(req.query.current_url);
+        // let current_url =  req.query.current_url.replace(/;/g,'');
+        let current_url=  req.query.current_url;
         let category = req.query.category;
+        console.log('***',current_url,'***');//----------------------------------------
         let final_result = {};
         await Post.aggregate([{$match: {url: current_url}},
             {$unwind: '$post'},
@@ -267,6 +273,7 @@ const post_controller = {
             {$unwind: '$post.post_tags'},
             {$group: {'_id': {'post_tags': '$post.post_tags'}, 'count': {'$sum': 1}}}])
             .then(result => {
+                console.log(result);
                 result.forEach(element => {
                     final_result[element._id.post_tags] = element.count;
                 });
