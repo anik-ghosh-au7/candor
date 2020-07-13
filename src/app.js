@@ -55,9 +55,14 @@ handlebars.registerHelper('json', function(context) {
     return JSON.stringify(context);
 });
 
-handlebars.registerHelper("inc", function(value, options)
+handlebars.registerHelper("inc", function(value)
 {
     return parseInt(value) + 1;
+});
+
+handlebars.registerHelper("shorten", function(value)
+{
+    return value.length < 50 ? value : value.slice(0, 47) + '...';
 });
 
 mongoose.connect(process.env.mongo_uri, {
