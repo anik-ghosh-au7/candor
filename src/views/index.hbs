@@ -80,7 +80,8 @@
                     }
                 }
             }
-            let normal_url = "{{URL}}/post/render?current_url=" + url_encoded + "&category=" +
+            <!--xhttp.open("GET", `{{URL}}/post/like/?post_id=${like_btns[j].id}&current_url=${encodeURIComponent(context_url)}`, true)-->
+            let normal_url = `{{URL}}/post/render?current_url=${encodeURIComponent(context_url)}`+ "&category=" +
                     "{{category}}" + "&page=1";
             let search_input = document.getElementById('search_input');
             let search_button = document.getElementById('search_button');
