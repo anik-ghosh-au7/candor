@@ -25,7 +25,9 @@ const message_controller={
                     });
                     User.findOne({username: req.body.share_username}).then(result => {
                         // console.log('sub_obj : ', JSON.parse(result.subscription));
-                        webpush.sendNotification(JSON.parse(result.subscription), payload)
+                        result.subscription.forEach(element => {
+                            webpush.sendNotification(JSON.parse(element), payload)
+                        });
                     }).catch(err => console.error(err));
                         flag = true;
                     }else{

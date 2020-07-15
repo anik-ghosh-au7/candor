@@ -82,8 +82,12 @@ _hbs["default"].registerHelper('json', function (context) {
   return JSON.stringify(context);
 });
 
-_hbs["default"].registerHelper("inc", function (value, options) {
+_hbs["default"].registerHelper("inc", function (value) {
   return parseInt(value) + 1;
+});
+
+_hbs["default"].registerHelper("shorten", function (value) {
+  return value.length < 50 ? value : value.slice(0, 47) + '...';
 });
 
 _mongoose["default"].connect(process.env.mongo_uri, {

@@ -44,7 +44,7 @@ var userSchema = new Schema({
     }
   }],
   favourite_urls: [String],
-  subscription: String
+  subscription: [String]
 }, {
   versionKey: false
 });

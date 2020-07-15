@@ -320,20 +320,52 @@ var user_controller = {
       res.send('Wrong OTP');
     }
   },
+  removeSubscription: function removeSubscription(req, res, next) {
+    var token = req.cookies['subToken'];
+
+    if (!token) {
+      next();
+    } else {
+      _jsonwebtoken["default"].verify(token, process.env.jwt_key, function (err, data) {
+        if (err) return res.status(403).send({
+          msg: 'Invalid token'
+        });
+
+        _user["default"].findOneAndUpdate({
+          username: req.user
+        }, {
+          $pull: {
+            subscription: JSON.stringify(data.subscription)
+          }
+        }, {
+          upsert: true
+        }).then(next())["catch"](function (err) {
+          return console.log(err);
+        });
+      });
+    }
+  },
   logout: function logout(req, res) {
     res.clearCookie('awtToken');
+    res.clearCookie('subToken');
     res.render('logged_out');
   },
   setSubscription: function () {
     var _setSubscription = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res) {
+      var subToken;
       return _regenerator["default"].wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
+              subToken = _jsonwebtoken["default"].sign({
+                subscription: JSON.stringify(req.body)
+              }, process.env.jwt_key);
+              res.cookie('subToken', subToken);
+
               _user["default"].findOneAndUpdate({
                 username: req.user
               }, {
-                $set: {
+                $addToSet: {
                   subscription: JSON.stringify(req.body)
                 }
               }, {
@@ -345,7 +377,7 @@ var user_controller = {
                 return console.log(err);
               });
 
-            case 1:
+            case 3:
             case "end":
               return _context4.stop();
           }

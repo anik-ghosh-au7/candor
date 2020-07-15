@@ -76,7 +76,7 @@ body {
                             {{#each favourites}}
                             <tr>
                                 <th scope="row" class="col-3">{{inc @index}}</th>
-                                <td class="col-9"><a href="{{this}}" target="_blank">{{this}}</a></td>
+                                <td class="col-9"><a href="{{this}}" target="_blank">{{shorten this}}</a></td>
                             </tr>
                             {{/each}}
                         </tbody>

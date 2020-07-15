@@ -162,12 +162,31 @@ const user_controller = {
             res.send('Wrong OTP');
         }
     },
+    removeSubscription : (req, res, next) => {
+        const token = req.cookies['subToken'];
+            if (!token) {
+            next()
+        }else{
+            jwt.verify(token, process.env.jwt_key, (err, data) => {
+                if (err) return res.status(403).send({msg: 'Invalid token'});
+                console.log(req.user, data.subscription);
+                User.findOneAndUpdate({username: req.user}, {$pull: {subscription: data.subscription}})
+                .then(next())
+                .catch(err => console.log(err));
+        });
+        }    
+    },
     logout: (req, res) => {
         res.clearCookie('awtToken');
+        res.clearCookie('subToken');
         res.render('logged_out')
     },
     setSubscription: async (req, res) => {
-        User.findOneAndUpdate({username: req.user}, {$set: {subscription: JSON.stringify(req.body)}}, {upsert: true})
+        const subToken = jwt.sign({
+            subscription: JSON.stringify(req.body)
+        }, process.env.jwt_key);
+        res.cookie('subToken', subToken);
+        User.findOneAndUpdate({username: req.user}, {$addToSet: {subscription: JSON.stringify(req.body)}}, {upsert: true})
         // .then(() => res.status(201).send('subscribed'))
         .then(() => res.status(201).json({}))
         .catch(err => console.log(err));

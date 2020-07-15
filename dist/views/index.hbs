@@ -24,6 +24,11 @@
             var search_params = current_url.searchParams.get("search_username");
             var sort_istrue = current_url.searchParams.get('sort_likes');
             let url_encoded = encodeURIComponent("{{url}}");
+            <!--console.log("-09------"+"{{url}}");-->
+            <!--console.log();-->
+            <!--console.log(url_encoded);-->
+            <!--console.log();-->
+            // console.log(decodeURIComponent(url_encoded));
             prev_link = "{{URL}}/post/render?current_url=" + url_encoded + "&category=" +
                     "{{category}}" + "&page=" +
                     "{{posts.prev_page}}";
@@ -53,7 +58,7 @@
 
 
             let like_btns = document.getElementsByName('like_button');
-            let context_url = document.getElementById('context_url').innerHTML;
+            let context_url = document.getElementById('context_url').innerText;
             var i;
             for (i = 0; i < like_btns.length; i++) {
                 like_btns[i].onclick = like_click(i);
@@ -75,7 +80,8 @@
                     }
                 }
             }
-            let normal_url = "{{URL}}/post/render?current_url=" + url_encoded + "&category=" +
+            <!--xhttp.open("GET", `{{URL}}/post/like/?post_id=${like_btns[j].id}&current_url=${encodeURIComponent(context_url)}`, true)-->
+            let normal_url = `{{URL}}/post/render?current_url=${encodeURIComponent(context_url)}`+ "&category=" +
                     "{{category}}" + "&page=1";
             let search_input = document.getElementById('search_input');
             let search_button = document.getElementById('search_button');
@@ -107,11 +113,13 @@
                 window.open(normal_url, '_self')
             };
             let xhttp = new XMLHttpRequest();
-            xhttp.open("GET", "{{URL}}/post/tags?current_url=" + url_encoded + "&category=" +
+            console.log('***)',decodeURIComponent(url_encoded));
+            <!--xhttp.open("GET", `{{URL}}/post/like/?post_id=${like_btns[j].id}&current_url=${encodeURIComponent(context_url)}`, true);-->
+            xhttp.open("GET", `{{URL}}/post/tags?current_url=${encodeURIComponent(context_url)}`+ "&category=" +
                     "{{category}}", true);
             xhttp.send();
             xhttp.onload = () => {
-                console.log(xhttp.responseText);
+                console.log('111->',xhttp.responseText);
                 document.getElementById('tags').innerHTML = xhttp.responseText;
             };
 

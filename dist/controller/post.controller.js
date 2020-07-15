@@ -83,7 +83,7 @@ var post_controller = {
           });
         }
 
-        if (data.favourite_users) {
+        if (data && data.favourite_users) {
           var title = "New post from ".concat(req.body.username);
           var message = "(Post in ".concat(req.body.category, "): ") + req.body.post_body;
           data.favourite_users.forEach(function (elem) {
@@ -133,7 +133,9 @@ var post_controller = {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              current_url = decodeURIComponent(req.query.current_url);
+              // let current_url = decodeURIComponent(req.query.current_url);
+              current_url = req.query.current_url;
+              console.log('111', current_url);
               category = req.query.category;
               limit = 3;
               page = parseInt(req.query.page);
@@ -142,16 +144,16 @@ var post_controller = {
               sort_likes = req.query.sort_likes;
 
               if (!sort_likes) {
-                _context.next = 19;
+                _context.next = 20;
                 break;
               }
 
               if (!search_by_username) {
-                _context.next = 14;
+                _context.next = 15;
                 break;
               }
 
-              _context.next = 11;
+              _context.next = 12;
               return _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -169,7 +171,7 @@ var post_controller = {
                 return console.log(err);
               });
 
-            case 11:
+            case 12:
               query = _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -197,11 +199,11 @@ var post_controller = {
               }, {
                 $limit: limit
               }]);
-              _context.next = 17;
+              _context.next = 18;
               break;
 
-            case 14:
-              _context.next = 16;
+            case 15:
+              _context.next = 17;
               return _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -217,46 +219,46 @@ var post_controller = {
               })["catch"](function (err) {
                 return console.log(err);
               });
-
-            case 16:
-              query = _post["default"].aggregate([{
-                $match: {
-                  url: current_url
-                }
-              }, {
-                $unwind: '$post'
-              }, {
-                $match: {
-                  'post.category': category
-                }
-              }, {
-                $addFields: {
-                  upvote_count: {
-                    $size: "$post.upvote_users"
-                  }
-                }
-              }, {
-                $sort: {
-                  "upvote_count": -1,
-                  'post.post_time': -1
-                }
-              }, {
-                $skip: (page - 1) * limit
-              }, {
-                $limit: limit
-              }]);
 
             case 17:
-              _context.next = 28;
+              query = _post["default"].aggregate([{
+                $match: {
+                  url: current_url
+                }
+              }, {
+                $unwind: '$post'
+              }, {
+                $match: {
+                  'post.category': category
+                }
+              }, {
+                $addFields: {
+                  upvote_count: {
+                    $size: "$post.upvote_users"
+                  }
+                }
+              }, {
+                $sort: {
+                  "upvote_count": -1,
+                  'post.post_time': -1
+                }
+              }, {
+                $skip: (page - 1) * limit
+              }, {
+                $limit: limit
+              }]);
+
+            case 18:
+              _context.next = 29;
               break;
 
-            case 19:
+            case 20:
               if (!search_by_username) {
-                _context.next = 25;
+                _context.next = 26;
                 break;
               }
 
-              _context.next = 22;
+              _context.next = 23;
               return _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -274,7 +276,7 @@ var post_controller = {
                 return console.log(err);
               });
 
-            case 22:
+            case 23:
               query = _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -295,11 +297,11 @@ var post_controller = {
               }, {
                 $limit: limit
               }]);
-              _context.next = 28;
+              _context.next = 29;
               break;
 
-            case 25:
-              _context.next = 27;
+            case 26:
+              _context.next = 28;
               return _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -316,7 +318,7 @@ var post_controller = {
                 return console.log(err);
               });
 
-            case 27:
+            case 28:
               query = _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -337,7 +339,7 @@ var post_controller = {
                 $limit: limit
               }]);
 
-            case 28:
+            case 29:
               query.exec().then(function (result) {
                 if (endIndex >= total_length) {
                   result.has_next = false;
@@ -354,9 +356,10 @@ var post_controller = {
                 }
 
                 attach_likes(result, req.user.name);
+                console.log('222', current_url);
                 res.render('index', {
                   posts: result,
-                  url: current_url,
+                  url: current_url.toString(),
                   viewername: req.user.name,
                   category: category,
                   user: req.user
@@ -365,7 +368,7 @@ var post_controller = {
                 return console.log(err);
               });
 
-            case 29:
+            case 30:
             case "end":
               return _context.stop();
           }
@@ -386,7 +389,7 @@ var post_controller = {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              current_url = decodeURIComponent(req.query.current_url);
+              current_url = req.query.current_url;
               data = {};
               data.fav = false;
               _context2.next = 5;
@@ -492,7 +495,7 @@ var post_controller = {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              current_url = decodeURIComponent(req.query.current_url);
+              current_url = req.query.current_url;
               post_id = req.query.post_id;
               like_search_result = {};
 
@@ -587,10 +590,13 @@ var post_controller = {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              current_url = decodeURIComponent(req.query.current_url);
+              // let current_url =  req.query.current_url.replace(/;/g,'');
+              current_url = req.query.current_url;
               category = req.query.category;
+              console.log('***', current_url, '***'); //----------------------------------------
+
               final_result = {};
-              _context4.next = 5;
+              _context4.next = 6;
               return _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -620,6 +626,7 @@ var post_controller = {
                   }
                 }
               }]).then(function (result) {
+                console.log(result);
                 result.forEach(function (element) {
                   final_result[element._id.post_tags] = element.count;
                 });
@@ -627,8 +634,8 @@ var post_controller = {
                 return console.log(err);
               });
 
-            case 5:
-              _context4.next = 7;
+            case 6:
+              _context4.next = 8;
               return _post["default"].aggregate([{
                 $match: {
                   url: current_url
@@ -689,7 +696,7 @@ var post_controller = {
                 return console.log(err);
               });
 
-            case 7:
+            case 8:
             case "end":
               return _context4.stop();
           }

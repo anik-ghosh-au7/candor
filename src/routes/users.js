@@ -33,7 +33,7 @@ router.get('/loginPage',authenticateToken, user_controller.loginPage);
 
 router.get('/signPage',authenticateToken, user_controller.signPage);
 
-router.get('/logout',user_controller.logout);
+router.get('/logout',authenticateToken,user_controller.removeSubscription,user_controller.logout);
 
 router.get('/submit_otp',user_controller.submit_otp);
 
