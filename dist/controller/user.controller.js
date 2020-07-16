@@ -330,15 +330,14 @@ var user_controller = {
         if (err) return res.status(403).send({
           msg: 'Invalid token'
         });
+        console.log(req.user, data.subscription);
 
         _user["default"].findOneAndUpdate({
           username: req.user
         }, {
           $pull: {
-            subscription: JSON.stringify(data.subscription)
+            subscription: data.subscription
           }
-        }, {
-          upsert: true
         }).then(next())["catch"](function (err) {
           return console.log(err);
         });

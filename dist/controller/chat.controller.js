@@ -27,15 +27,8 @@ var botName = 'Candor Admin';
 var authenticateToken = function authenticateToken(token) {
   var username;
 
-  if (!token) {
-    return res.redirect('/users/loginPage');
-  }
-
   _jsonwebtoken["default"].verify(token, process.env.jwt_key, function (err, user) {
-    if (err) return res.status(403).send({
-      msg: 'Unauthorized Forbidden'
-    });
-    username = user.name; // return user.name;
+    username = user.name;
   });
 
   return username;

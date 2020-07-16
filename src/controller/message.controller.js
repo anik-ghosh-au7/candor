@@ -76,8 +76,9 @@ const message_controller={
                         msg_body: message
                     });
                     User.findOne({username: receiver}).then(result => {
-                        console.log(`sending notification to ${result.username} -->     `, JSON.parse(result.subscription));
-                        webpush.sendNotification(JSON.parse(result.subscription), payload)
+                        result.subscription.forEach(element => {
+                            webpush.sendNotification(JSON.parse(element), payload)
+                        });
                         return;
                     }).catch(err => console.error(err));
                     }

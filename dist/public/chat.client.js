@@ -12,7 +12,7 @@ let socket = io({
     transportOptions: {
         polling: {
             extraHeaders: {
-                'x-clientid': document.cookie,
+                'x-clientid': document.cookie.split(' ')[0].replace(';', ''),
                 'room': document.getElementById('room').innerText
             }
         }

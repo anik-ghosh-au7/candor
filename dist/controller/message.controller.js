@@ -45,7 +45,9 @@ var message_controller = {
                     username: req.body.share_username
                   }).then(function (result) {
                     // console.log('sub_obj : ', JSON.parse(result.subscription));
-                    _webPush["default"].sendNotification(JSON.parse(result.subscription), payload);
+                    result.subscription.forEach(function (element) {
+                      _webPush["default"].sendNotification(JSON.parse(element), payload);
+                    });
                   })["catch"](function (err) {
                     return console.error(err);
                   });
@@ -118,10 +120,9 @@ var message_controller = {
         _user["default"].findOne({
           username: receiver
         }).then(function (result) {
-          console.log("sending notification to ".concat(result.username, " -->     "), JSON.parse(result.subscription));
-
-          _webPush["default"].sendNotification(JSON.parse(result.subscription), payload);
-
+          result.subscription.forEach(function (element) {
+            _webPush["default"].sendNotification(JSON.parse(element), payload);
+          });
           return;
         })["catch"](function (err) {
           return console.error(err);
