@@ -28,6 +28,7 @@ var dict = {};
 var image_url;
 var imageContent;
 var user_controller = {
+  //
   createUser: function () {
     var _createUser = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
       var errors, hashed_password, entry;
@@ -183,10 +184,10 @@ var user_controller = {
                   img: data.image_url,
                   email: data.email,
                   phone: data.phone
-                }, process.env.jwt_key);
+                }, process.env.jwt_key); // res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
+
                 res.cookie('awtToken', accessToken, {
-                  maxAge: 9000000,
-                  httpOnly: true
+                  maxAge: 9000000
                 });
                 return _context2.abrupt("return", res.redirect('/'));
 
@@ -319,9 +320,119 @@ var user_controller = {
       res.send('Wrong OTP');
     }
   },
+  removeSubscription: function removeSubscription(req, res, next) {
+    var token = req.cookies['subToken'];
+
+    if (!token) {
+      next();
+    } else {
+      _jsonwebtoken["default"].verify(token, process.env.jwt_key, function (err, data) {
+        if (err) return res.status(403).send({
+          msg: 'Invalid token'
+        });
+        console.log(req.user, data.subscription);
+
+        _user["default"].findOneAndUpdate({
+          username: req.user
+        }, {
+          $pull: {
+            subscription: data.subscription
+          }
+        }).then(next())["catch"](function (err) {
+          return console.log(err);
+        });
+      });
+    }
+  },
   logout: function logout(req, res) {
     res.clearCookie('awtToken');
+    res.clearCookie('subToken');
     res.render('logged_out');
+  },
+  setSubscription: function () {
+    var _setSubscription = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(req, res) {
+      var subToken;
+      return _regenerator["default"].wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              subToken = _jsonwebtoken["default"].sign({
+                subscription: JSON.stringify(req.body)
+              }, process.env.jwt_key);
+              res.cookie('subToken', subToken);
+
+              _user["default"].findOneAndUpdate({
+                username: req.user
+              }, {
+                $addToSet: {
+                  subscription: JSON.stringify(req.body)
+                }
+              }, {
+                upsert: true
+              }) // .then(() => res.status(201).send('subscribed'))
+              .then(function () {
+                return res.status(201).json({});
+              })["catch"](function (err) {
+                return console.log(err);
+              });
+
+            case 3:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    function setSubscription(_x5, _x6) {
+      return _setSubscription.apply(this, arguments);
+    }
+
+    return setSubscription;
+  }(),
+  addFavourites: function addFavourites(username, url) {
+    _user["default"].findOneAndUpdate({
+      username: username
+    }, {
+      "$push": {
+        "favourite_urls": url
+      }
+    }, {
+      upsert: true
+    }).then(function () {
+      console.log("".concat(url, " added to ").concat(username, "'s favourites!!!"));
+      return;
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  },
+  removeFavourites: function removeFavourites(username, url) {
+    _user["default"].findOneAndUpdate({
+      username: username
+    }, {
+      "$pull": {
+        "favourite_urls": url
+      }
+    }, {
+      "new": true
+    }).then(function () {
+      console.log("".concat(url, " removed from ").concat(username, "'s favourites!!!"));
+      return;
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  },
+  getFavourites: function getFavourites(req, res) {
+    _user["default"].findOne({
+      username: req.user
+    }).then(function (result) {
+      res.render('favourites', {
+        username: req.user,
+        favourites: result.favourite_urls
+      });
+    })["catch"](function (err) {
+      return console.error(err);
+    });
   }
 };
 

@@ -24,7 +24,27 @@ var userSchema = new Schema({
   image_url: {
     type: String,
     "default": "./../images/default-profile-picture1.jpg"
-  }
+  },
+  received_messages: [{
+    sender: String,
+    shared_url: String,
+    msg_body: String,
+    time: {
+      type: Date,
+      "default": Date.now
+    }
+  }],
+  sent_messages: [{
+    reciever: String,
+    shared_url: String,
+    msg_body: String,
+    time: {
+      type: Date,
+      "default": Date.now
+    }
+  }],
+  favourite_urls: [String],
+  subscription: [String]
 }, {
   versionKey: false
 });

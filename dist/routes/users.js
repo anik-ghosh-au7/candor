@@ -39,7 +39,9 @@ router.post('/createuser', authenticateToken, _multer["default"], [_user2["defau
 router.post('/login', authenticateToken, _user["default"].login);
 router.get('/loginPage', authenticateToken, _user["default"].loginPage);
 router.get('/signPage', authenticateToken, _user["default"].signPage);
-router.get('/logout', _user["default"].logout);
+router.get('/logout', authenticateToken, _user["default"].removeSubscription, _user["default"].logout);
 router.get('/submit_otp', _user["default"].submit_otp);
+router.post('/subscribe', authenticateToken, _user["default"].setSubscription);
+router.get('/favourites', authenticateToken, _user["default"].getFavourites);
 module.exports = router;
 //# sourceMappingURL=users.js.map

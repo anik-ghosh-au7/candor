@@ -5,5 +5,8 @@
     ],
       "presets": [
         "@babel/preset-env"
+      ],
+      "ignore": [
+        "src/public/**/*.js"
       ]
 }

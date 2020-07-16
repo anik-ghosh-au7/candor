@@ -1,6 +1,8 @@
 import Post from '../model/post.model';
 import {validationResult} from 'express-validator';
 import {ObjectId} from 'mongodb';
+import messageController from '../controller/message.controller';
+import userController from '../controller/user.controller';
 
 const app = {};
 
@@ -53,6 +55,13 @@ const post_controller = {
                         }
                     );
                 }
+                if (data && data.favourite_users) {
+                    let title = `New post from ${req.body.username}`
+                    let message = `(Post in ${req.body.category}): ` + req.body.post_body;
+                    data.favourite_users.forEach(elem => {
+                        messageController.handle_post_comment_messages(elem, req.body.username, req.body.url, message, title);
+                    })
+                }
             }
 
         })
@@ -62,6 +71,8 @@ const post_controller = {
 
         let current_url = req.body.url;
         let post_id = req.body.post_id;
+        let post_author = req.body.post_author;
+        let post_body = req.body.post_body;
         const tag = req.body.comment_body.match(/(#[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+)/g);
 
         Post.findOneAndUpdate({url: current_url, "post._id": post_id},
@@ -75,15 +86,22 @@ const post_controller = {
                 }
             }, {"new": true})
             .then(() => {
+                post_body = post_body.length > 30 ? post_body.slice(0, 30)+ '...' : post_body;
+                let message = `(Comment in ${post_body}): ` + req.body.comment_body;
+                let title = `New comment from ${req.body.username}`
+                messageController.handle_post_comment_messages(post_author, req.body.username, current_url, message, title);
+
                 let hitUrl = `/post/render?current_url=${encodeURIComponent(current_url)}&category=${req.body.category}`;
                 res.redirect(hitUrl)
             })
             .catch(err => console.log(err));
-
     },
     renderPost: async (req, res) => {
-        let current_url = decodeURIComponent(req.query.current_url);
+        // let current_url = decodeURIComponent(req.query.current_url);
+        let current_url=req.query.current_url;
+        console.log('111',current_url);
         let category = req.query.category;
+
         let limit = 3;
         let page = parseInt(req.query.page);
         const endIndex = page * limit;
@@ -155,10 +173,10 @@ const post_controller = {
                     result.prev_page = page - 1
                 }
                 attach_likes(result, req.user.name);
-
+                console.log('222',current_url);
                 res.render('index', {
                     posts: result,
-                    url: current_url,
+                    url: current_url.toString(),
                     viewername: req.user.name,
                     category,
                     user: req.user
@@ -167,8 +185,9 @@ const post_controller = {
             .catch(err => console.log(err));
     },
     getdata: async (req, res) => {
-        let current_url = decodeURIComponent(req.query.current_url);
+        let current_url = req.query.current_url;
         let data = {};
+        data.fav = false;
         await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'question'}}]).then(result => {
             data.question = result.length
         });
@@ -181,10 +200,20 @@ const post_controller = {
         await Post.aggregate([{$match: {url: current_url}}, {$unwind: '$post'}, {$match: {'post.category': 'others'}}]).then(result => {
             data.others = result.length
         });
+        await Post.findOne({url: current_url}).then(result => {
+            if (result) {
+            result.favourite_users.forEach(elem => {
+                if(elem === req.user.name) {
+                    data.fav = true;
+                }
+            });
+            };
+        });
         res.status(200).send(data);
     },
     updateLike: async (req, res) => {
-        let current_url = decodeURIComponent(req.query.current_url);
+        let current_url = req.query.current_url;
+
         let post_id = req.query.post_id;
         let like_search_result = {};
 
@@ -232,8 +261,10 @@ const post_controller = {
 
     },
     getTrendingTags: async (req, res) => {
-        let current_url = decodeURIComponent(req.query.current_url);
+        // let current_url =  req.query.current_url.replace(/;/g,'');
+        let current_url=  req.query.current_url;
         let category = req.query.category;
+        console.log('***',current_url,'***');//----------------------------------------
         let final_result = {};
         await Post.aggregate([{$match: {url: current_url}},
             {$unwind: '$post'},
@@ -242,6 +273,7 @@ const post_controller = {
             {$unwind: '$post.post_tags'},
             {$group: {'_id': {'post_tags': '$post.post_tags'}, 'count': {'$sum': 1}}}])
             .then(result => {
+                console.log(result);
                 result.forEach(element => {
                     final_result[element._id.post_tags] = element.count;
                 });
@@ -283,6 +315,51 @@ const post_controller = {
                 }
             )
             .catch(err => console.log(err))
+    },
+
+    favouriteUsers: async (req, res) => {
+        // console.log(req.body);
+        let username = req.user.name;
+        let url = req.body.current_url;
+        let flag = false;
+        await Post.findOne({url}).then(result => {
+            // console.log('result findOne', result.favourite_users);
+            if (result) {
+            result.favourite_users.forEach(elem => {
+                if(elem === username) {
+                    flag = true;
+                }
+            });
+            };
+        });
+
+        if (flag) {
+            // console.log('inside if --> ', flag);
+            Post.findOneAndUpdate({url}, {
+                "$pull": {
+                    "favourite_users": username
+                }
+            }, {"new": true})
+            .then(() => {
+                userController.removeFavourites(username, url);
+                console.log(`${username} removed from ${url} favourites!!!`);
+                res.send(`removed from favourites!!!`);
+            })
+            .catch(err => console.log(err));
+        } else {
+            // console.log('inside else --> ', flag);
+            Post.findOneAndUpdate({url}, {
+                "$push": {
+                    "favourite_users": username
+                }
+            }, {upsert: true})
+            .then(() => {
+                userController.addFavourites(username, url);
+                console.log(`${username} added to ${url} favourites!!!`);
+                res.send(`added to favourites!!!`);
+            })
+            .catch(err => console.log(err));
+        }
     }
 };
 module.exports = {post_controller, app};

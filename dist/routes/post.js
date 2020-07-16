@@ -33,8 +33,9 @@ var authenticateToken = function authenticateToken(req, res, next) {
 router.post('/addpost', authenticateToken, _post.post_controller.createPost);
 router.post('/addcomment', authenticateToken, _post.post_controller.createComment);
 router.get('/render', authenticateToken, _post.post_controller.renderPost);
-router.get('/getdata', _post.post_controller.getdata);
+router.get('/getdata', authenticateToken, _post.post_controller.getdata);
 router.get('/like', authenticateToken, _post.post_controller.updateLike);
 router.get('/tags', _post.post_controller.getTrendingTags);
+router.post('/addfav', authenticateToken, _post.post_controller.favouriteUsers);
 module.exports = router;
 //# sourceMappingURL=post.js.map

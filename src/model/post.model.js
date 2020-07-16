@@ -39,7 +39,8 @@ const postSchema = new Schema({
                 }
             }
         ]
-    }]
+    }],
+    favourite_users: [String]
 });
 
 module.exports = mongoose.model('post', postSchema, 'post_list');

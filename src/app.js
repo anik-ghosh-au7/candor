@@ -6,6 +6,7 @@ import logger from 'morgan';
 import mongoose from 'mongoose';
 import handlebars from 'hbs';
 import dotenv from 'dotenv';
+import webpush from 'web-push';
 dotenv.config();
 
 handlebars.registerHelper('URL',()=>{
@@ -50,6 +51,19 @@ handlebars.registerHelper("printDate", function(date_before) {
     // dateIST.setMinutes(dateIST.getMinutes() + 30);
     // return dateIST.toString();
 });
+handlebars.registerHelper('json', function(context) {
+    return JSON.stringify(context);
+});
+
+handlebars.registerHelper("inc", function(value)
+{
+    return parseInt(value) + 1;
+});
+
+handlebars.registerHelper("shorten", function(value)
+{
+    return value.length < 50 ? value : value.slice(0, 47) + '...';
+});
 
 mongoose.connect(process.env.mongo_uri, {
     useFindAndModify: false,
@@ -63,6 +77,8 @@ mongoose.connect(process.env.mongo_uri, {
 import homeRouter from './routes/home';
 import usersRouter from './routes/users';
 import postRouter from './routes/post';
+import chatRouter from './routes/chat';
+import messageRouter from './routes/message';
 
 const app = express();
 
@@ -79,6 +95,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', homeRouter);
 app.use('/users', usersRouter);
 app.use('/post', postRouter);
+app.use('/chat', chatRouter);
+app.use('/messages',messageRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -95,5 +113,11 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+webpush.setVapidDetails(
+    "mailto:app.candor@gmail.com",
+    process.env.public_vapid_key,
+    process.env.private_vapid_key
+  );
 
 module.exports = app;

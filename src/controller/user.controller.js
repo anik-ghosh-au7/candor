@@ -13,7 +13,7 @@ let image_url;
 let imageContent;
 
 const user_controller = {
-
+    //
     createUser: async (req, res) => {
         if (req.user) {
             return res.redirect('/');
@@ -87,7 +87,8 @@ const user_controller = {
                                 email: data.email,
                                 phone: data.phone
                             }, process.env.jwt_key);
-                            res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
+                            // res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
+                            res.cookie('awtToken', accessToken, {maxAge: 9000000});
                             return res.redirect('/');
                         } else {
                             res.status(401).send('Unauthorized access');
@@ -161,9 +162,63 @@ const user_controller = {
             res.send('Wrong OTP');
         }
     },
+    removeSubscription : (req, res, next) => {
+        const token = req.cookies['subToken'];
+            if (!token) {
+            next()
+        }else{
+            jwt.verify(token, process.env.jwt_key, (err, data) => {
+                if (err) return res.status(403).send({msg: 'Invalid token'});
+                console.log(req.user, data.subscription);
+                User.findOneAndUpdate({username: req.user}, {$pull: {subscription: data.subscription}})
+                .then(next())
+                .catch(err => console.log(err));
+        });
+        }    
+    },
     logout: (req, res) => {
-        res.clearCookie('awtToken')
+        res.clearCookie('awtToken');
+        res.clearCookie('subToken');
         res.render('logged_out')
+    },
+    setSubscription: async (req, res) => {
+        const subToken = jwt.sign({
+            subscription: JSON.stringify(req.body)
+        }, process.env.jwt_key);
+        res.cookie('subToken', subToken);
+        User.findOneAndUpdate({username: req.user}, {$addToSet: {subscription: JSON.stringify(req.body)}}, {upsert: true})
+        // .then(() => res.status(201).send('subscribed'))
+        .then(() => res.status(201).json({}))
+        .catch(err => console.log(err));
+    },
+    addFavourites: (username, url) => {
+        User.findOneAndUpdate({username}, {
+            "$push": {
+                "favourite_urls": url
+            }
+        }, {upsert: true})
+        .then(() => {
+            console.log(`${url} added to ${username}'s favourites!!!`);
+            return;
+        })
+        .catch(err => console.log(err));
+    },
+    removeFavourites: (username, url) => {
+        User.findOneAndUpdate({username}, {
+                "$pull": {
+                    "favourite_urls": url
+                }
+            }, {new: true})
+            .then(() => {
+                console.log(`${url} removed from ${username}'s favourites!!!`);
+                return;
+            })
+            .catch(err => console.log(err));
+    },
+    getFavourites: (req, res) => {
+        User.findOne({username: req.user}).then(result => {
+            res.render('favourites', {username:  req.user, favourites: result.favourite_urls});
+        }).catch(err => console.error(err));
     }
 };
 

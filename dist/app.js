@@ -18,11 +18,17 @@ var _hbs = _interopRequireDefault(require("hbs"));
 
 var _dotenv = _interopRequireDefault(require("dotenv"));
 
+var _webPush = _interopRequireDefault(require("web-push"));
+
 var _home = _interopRequireDefault(require("./routes/home"));
 
 var _users = _interopRequireDefault(require("./routes/users"));
 
 var _post = _interopRequireDefault(require("./routes/post"));
+
+var _chat = _interopRequireDefault(require("./routes/chat"));
+
+var _message = _interopRequireDefault(require("./routes/message"));
 
 _dotenv["default"].config();
 
@@ -72,6 +78,18 @@ _hbs["default"].registerHelper("printDate", function (date_before) {
 
 });
 
+_hbs["default"].registerHelper('json', function (context) {
+  return JSON.stringify(context);
+});
+
+_hbs["default"].registerHelper("inc", function (value) {
+  return parseInt(value) + 1;
+});
+
+_hbs["default"].registerHelper("shorten", function (value) {
+  return value.length < 50 ? value : value.slice(0, 47) + '...';
+});
+
 _mongoose["default"].connect(process.env.mongo_uri, {
   useFindAndModify: false,
   useNewUrlParser: true,
@@ -94,7 +112,9 @@ app.use((0, _cookieParser["default"])());
 app.use(_express["default"]["static"](_path["default"].join(__dirname, 'public')));
 app.use('/', _home["default"]);
 app.use('/users', _users["default"]);
-app.use('/post', _post["default"]); // catch 404 and forward to error handler
+app.use('/post', _post["default"]);
+app.use('/chat', _chat["default"]);
+app.use('/messages', _message["default"]); // catch 404 and forward to error handler
 
 app.use(function (req, res, next) {
   next((0, _httpErrors["default"])(404));
@@ -108,5 +128,8 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+_webPush["default"].setVapidDetails("mailto:app.candor@gmail.com", process.env.public_vapid_key, process.env.private_vapid_key);
+
 module.exports = app;
 //# sourceMappingURL=app.js.map

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/post/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        window.onload = () => {
+        let urls = document.querySelector('.urls')
+        urls.scrollTop = urls.scrollHeight;
+        }
+    </script>
+    <style>
+        .table-fixed tbody {
+    height: 300px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th {
+    display: block;
+}
+
+.table-fixed tbody td,
+.table-fixed tbody th,
+.table-fixed thead > tr > th {
+    float: left;
+    position: relative;
+
+    &::after {
+        content: '';
+        clear: both;
+        display: block;
+    }
+}
+body {
+    background: #74ebd5;
+    background: -webkit-linear-gradient(to right, #74ebd5, #ACB6E5);
+    background: linear-gradient(to right, #74ebd5, #ACB6E5);
+    min-height: 100vh;
+
+}
+    </style>
+    <title>Favourites</title>
+</head>
+<body>
+    <div class="container text-center text-white">
+    <div class="row pt-5">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="display-4">Favourites</h1>
+            <p class="lead">Hello <em>{{username}}</em></p>
+            <p class="lead mb-0">List of your favourite URLs</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-7 mx-auto bg-white rounded shadow">
+
+                <!-- Fixed header table-->
+                <div class="table-responsive">
+                    <table class="table table-fixed">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-3">#</th>
+                                <th scope="col" class="col-9">URLs</th>
+                            </tr>
+                        </thead>
+                        <tbody class="urls">
+                            {{#each favourites}}
+                            <tr>
+                                <th scope="row" class="col-3">{{inc @index}}</th>
+                                <td class="col-9"><a href="{{this}}" target="_blank">{{shorten this}}</a></td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div><!-- End -->
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
