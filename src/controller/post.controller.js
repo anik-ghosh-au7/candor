@@ -318,6 +318,7 @@ const post_controller = {
     },
 
     favouriteUsers: async (req, res) => {
+        if(!req.body.current_url) return;
         // console.log(req.body);
         let username = req.user.name;
         let url = req.body.current_url;
