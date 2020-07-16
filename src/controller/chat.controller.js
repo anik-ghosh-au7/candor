@@ -7,7 +7,7 @@ function formatMessage(username, text) {
     return {
         username,
         text,
-        time: moment().format('h:mm=ss:S= a DD-MM-yy').toString()
+        time: moment().utcOffset(330).format('h:mm=ss:S= a DD-MM-yy').toString()
     };
 }
 
