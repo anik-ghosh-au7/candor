@@ -23,7 +23,7 @@ chrome.runtime.sendMessage(
             curr_url = actual_url;
         }
 
-        if (curr_url!= null) {
+        if (curr_url!== null && curr_url!=="null" ) {
             document.getElementById('context_url').innerText= curr_url;
             document.querySelector("input[name=context]").value = curr_url;
             document.querySelector("input[name=user]").value = username;

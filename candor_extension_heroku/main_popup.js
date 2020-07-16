@@ -20,11 +20,10 @@ chrome.runtime.sendMessage(
         let domain = url_domain(curr_url);
         if (domain === 'candor-app.herokuapp.com') {
             var actual_url = new URL(curr_url).searchParams.get("current_url");
-            actual_url = decodeURIComponent(actual_url);
             curr_url = actual_url;
         }
 
-        if (curr_url!= null) {
+        if (curr_url!== null && curr_url!=="null" ) {
             document.getElementById('context_url').innerText= curr_url;
             document.querySelector("input[name=context]").value = curr_url;
             document.querySelector("input[name=user]").value = username;
@@ -159,3 +158,29 @@ function closeDialogBox() {
     }
 };
 
+function openMsgPage() {
+    return () => {
+        let msgUrl = `https://candor-app.herokuapp.com/messages/getmsg`;
+        window.open(msgUrl, '_blank');
+    };
+}
+
+function closeSelf() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", 'https://candor-app.herokuapp.com/messages', true);
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+    let formData = new FormData(form_data);
+    let send_data = {};
+    for (var [key, value] of formData.entries()) {
+        send_data[key] = value;
+      }
+    xhttp.send(JSON.stringify(send_data));
+    xhttp.onload = () => {
+        if (xhttp.responseText === 'Message sent') {
+            document.getElementById('share_username').value = '';
+            document.getElementById('comments').value = '';
+        }
+        // document.getElementById('myDialog').close();
+        document.getElementById('shared_status').innerText = xhttp.responseText;
+    };
+};
