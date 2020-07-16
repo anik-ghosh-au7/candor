@@ -3,8 +3,7 @@
 <head>
     <title>Candor</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="jquery-3.4.1.min.js"></script>
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <script src="main_popup.js"></script>
     <style>
         body {
@@ -19,6 +18,40 @@
 </head>
 
 <body>
+    <div>
+        <div class="float-left">
+            <i type="button" class="fa fa-list" id="list_element" title="favourites list"></i>
+            <i type="button" class="far fa-envelope" id="msg_element" style="padding-left: 10px;" title="messages"></i>
+            <!-- <i type="button" class="far fa-envelope-open" id="notification_element" style="padding-left: 10px;"></i> -->
+            <!-- <span id="notifications" style="font-size: x-small;"> (0 new msgs)</span> -->
+        </div>
+        <div class="float-right">
+            <!-- <i type="button" class="fas fa-comments" id="chat_element"></i>
+            <i type="button" class="fas fa-share-alt-square" id="share_element" style="padding-left: 10px;"></i> -->
+            <!-- <i type="button" hidden class="fas fa-star" id="star_element" style="padding-left: 10px;"></i> -->
+            <i type="button" class="far fa-comments" id="chat_element" title="live forum"></i>
+            <i type="button" class="fas fa-share-alt" id="share_element" style="padding-left: 10px;" title="share"></i>
+            <i type="button" class="far fa-star" id="star_element" style="padding-left: 10px;" title="add/remove favourites"></i>
+        </div>
+    </div>
+    <dialog id="myDialog">
+        <h6 class="card-title">Share URL with : </h6>
+        <form id="form_submit">
+            <div>
+                <input type="text" name="share_username" id="share_username" placeholder="username">
+            </div><br>
+            <div>
+                <textarea name="comments" id="comments" placeholder="comments..."></textarea>
+            </div>
+            <span id="shared_status"></span><br>
+            <input hidden type="text" id="context" name="context">
+            <input hidden type="text" id="user" name="user">
+            <div>
+                <button type="submit">Share</button>
+                <button type="button" id="closeDialog">Close</button>
+            </div>
+    </form>
+    </dialog>
     <img class="logo-icon" src="images/logo_full.png" style="width: 15rem;"/><br>
 <div class="modal-header" style="padding-top: 0px">
     <img class="logo-icon my-auto" id="profile_img" alt="Profile picture"
