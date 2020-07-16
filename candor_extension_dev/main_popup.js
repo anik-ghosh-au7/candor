@@ -4,11 +4,11 @@ chrome.storage.local.get('username', (result) => {
     document.getElementById("username").innerHTML = "Hello " + result.username;
     username = result.username;
 });
-chrome.storage.local.get('img',(result)=>{
-    if(result.img){
-        document.getElementById('profile_img').src=result.img;
-    }else{
-        document.getElementById('profile_img').src="images/default-profile-picture1.jpg";
+chrome.storage.local.get('img', (result) => {
+    if (result.img) {
+        document.getElementById('profile_img').src = result.img;
+    } else {
+        document.getElementById('profile_img').src = "images/default-profile-picture1.jpg";
     }
 
 });
@@ -23,19 +23,21 @@ chrome.runtime.sendMessage(
             curr_url = actual_url;
         }
 
-        if (curr_url!== null && curr_url!=="null" ) {
-            document.getElementById('context_url').innerText= curr_url;
+        if (curr_url !== null && curr_url !== "null") {
+            document.getElementById('context_url').innerText = curr_url;
             document.querySelector("input[name=context]").value = curr_url;
-            document.querySelector("input[name=user]").value = username;
-
             update_links();
             get_data();
-        }else{
-            document.getElementById('context_url').innerHTML= "We don't serve at this site."
+        } else {
+            disableFunctions()
         }
-
+        document.querySelector("input[name=user]").value = username;
     }
 );
+function disableFunctions() {
+    document.getElementById('context_url').innerHTML = "We don't serve at this site.";
+    document.querySelector("input[name=context]").value="https://github.com/anik-ghosh-au7/candor/blob/master/README.md";
+};
 
 const get_data = () => {
     let http_req = new XMLHttpRequest();
@@ -44,7 +46,7 @@ const get_data = () => {
     http_req.onload = () => {
         update_data(JSON.parse(http_req.response));
     }
-}
+};
 
 
 function update_links() {
@@ -60,7 +62,7 @@ function update_data(data) {
     document.getElementById("admin_data").innerHTML = data.admin;
     document.getElementById("others_data").innerHTML = data.others;
 
-    if (data.fav){
+    if (data.fav) {
         let star_icon = document.getElementById('star_element');
         star_icon.classList.remove('far');
         star_icon.classList.add('fas');
@@ -100,12 +102,13 @@ window.onload = () => {
 
     let closeDialog = document.getElementById('closeDialog');
     closeDialog.addEventListener("click", closeDialogBox());
-    form_data= document.getElementById('form_submit');
-    form_data.addEventListener( "submit", function ( event ) {
+    form_data = document.getElementById('form_submit');
+    form_data.addEventListener("submit", function (event) {
         event.preventDefault();
         closeSelf();
-      } );
+    });
 };
+
 function getfavFunction() {
     return () => {
         let getFavUrl = `http://localhost:3000/users/favourites`;
@@ -115,7 +118,12 @@ function getfavFunction() {
 
 function chatFunction() {
     return () => {
-        let chatUrl = `http://localhost:3000/chat?current_url=${encodeURIComponent(curr_url)}`;
+        let chatUrl;
+        if(curr_url){
+            chatUrl = `http://localhost:3000/chat?current_url=${encodeURIComponent(curr_url)}`;
+        }else{
+            chatUrl = `http://localhost:3000/chat?current_url=${encodeURIComponent("Candor")}`;
+        };
         window.open(chatUrl, '_blank');
     };
 };
@@ -126,7 +134,7 @@ function favFunction() {
             "current_url": curr_url
         };
         console.log('curr_url', curr_url);
-        console.log("body_url",body);
+        console.log("body_url", body);
         let xhttp = new XMLHttpRequest();
         xhttp.open("POST", 'http://localhost:3000/post/addfav', true);
         xhttp.setRequestHeader('Content-Type', 'application/json');
@@ -150,12 +158,13 @@ function shareFunction() {
         document.getElementById("myDialog").showModal();
     };
 };
+
 function closeDialogBox() {
     return () => {
-     document.getElementById('myDialog').close();
-     document.getElementById('share_username').value = '';
-     document.getElementById('comments').value = '';
-     document.getElementById('shared_status').innerText = '';
+        document.getElementById('myDialog').close();
+        document.getElementById('share_username').value = '';
+        document.getElementById('comments').value = '';
+        document.getElementById('shared_status').innerText = '';
     }
 };
 
@@ -174,7 +183,7 @@ function closeSelf() {
     let send_data = {};
     for (var [key, value] of formData.entries()) {
         send_data[key] = value;
-      }
+    }
     xhttp.send(JSON.stringify(send_data));
     xhttp.onload = () => {
         if (xhttp.responseText === 'Message sent') {
