@@ -88,7 +88,7 @@ const user_controller = {
                                 phone: data.phone
                             }, process.env.jwt_key);
                             // res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
-                            res.cookie('awtToken', accessToken, {maxAge: 9000000});
+                            res.cookie('awtToken', accessToken);
                             return res.redirect('/');
                         } else {
                             res.status(401).send('Unauthorized access');
@@ -174,7 +174,7 @@ const user_controller = {
                 .then(next())
                 .catch(err => console.log(err));
         });
-        }    
+        }
     },
     logout: (req, res) => {
         res.clearCookie('awtToken');
