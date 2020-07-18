@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Candor",
-  "description": "Quick launch Candor",
+  "description": "A platform to exchange and manage information regarding web-pages.",
   "version": "1.0.0",
   "icons": { "128": "icon_128.png" },
   "browser_action": {
