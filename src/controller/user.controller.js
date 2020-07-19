@@ -224,13 +224,20 @@ const user_controller = {
     
     addFriend: async (req, res) => {
         let flag = true;
-        await User.findOne({username: req.body.friend_username}).then(result => {
-            if (!result) {
-                flag = false;
-                return res.send("Username doesn't exists"); 
-            };     
-        })
-        .catch(err => console.error('1 --> ',err));
+
+        if (req.user === req.body.friend_username) {
+            return res.send("Can't send request to yourself");
+        };
+
+        if (flag) {
+            await User.findOne({username: req.body.friend_username}).then(result => {
+                if (!result) {
+                    flag = false;
+                    return res.send("Username doesn't exists"); 
+                };     
+            })
+            .catch(err => console.error('1 --> ',err));
+        };
 
         if (flag) {
             await User.findOne({username: req.user}).then(result => {
