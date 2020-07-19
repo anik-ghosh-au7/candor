@@ -6,6 +6,7 @@ import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import cloudinary from '../utils/cloudinary';
 import buff2Str from '../utils/convertBuffToStr';
+import messageController from '../controller/message.controller';
 dotenv.config();
 
 let dict = {};
@@ -219,6 +220,99 @@ const user_controller = {
         User.findOne({username: req.user}).then(result => {
             res.render('favourites', {username:  req.user, favourites: result.favourite_urls});
         }).catch(err => console.error(err));
+    },
+    // addFriend: (req, res) => {
+    //     User.findOne({username: req.body.friend_username}).then(result => {
+    //         if (!result) return res.send("Username doesn't exists");
+    //         User.findOne({username: req.user}).then(result => {
+    //             for (let i = 0; i < result.friend_list.length; i++) {
+    //                 if (result.friend_list[i] === req.body.friend_username) return res.send(`{req.body.friend_username} is already added`);
+    //             };
+    //             User.findOne({username: req.body.friend_username}).then(search_result => {
+    //                 for (let i = 0; i < search_result.received_requests.length; i++) {
+    //                     if (search_result.received_requests[i] === req.user) return res.send(`Friend request is already sent`);
+    //                 };
+    //                 User.findOneAndUpdate(
+    //                     {username: req.user}, 
+    //                     {$addToSet: {sent_requests: req.body.friend_username}})
+    //                     .catch(err => console.log('1 --> ',err));
+    //                 User.findOneAndUpdate(
+    //                     {username: req.body.friend_username}, 
+    //                     {$addToSet: {received_requests: req.user}})
+    //                     .then(() => {
+    //                         let title = `New friend request from ${req.user}`;
+    //                         messageController.handle_requests(req.body.friend_username, '', title);
+    //                         return res.send("Friend request sent")
+    //                     })
+    //                     .catch(err => console.log('2 --> ',err));
+    //                 })
+    //                 .catch(err => console.log('3 --> ',err));    
+    //             })
+    //             .catch(err => console.log('4 --> ',err));      
+    //     })
+    //     .catch(err => console.error('5 --> ',err));
+    // },
+
+    addFriend: async (req, res) => {
+        await User.findOne({username: req.body.friend_username}).then(result => {
+            if (!result) return res.send("Username doesn't exists");      
+        })
+        .catch(err => console.error('5 --> ',err));
+
+        await User.findOne({username: req.user}).then(result => {
+            for (let i = 0; i < result.friend_list.length; i++) {
+                if (result.friend_list[i] === req.body.friend_username) return res.send(`{req.body.friend_username} is already added`);
+            };    
+        })
+        .catch(err => console.log('4 --> ',err));
+
+        await User.findOne({username: req.body.friend_username}).then(search_result => {
+            for (let i = 0; i < search_result.received_requests.length; i++) {
+                if (search_result.received_requests[i] === req.user) return res.send(`Friend request is already sent`);
+            };
+        })
+        .catch(err => console.log('3 --> ',err));
+
+        await User.findOneAndUpdate(
+            {username: req.user}, 
+            {$addToSet: {sent_requests: req.body.friend_username}
+        })
+        .catch(err => console.log('1 --> ',err));
+
+        await User.findOneAndUpdate(
+            {username: req.body.friend_username}, 
+            {$addToSet: {received_requests: req.user}
+        })
+        .then(() => {
+            let title = `New friend request from ${req.user}`;
+            messageController.handle_requests(req.body.friend_username, '', title);
+            return res.send("Friend request sent")
+        })
+        .catch(err => console.log('2 --> ',err));
+    },
+
+    respondToRequest: (req, res) => {
+        if(req.query.confirm) {
+            User.findOneAndUpdate(
+                {username: req.user}, 
+                {$addToSet: {friend_list: req.query.friend_username}, 
+                $pull: {received_requests: req.query.friend_username}})
+                .catch(err => console.log(err));
+            User.findOneAndUpdate(
+                {username: req.body.friend_username}, 
+                {$addToSet: {friend_list: req.user}, 
+                $pull: {sent_requests: req.user}})
+                .catch(err => console.log(err));
+        } else {
+            User.findOneAndUpdate(
+                {username: req.user}, 
+                {$pull: {received_requests: req.query.friend_username}})
+                .catch(err => console.log(err));
+            User.findOneAndUpdate(
+                {username: req.body.friend_username}, 
+                {$pull: {sent_requests: req.user}})
+                .catch(err => console.log(err));
+        }
     }
 };
 

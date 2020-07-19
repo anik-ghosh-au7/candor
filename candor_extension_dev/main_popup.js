@@ -1,5 +1,5 @@
 let username;
-let form_data;
+let form_data, friend_form_data;
 chrome.storage.local.get('username', (result) => {
     document.getElementById("username").innerHTML = "Hello " + result.username;
     username = result.username;
@@ -94,6 +94,15 @@ window.onload = () => {
     let star_icon = document.getElementById("star_element");
     star_icon.addEventListener("click", favFunction());
 
+    let friend_icon = document.getElementById("friend_element");
+    friend_icon.addEventListener("click", friendFunction());
+    closeNewDialog.addEventListener("click", closeNewDialogBox());
+    friend_form_data = document.getElementById('form_friends');
+    friend_form_data.addEventListener("submit", function (event) {
+        event.preventDefault();
+        selfClose();
+    });
+
     let favList_icon = document.getElementById("list_element");
     favList_icon.addEventListener("click", getfavFunction());
 
@@ -159,6 +168,20 @@ function shareFunction() {
     };
 };
 
+function friendFunction() {
+    return () => {
+        document.getElementById("newDialog").showModal();
+    };
+};
+
+function closeNewDialogBox() {
+    return () => {
+        document.getElementById('newDialog').close();
+        document.getElementById('friend_username').value = '';
+        document.getElementById('friend_status').innerText = '';
+    }
+}
+
 function closeDialogBox() {
     return () => {
         document.getElementById('myDialog').close();
@@ -192,5 +215,24 @@ function closeSelf() {
         }
         // document.getElementById('myDialog').close();
         document.getElementById('shared_status').innerText = xhttp.responseText;
+    };
+};
+
+function selfClose() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", 'http://localhost:3000/users/friendrequest', true);
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+    let formData = new FormData(friend_form_data);
+    let send_data = {};
+    for (var [key, value] of formData.entries()) {
+        send_data[key] = value;
+    }
+    console.log(send_data);
+    xhttp.send(JSON.stringify(send_data));
+    xhttp.onload = () => {
+        if (xhttp.responseText === 'Friend request sent') {
+            document.getElementById('friend_username').value = '';
+        }
+        document.getElementById('friend_status').innerText = xhttp.responseText;
     };
 };

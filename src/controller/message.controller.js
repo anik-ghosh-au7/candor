@@ -86,6 +86,24 @@ const message_controller={
                 .catch(err => console.log(err));
             },
 
+    handle_requests: function (receiver, body, title) {
+            User.findOneAndUpdate({username:receiver})
+                    .then((result) => {
+                        if(result.subscription){
+                            let message = body;
+                            let payload = JSON.stringify({ 
+                            title: title,
+                            msg_body: message
+                                 });
+                            result.subscription.forEach(elem => {
+                                webpush.sendNotification(JSON.parse(elem), payload)
+                            })
+                        }
+                    })
+                    .catch(err => console.log(err));
+
+    },
+
     getmsg: function (req,res) {
         let messages={};
         User.findOne({username:req.user.name}).then((result)=>{

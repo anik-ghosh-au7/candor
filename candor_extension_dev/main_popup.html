@@ -21,7 +21,8 @@
     <div>
         <div class="float-left">
             <i type="button" class="fa fa-list" id="list_element" title="favourites list"></i>
-            <i type="button" class="far fa-envelope" id="msg_element" style="padding-left: 10px;" title="messages"></i> 
+            <i type="button" class="far fa-envelope" id="msg_element" style="padding-left: 10px;" title="messages"></i>
+            <i type="button" class="fas fa-user-friends" id="friend_element" style="padding-left: 10px;" title="friends"></i>
             <!-- <i type="button" class="far fa-envelope-open" id="notification_element" style="padding-left: 10px;"></i> -->
             <!-- <span id="notifications" style="font-size: x-small;"> (0 new msgs)</span> -->
         </div>
@@ -51,6 +52,21 @@
                 <button type="button" id="closeDialog">Close</button>
             </div>
     </form>
+    </dialog>
+
+    <dialog id="newDialog">
+        <form id="form_friends">
+            <div>
+                <input type="text" name="friend_username" id="friend_username" placeholder="username">
+                <!-- <input hidden type="text" id="user" name="user"> -->
+                <button type="submit" class="fas fa-user-plus" style="padding-left: 10px;" title="addFriend"></button>
+            </div><br>
+            <div>
+                <span id="friend_status"></span>
+                <button type="button" id="showFriends">Show all friends</button>
+                <button type="button" id="closeNewDialog">Close</button>
+            </div>
+        </form>
     </dialog>
     <img class="logo-icon" src="images/logo_full.png" style="width: 15rem;"/><br>
 <div class="modal-header" style="padding-top: 0px">
