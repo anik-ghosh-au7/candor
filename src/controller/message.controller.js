@@ -87,7 +87,7 @@ const message_controller={
             },
 
     handle_requests: function (receiver, body, title) {
-            User.findOneAndUpdate({username:receiver})
+            User.findOne({username:receiver})
                     .then((result) => {
                         if(result.subscription){
                             let message = body;
