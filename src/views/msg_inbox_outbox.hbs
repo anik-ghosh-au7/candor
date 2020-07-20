@@ -115,7 +115,7 @@
                                             {{#each messages.received}}
                                                 <div class="card bg-light mb-3"
                                                      style="width: 200%; padding: 10px; margin:10px;">
-                                                    <p class="meta">From {{this.sender}} Time-
+                                                    <p class="meta">From {{this.sender}}<br> Time-
                                                         <span>{{this.time}}</span></p>
                                                     <p class="text">
                                                         Shared URL- <a href="{{this.shared_url}}" target="_blank">{{this.shared_url}}</a>
@@ -132,7 +132,7 @@
                                             {{#each messages.sent}}
                                                 <div class="card bg-light mb-3"
                                                      style="width: 200%; padding: 10px; margin:10px;">
-                                                    <p class="meta">To {{this.reciever}} Time-
+                                                    <p class="meta">To {{this.reciever}}<br> Time-
                                                         <span>{{this.time}}</span></p>
                                                     <p class="text">
                                                         Shared URL- <a href="{{this.shared_url}}" target="_blank">{{this.shared_url}}</a>
@@ -147,10 +147,12 @@
 
                                         </div>
                                         <div hidden class="col-sm-6" id="others">
-                                            {{#each messages.sent}}
+                                            {{#each messages.others}}
                                                 <div class="card bg-light mb-3"
                                                      style="width: 200%; padding: 10px; margin:10px;">
-                                                    <p class="meta">To {{this.reciever}} Time-
+                                                    <p class="meta">From {{this.sender}}
+                                                        <button type="submit" class="btn fas fa-user-plus" style="padding-left: 10px;" title="addFriend"></button>
+                                                        <br> Time-
                                                         <span>{{this.time}}</span></p>
                                                     <p class="text">
                                                         Shared URL- <a href="{{this.shared_url}}" target="_blank">{{this.shared_url}}</a>
@@ -158,7 +160,6 @@
                                                     </p>
                                                     <p class="text">
                                                         Comments- {{this.msg_body}}
-
                                                     </p>
                                                 </div>
                                             {{/each}}
