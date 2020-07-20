@@ -60,6 +60,11 @@ handlebars.registerHelper("inc", function(value)
     return parseInt(value) + 1;
 });
 
+handlebars.registerHelper("len", function(value)
+{
+    return value.length;
+});
+
 handlebars.registerHelper("shorten", function(value)
 {
     return value.length < 50 ? value : value.slice(0, 47) + '...';
