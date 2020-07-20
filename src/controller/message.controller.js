@@ -6,10 +6,12 @@ const message_controller = {
         let isReceiver = false;
         let isFriend = false;
         await User.findOne({username: req.body.share_username}).then(result => {
-            if(result) isReceiver = true;
-            result.friend_list.forEach((friend) => {
-                if (friend === req.body.share_username) isFriend = true;
-            })
+            if (result) {
+                isReceiver = true;
+                result.friend_list.forEach((friend) => {
+                    if (friend === req.body.share_username) isFriend = true;
+                })
+            }
 
         });
         // console.log('body',req.body);
@@ -51,7 +53,8 @@ const message_controller = {
                     }
                 }
             }).then(() => console.log('msg saved in others')).catch(err => console.log(err));
-        };
+        }
+        ;
 
         if (isReceiver) {
             User.findOneAndUpdate({username: req.body.user}, {
@@ -127,7 +130,7 @@ const message_controller = {
             messages.received = result.received_messages;
             messages.sent = result.sent_messages;
             messages.username = req.user.name;
-            messages.others=result.other_messages;
+            messages.others = result.other_messages;
             res.render('msg_inbox_outbox', {messages});
         });
         // res.render('msg_inbox_outbox',[{'sent':messages.sent},{'received':messages.received}]);
