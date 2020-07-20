@@ -7,7 +7,10 @@
     <title>Document</title>
 
     <link href="/post/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
     <style>
         .chat-messages {
             padding: 30px;
@@ -28,9 +31,15 @@
                 if (document.querySelector("a.active[href='#']").id == 'inbox_button') {
                     document.getElementById('msg_received').hidden = false;
                     document.getElementById('msg_sent').hidden = true;
-                } else {
-                    document.getElementById('msg_sent').hidden = false;
+                    document.getElementById('others').hidden = true;
+                } else if(document.querySelector("a.active[href='#']").id == 'outbox_button') {
                     document.getElementById('msg_received').hidden = true;
+                    document.getElementById('msg_sent').hidden = false;
+                    document.getElementById('others').hidden = true;
+                }else {
+                    document.getElementById('msg_received').hidden = true;
+                    document.getElementById('msg_sent').hidden = true;
+                    document.getElementById('others').hidden = false;
                 }
             }
 
@@ -41,14 +50,22 @@
             inbox_button.onclick = () => {
                 outbox_button.classList.remove("active");
                 inbox_button.classList.add("active");
+                others_button.classList.remove("active");
                 toggle();
                 console.log('clicke inbox_button');
             };
             outbox_button.onclick = () => {
                 inbox_button.classList.remove("active");
                 outbox_button.classList.add("active");
+                others_button.classList.remove("active");
                 toggle();
             };
+            others_button.onclick= ()=>{
+                inbox_button.classList.remove("active");
+                outbox_button.classList.remove("active");
+                others_button.classList.add("active");
+                toggle();
+            }
         };
 
     </script>
@@ -75,6 +92,9 @@
                                     <a href="#" id="outbox_button" class="list-group-item"><i
                                             class="fa fa-paper-plane-o mr-2"
                                     ></i>Sent Messages</a>
+                                    <a href="#" id="others_button" class="list-group-item"><i
+                                            class="fas fa-envelope-open-text mr-2"
+                                    ></i>Others</a>
                                 </div>
                             </div>
                             <br>
@@ -126,16 +146,27 @@
                                             {{/each}}
 
                                         </div>
+                                        <div hidden class="col-sm-6" id="others">
+                                            {{#each messages.sent}}
+                                                <div class="card bg-light mb-3"
+                                                     style="width: 200%; padding: 10px; margin:10px;">
+                                                    <p class="meta">To {{this.reciever}} Time-
+                                                        <span>{{this.time}}</span></p>
+                                                    <p class="text">
+                                                        Shared URL- <a href="{{this.shared_url}}" target="_blank">{{this.shared_url}}</a>
+
+                                                    </p>
+                                                    <p class="text">
+                                                        Comments- {{this.msg_body}}
+
+                                                    </p>
+                                                </div>
+                                            {{/each}}
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!--                                <div class="chat-messages">-->
-                            <!--                                    <p class="meta">message.username <span>time</span></p>-->
-                            <!--                                    <p class="text">-->
-                            <!--                                        message.text-->
-                            <!--                                    </p>-->
-                            <!--                                </div>-->
 
                         </div> <!-- card -->
                     </div> <!-- end Col-9 -->
