@@ -1,0 +1,181 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link href="/post/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+    <style>
+        .chat-messages {
+            padding: 30px;
+            max-height: 550px;
+            overflow-y: scroll;
+        }
+
+        body {
+            background: #74ebd5;
+            background: -webkit-linear-gradient(to right, #74ebd5, #ACB6E5);
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            min-height: 100vh;
+
+        }
+        p {
+            margin: 0;
+        }
+    </style>
+    <script>
+        window.onload = () => {
+            function toggle() {
+                if (document.querySelector("a.active[href='#']").id == 'all_friends_button') {
+                    document.getElementById('all_friends_list').hidden = false;
+                    document.getElementById('received_list').hidden = true;
+                    document.getElementById('sent_list').hidden = true;
+                } else if (document.querySelector("a.active[href='#']").id == 'received_button') {
+                    document.getElementById('all_friends_list').hidden = true;
+                    document.getElementById('received_list').hidden = false;
+                    document.getElementById('sent_list').hidden = true;
+                } else {
+                    document.getElementById('all_friends_list').hidden = true;
+                    document.getElementById('received_list').hidden = true;
+                    document.getElementById('sent_list').hidden = false;
+                }
+            }
+
+            toggle();
+            let all_friends_button = document.getElementById('all_friends_button');
+            let received_button = document.getElementById('received_button');
+            let sent_button = document.getElementById('sent_button');
+
+            all_friends_button.onclick = () => {
+                all_friends_button.classList.add("active");
+                received_button.classList.remove("active");
+                sent_button.classList.remove("active");
+                toggle();
+            };
+            received_button.onclick = () => {
+                all_friends_button.classList.remove("active");
+                received_button.classList.add("active");
+                sent_button.classList.remove("active");
+                toggle();
+            };
+            sent_button.onclick = () => {
+                all_friends_button.classList.remove("active");
+                received_button.classList.remove("active");
+                sent_button.classList.add("active");
+                toggle();
+            };
+        };
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row" style="vertical-align: middle;">
+                        <!-- Left sidebar -->
+                        <div class="col-lg-3 col-md-4">
+                            <div class="position-relative">
+                                <h2><b>Hello {{messages.username}}</b></h2>
+                            </div>
+                            <div class="card shadow-none mt-3">
+                                <div class="list-group shadow-none ">
+                                    <a href="#" id="all_friends_button" class="list-group-item active">
+                                        <i class="fas fa-users" style="margin-right: 10px;"></i>All Friends
+                                    </a>
+                                    <a href="#" id="received_button" class="list-group-item">
+                                        <i class="fas fa-arrow-circle-down" style="margin-right: 10px;"></i>
+                                        Received request
+                                    </a>
+                                    <a href="#" id="sent_button" class="list-group-item">
+                                        <i class="fas fa-arrow-circle-up " style="margin-right: 10px;"></i>
+                                        Sent request</a>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="position-relative has-icon-right">
+                                <input type="text" class="form-control" placeholder="search messages">
+                                <i class="fa fa-search text-info"></i>
+                            </div>
+                        </div>
+                        <!-- End Left sidebar -->
+
+                        <!-- Right Sidebar -->
+                        <div class="col-lg-9 col-md-8">
+
+                            <div class="chat-messages">
+                                <div class="card shadow-none mt-3 border border-light">
+                                    <div class="row">
+                                        <div hidden class="col-sm-6" id="all_friends_list">
+                                            {{#each friends}}
+                                                <div class="card bg-light mb-3"
+                                                     style="width: 200%; padding: 10px; margin:10px;">
+                                                    <p>
+                                                        {{this}}
+                                                        <button class="fas fa-user-minus" style="padding-left: 10px; float: right"
+                                                            title="remove friend"></button>
+                                                    </p>
+                                                </div>
+                                            {{/each}}
+
+                                        </div>
+                                        <div hidden class="col-sm-6" id="received_list">
+                                            {{#each received}}
+                                                <div class="card bg-light mb-3"
+                                                     style="width: 200%; padding: 5px; margin:10px;">
+                                                    <p >
+                                                        {{this}}
+                                                        <button class="fas fa-user-check" style="margin: 0 10px; float: right;"
+                                                                title="Accept request"></button>
+                                                        <button class="fas fa-user-times" style="margin: 0 10px; float: right"
+                                                                title="Reject request"></button>
+                                                    </p>
+                                                </div>
+
+                                            {{/each}}
+
+                                        </div>
+                                        <div hidden class="col-sm-6" id="sent_list">
+                                            {{#each sent}}
+                                                <div class="card bg-light mb-3"
+                                                     style="width: 200%; padding: 10px; margin:10px;">
+                                                    <p>
+                                                        {{this}}
+                                                    </p>
+                                                </div>
+                                            {{/each}}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--                                <div class="chat-messages">-->
+                            <!--                                    <p class="meta">message.username <span>time</span></p>-->
+                            <!--                                    <p class="text">-->
+                            <!--                                        message.text-->
+                            <!--                                    </p>-->
+                            <!--                                </div>-->
+
+                        </div> <!-- card -->
+                    </div> <!-- end Col-9 -->
+
+                </div><!-- End row -->
+
+            </div>
+        </div>
+    </div>
+</div><!-- End row -->
+
+</div>
+</body>
+</html>

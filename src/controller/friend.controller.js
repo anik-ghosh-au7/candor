@@ -86,6 +86,11 @@ const friend_controller={
                 {$pull: {sent_requests: req.user}})
                 .catch(err => console.log(err));
         }
+    },
+    getAllFriends: (req,res)=>{
+            User.findOne({username:req.user}).then((result)=>{
+                res.render('allFriends',{'friends':result.friend_list,'received':result.received_requests,'sent':result.sent_requests})
+            })
     }
 };
 module.exports=friend_controller;

@@ -21,4 +21,6 @@ router.post('/friendrequest', authenticateToken, friend_controller.addFriend);
 
 router.post('/respondtorequest', authenticateToken, friend_controller.respondToRequest);
 
+router.get('/getallfriends',authenticateToken,friend_controller.getAllFriends);
+
 module.exports = router;

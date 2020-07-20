@@ -34,9 +34,10 @@ chrome.runtime.sendMessage(
         document.querySelector("input[name=user]").value = username;
     }
 );
+
 function disableFunctions() {
     document.getElementById('context_url').innerHTML = "We don't serve at this site.";
-    document.querySelector("input[name=context]").value="https://github.com/anik-ghosh-au7/candor/blob/master/README.md";
+    document.querySelector("input[name=context]").value = "https://github.com/anik-ghosh-au7/candor/blob/master/README.md";
 };
 
 const get_data = () => {
@@ -116,6 +117,12 @@ window.onload = () => {
         event.preventDefault();
         closeSelf();
     });
+
+    let getAllFriends = document.getElementById('showFriends');
+    getAllFriends.onclick = () => {
+        let allFriendUrl = 'http://localhost:3000/friend/getallfriends';
+        window.open(allFriendUrl, '_blank');
+    }
 };
 
 function getfavFunction() {
@@ -128,11 +135,12 @@ function getfavFunction() {
 function chatFunction() {
     return () => {
         let chatUrl;
-        if(curr_url){
+        if (curr_url) {
             chatUrl = `http://localhost:3000/chat?current_url=${encodeURIComponent(curr_url)}`;
-        }else{
+        } else {
             chatUrl = `http://localhost:3000/chat?current_url=${encodeURIComponent("Candor")}`;
-        };
+        }
+        ;
         window.open(chatUrl, '_blank');
     };
 };
