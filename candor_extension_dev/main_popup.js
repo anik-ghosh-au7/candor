@@ -220,7 +220,7 @@ function closeSelf() {
 
 function selfClose() {
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", 'http://localhost:3000/users/friendrequest', true);
+    xhttp.open("POST", 'http://localhost:3000/friend/friendrequest', true);
     xhttp.setRequestHeader('Content-Type', 'application/json');
     let formData = new FormData(friend_form_data);
     let send_data = {};

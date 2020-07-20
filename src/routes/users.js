@@ -41,9 +41,6 @@ router.post('/subscribe', authenticateToken, user_controller.setSubscription);
 
 router.get('/favourites', authenticateToken, user_controller.getFavourites);
 
-router.post('/friendrequest', authenticateToken, user_controller.addFriend);
-
-router.post('/respondtorequest', authenticateToken, user_controller.respondToRequest);
 
 
 module.exports = router;

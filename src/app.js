@@ -79,6 +79,7 @@ import usersRouter from './routes/users';
 import postRouter from './routes/post';
 import chatRouter from './routes/chat';
 import messageRouter from './routes/message';
+import friendRouter from './routes/friend';
 
 const app = express();
 
@@ -97,6 +98,7 @@ app.use('/users', usersRouter);
 app.use('/post', postRouter);
 app.use('/chat', chatRouter);
 app.use('/messages',messageRouter);
+app.use('/friend',friendRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
