@@ -131,13 +131,13 @@
                                         <div hidden class="col-sm-6" id="received_list">
                                             {{#each received}}
                                                 <div class="card bg-light mb-3"
-                                                     style="width: 200%; padding: 5px; margin:10px;">
+                                                     style="width: 200%; padding: 10px; margin:10px;">
                                                     <p >
                                                         {{this}}
-                                                        <button class="fas fa-user-check" style="margin: 0 10px; float: right;"
-                                                                title="Accept request"></button>
                                                         <button class="fas fa-user-times" style="margin: 0 10px; float: right"
                                                                 title="Reject request"></button>
+                                                        <button class="fas fa-user-check" style="margin: 0 10px; float: right;"
+                                                                title="Accept request"></button>
                                                     </p>
                                                 </div>
 
@@ -150,6 +150,8 @@
                                                      style="width: 200%; padding: 10px; margin:10px;">
                                                     <p>
                                                         {{this}}
+                                                        <button class="fas fa-user-alt-slash" style="margin: 0 10px; float: right;"
+                                                                title="Cancel request"></button>
                                                     </p>
                                                 </div>
                                             {{/each}}
