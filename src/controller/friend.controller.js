@@ -33,6 +33,18 @@ const friend_controller={
         };
 
         if (flag) {
+            await User.findOne({username: req.user}).then(result => {
+                for (let i = 0; i < result.received_requests.length; i++) {
+                    if (result.received_requests[i] === req.body.friend_username) {
+                        flag = false;
+                        return res.send(`${req.body.friend_username}'s request is pending`);
+                    };
+                };
+            })
+            .catch(err => console.log('2 --> ',err));
+        };
+
+        if (flag) {
             await User.findOne({username: req.body.friend_username}).then(search_result => {
                 for (let i = 0; i < search_result.received_requests.length; i++) {
                     if (search_result.received_requests[i] === req.user) {
