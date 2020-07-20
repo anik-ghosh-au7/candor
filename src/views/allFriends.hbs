@@ -125,8 +125,20 @@
                                                         {{this}}
                                                         <button class="btn fas fa-user-minus"
                                                                 onclick="respond_person('{{this}}','unfriend')"
-                                                                style="padding-left: 10px; float: right"
+                                                                style="float: right"
                                                                 title="remove friend"></button>
+                                                        <button class="btn fas fa-exchange-alt"
+                                                                onclick=""
+                                                                style="float: right"
+                                                                title="chat"></button>
+                                                        <button class="btn fas fa-video"
+                                                                onclick=""
+                                                                style="float: right"
+                                                                title="video call"></button>
+                                                        <button class="btn fas fa-headset"
+                                                                onclick=""
+                                                                style="float: right"
+                                                                title="call"></button>
                                                     </p>
                                                 </div>
                                             {{/each}}
@@ -140,11 +152,11 @@
                                                         {{this}}
                                                         <button onclick="respond_person('{{this}}','reject')"
                                                                 class="btn fas fa-user-times"
-                                                                style="margin: 0 10px; float: right"
+                                                                style="float: right"
                                                                 title="Reject request"></button>
                                                         <button onclick="respond_person('{{this}}','accept')"
                                                                 class="btn fas fa-user-check"
-                                                                style="margin: 0 10px; float: right;"
+                                                                style="float: right;"
                                                                 title="Accept request"></button>
                                                     </p>
                                                 </div>
@@ -159,7 +171,7 @@
                                                     <p>
                                                         {{this}}
                                                         <button class="btn fas fa-user-alt-slash"
-                                                                style="margin: 0 10px; float: right;"
+                                                                style="float: right;"
                                                                 onclick="respond_person('{{this}}','cancel')"
                                                                 title="Cancel request"></button>
                                                     </p>
