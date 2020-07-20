@@ -9,11 +9,13 @@ const message_controller = {
             if (result) {
                 isReceiver = true;
                 result.friend_list.forEach((friend) => {
-                    if (friend === req.body.share_username) isFriend = true;
-                })
+                    if (friend === req.body.user) isFriend = true;
+                });
+                // console.log(result.friend_list,req.body.share_username);
             }
 
         });
+        // console.log(isFriend);
         // console.log('body',req.body);
         if (isFriend) {
             await User.findOneAndUpdate({username: req.body.share_username}, {
