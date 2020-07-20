@@ -19,7 +19,7 @@ const authenticateToken = (req, res, next) => {
 const router = express.Router();
 router.post('/friendrequest', authenticateToken, friend_controller.addFriend);
 
-router.post('/respondtorequest', authenticateToken, friend_controller.respondToRequest);
+router.get('/respondtorequest', authenticateToken, friend_controller.respondToRequest);
 
 router.get('/getallfriends',authenticateToken,friend_controller.getAllFriends);
 

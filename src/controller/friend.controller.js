@@ -77,31 +77,55 @@ const friend_controller={
     },
 
     respondToRequest: (req, res) => {
-        if(req.query.confirm) {
+            console.log(req.query);
+        if(req.query.action==='accept') {
             User.findOneAndUpdate(
                 {username: req.user},
                 {$addToSet: {friend_list: req.query.friend_username},
                 $pull: {received_requests: req.query.friend_username}})
                 .catch(err => console.log(err));
             User.findOneAndUpdate(
-                {username: req.body.friend_username},
+                {username: req.query.friend_username},
                 {$addToSet: {friend_list: req.user},
                 $pull: {sent_requests: req.user}})
                 .catch(err => console.log(err));
-        } else {
+        };
+        if(req.query.action==='reject') {
             User.findOneAndUpdate(
                 {username: req.user},
                 {$pull: {received_requests: req.query.friend_username}})
                 .catch(err => console.log(err));
             User.findOneAndUpdate(
-                {username: req.body.friend_username},
+                {username: req.query.friend_username},
                 {$pull: {sent_requests: req.user}})
                 .catch(err => console.log(err));
+        };
+        if(req.query.action==='unfriend'){
+            User.findOneAndUpdate(
+                {username: req.user},
+                {$pull: {friend_list: req.query.friend_username}})
+                .catch(err => console.log(err));
+            User.findOneAndUpdate(
+                {username: req.query.friend_username},
+                {$pull: {friend_list: req.user}})
+                .catch(err => console.log(err));
+        };
+        if(req.query.action==='cancel'){
+            User.findOneAndUpdate(
+                {username: req.user},
+                {$pull: {sent_requests: req.query.friend_username}})
+                .catch(err => console.log(err));
+            User.findOneAndUpdate(
+                {username: req.query.friend_username},
+                {$pull: {received_requests: req.user}})
+                .catch(err => console.log(err));
         }
+        res.send('redirect');
+
     },
     getAllFriends: (req,res)=>{
             User.findOne({username:req.user}).then((result)=>{
-                res.render('allFriends',{'friends':result.friend_list,'received':result.received_requests,'sent':result.sent_requests})
+                res.render('allFriends',{'friends':result.friend_list,'received':result.received_requests,'sent':result.sent_requests,'user':req.user})
             })
     }
 };

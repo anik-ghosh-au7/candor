@@ -25,6 +25,7 @@
             min-height: 100vh;
 
         }
+
         p {
             margin: 0;
         }
@@ -70,6 +71,7 @@
                 sent_button.classList.add("active");
                 toggle();
             };
+
         };
 
     </script>
@@ -85,7 +87,7 @@
                         <!-- Left sidebar -->
                         <div class="col-lg-3 col-md-4">
                             <div class="position-relative">
-                                <h2><b>Hello {{messages.username}}</b></h2>
+                                <h2><b>Hello {{user}}</b></h2>
                             </div>
                             <div class="card shadow-none mt-3">
                                 <div class="list-group shadow-none ">
@@ -121,8 +123,10 @@
                                                      style="width: 200%; padding: 10px; margin:10px;">
                                                     <p>
                                                         {{this}}
-                                                        <button class="fas fa-user-minus" style="padding-left: 10px; float: right"
-                                                            title="remove friend"></button>
+                                                        <button class="btn fas fa-user-minus"
+                                                                onclick="respond_person('{{this}}','unfriend')"
+                                                                style="padding-left: 10px; float: right"
+                                                                title="remove friend"></button>
                                                     </p>
                                                 </div>
                                             {{/each}}
@@ -132,11 +136,15 @@
                                             {{#each received}}
                                                 <div class="card bg-light mb-3"
                                                      style="width: 200%; padding: 10px; margin:10px;">
-                                                    <p >
+                                                    <p>
                                                         {{this}}
-                                                        <button class="fas fa-user-times" style="margin: 0 10px; float: right"
+                                                        <button onclick="respond_person('{{this}}','reject')"
+                                                                class="btn fas fa-user-times"
+                                                                style="margin: 0 10px; float: right"
                                                                 title="Reject request"></button>
-                                                        <button class="fas fa-user-check" style="margin: 0 10px; float: right;"
+                                                        <button onclick="respond_person('{{this}}','accept')"
+                                                                class="btn fas fa-user-check"
+                                                                style="margin: 0 10px; float: right;"
                                                                 title="Accept request"></button>
                                                     </p>
                                                 </div>
@@ -150,7 +158,9 @@
                                                      style="width: 200%; padding: 10px; margin:10px;">
                                                     <p>
                                                         {{this}}
-                                                        <button class="fas fa-user-alt-slash" style="margin: 0 10px; float: right;"
+                                                        <button class="btn fas fa-user-alt-slash"
+                                                                style="margin: 0 10px; float: right;"
+                                                                onclick="respond_person('{{this}}','cancel')"
                                                                 title="Cancel request"></button>
                                                     </p>
                                                 </div>
@@ -160,13 +170,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!--                                <div class="chat-messages">-->
-                            <!--                                    <p class="meta">message.username <span>time</span></p>-->
-                            <!--                                    <p class="text">-->
-                            <!--                                        message.text-->
-                            <!--                                    </p>-->
-                            <!--                                </div>-->
 
                         </div> <!-- card -->
                     </div> <!-- end Col-9 -->
@@ -179,5 +182,16 @@
 </div><!-- End row -->
 
 </div>
+<script>
+    function respond_person(person, action) {
+        console.log(person, action);
+        let http_req = new XMLHttpRequest();
+        http_req.open("GET", 'http://localhost:3000/friend/respondtorequest'+`?action=${action}&friend_username=${person}`);
+        http_req.send();
+        http_req.onload=()=>{
+            location.reload();
+        }
+    }
+</script>
 </body>
 </html>
