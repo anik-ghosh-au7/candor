@@ -43,8 +43,20 @@ var userSchema = new Schema({
       "default": Date.now
     }
   }],
+  other_messages: [{
+    sender: String,
+    shared_url: String,
+    msg_body: String,
+    time: {
+      type: Date,
+      "default": Date.now
+    }
+  }],
   favourite_urls: [String],
-  subscription: [String]
+  subscription: [String],
+  friend_list: [String],
+  received_requests: [String],
+  sent_requests: [String]
 }, {
   versionKey: false
 });

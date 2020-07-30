@@ -85,6 +85,7 @@ import postRouter from './routes/post';
 import chatRouter from './routes/chat';
 import messageRouter from './routes/message';
 import friendRouter from './routes/friend';
+import communicationRouter from './routes/communication.route';
 
 const app = express();
 
@@ -104,6 +105,7 @@ app.use('/post', postRouter);
 app.use('/chat', chatRouter);
 app.use('/messages',messageRouter);
 app.use('/friend',friendRouter);
+app.use('/communication', communicationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

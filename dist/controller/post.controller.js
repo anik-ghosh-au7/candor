@@ -717,11 +717,19 @@ var post_controller = {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
+              if (req.body.current_url) {
+                _context5.next = 2;
+                break;
+              }
+
+              return _context5.abrupt("return");
+
+            case 2:
               // console.log(req.body);
               username = req.user.name;
               url = req.body.current_url;
               flag = false;
-              _context5.next = 5;
+              _context5.next = 7;
               return _post["default"].findOne({
                 url: url
               }).then(function (result) {
@@ -737,7 +745,7 @@ var post_controller = {
                 ;
               });
 
-            case 5:
+            case 7:
               if (flag) {
                 // console.log('inside if --> ', flag);
                 _post["default"].findOneAndUpdate({
@@ -776,7 +784,7 @@ var post_controller = {
                 });
               }
 
-            case 6:
+            case 8:
             case "end":
               return _context5.stop();
           }
