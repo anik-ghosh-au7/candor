@@ -12,6 +12,7 @@ import debugLib from 'debug';
 import http from 'http';
 const debug = debugLib('candor:server');
 import webSocket from '../controller/chat.controller';
+import web_video_Socket from '../controller/communication.controller';
 
 /**
  * Get port from environment and store in Express.
@@ -27,6 +28,7 @@ app.set('port', port);
 const server = http.createServer(app);
 
 webSocket(server);
+web_video_Socket(server);
 
 /**
  * Listen on provided port, on all network interfaces.

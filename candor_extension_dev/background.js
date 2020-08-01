@@ -17,5 +17,9 @@ chrome.runtime.onMessage.addListener((request,sender,response) => {
             response(activeTab.url);
         });
         return true;
-    }
+    };
+
+    if(request.msg==="socket"){
+        console.log("receive from socket server: "+request.text);
+    };
 });

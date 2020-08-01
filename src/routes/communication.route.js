@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import {video_emit} from '../controller/communication.controller';
 dotenv.config();
 const router = express.Router();
 
@@ -21,5 +22,6 @@ router.get('/video',authenticateToken, (req, res, next) => {
     // res.render('video',{room: decodeURIComponent(req.query.current_url)});
     res.render('video');
     });
+
   
   module.exports = router;
