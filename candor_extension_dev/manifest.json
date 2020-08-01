@@ -8,8 +8,8 @@
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "scripts": ["background.js","socket.io.js"],
+    "persistent": true
   },
   "permissions": [
     "activeTab",

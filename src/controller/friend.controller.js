@@ -25,7 +25,7 @@ const friend_controller={
                 for (let i = 0; i < result.friend_list.length; i++) {
                     if (result.friend_list[i] === req.body.friend_username) {
                         flag = false;
-                        return res.send(`{req.body.friend_username} is already added`);
+                        return res.send(`${req.body.friend_username} is already added`);
                     };
                 };
             })
