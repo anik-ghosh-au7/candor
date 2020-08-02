@@ -86,7 +86,8 @@ const user_controller = {
                                 name: username,
                                 img: data.image_url,
                                 email: data.email,
-                                phone: data.phone
+                                phone: data.phone,
+                                id:data._id
                             }, process.env.jwt_key);
                             // res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
                             res.cookie('awtToken', accessToken);
@@ -94,7 +95,7 @@ const user_controller = {
                         } else {
                             res.status(401).send('Unauthorized access');
                         }
-                    } catch (err) {
+                    } catch (err){
                         console.log(err);
                         res.status(400).send('Bad request');
                     }

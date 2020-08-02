@@ -1,15 +1,18 @@
 import ioLib from 'socket.io';
+import User from '../model/user.model';
 
+let socket;
 const web_video_Socket = (server) => {
-    console.log('inside --> controller - func');
     const io = ioLib(server);
-    io.sockets.on('connection',function(socket){
-        console.log('in controller .....');
-        socket.emit('hello',{text:"node!"});
-        socket.on('video', () => {
-            console.log('video');
-        });
+    io.sockets.on('connection', function (socket_io) {
+        socket = socket_io;
     });
 };
-
-module.exports = web_video_Socket;
+const sendToReceiver = (req, res) => {
+    User.findOne({username: req.query.friend_username}).then(result => {
+        console.log(result._id);
+        socket.emit(`vcall_${result._id}`, {caller: `${req.user.name}`});
+        res.render('video');
+    });
+};
+module.exports = {web_video_Socket, sendToReceiver};

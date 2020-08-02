@@ -1,15 +1,19 @@
-chrome.runtime.onMessage.addListener((request,sender,response) => {
+chrome.runtime.onMessage.addListener((request, sender, response) => {
     if (request.payload === 'Change to main_popup.html') {
         chrome.browserAction.setPopup({
             popup: "main_popup.html"
         });
-    };
+        setVideoConfig(request.id);
+    }
+    ;
 
     if (request.payload === 'Change to popup.html: logged out') {
         chrome.browserAction.setPopup({
             popup: "popup.html"
         });
-    };
+        disconnect_socket_io();
+    }
+    ;
 
     if (request.payload === 'Give active tab') {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
@@ -17,9 +21,32 @@ chrome.runtime.onMessage.addListener((request,sender,response) => {
             response(activeTab.url);
         });
         return true;
-    };
+    }
+    ;
 
-    if(request.msg==="socket"){
-        console.log("receive from socket server: "+request.text);
-    };
 });
+// console.log(io);
+// io.connect('http://localhost:3000');
+let socket;
+function setVideoConfig(id) {
+    socket = io.connect('http://localhost:3000', {transports: ['polling']});
+    socket.on(`vcall_${id}`, data => {
+        console.log('caller',data.caller,'receiverID',id);
+        chrome.tabs.create({
+            url: chrome.runtime.getURL('dialog.html'),
+            active: false
+        }, function (tab) {
+            // After the tab has been created, open a window to inject the tab
+            chrome.windows.create({
+                tabId: tab.id,
+                type: 'popup',
+                focused: true
+                // incognito, top, left, ...
+            });
+        });
+    });
+}
+
+function disconnect_socket_io() {
+    socket.disconnect()
+}
