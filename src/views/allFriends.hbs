@@ -32,7 +32,6 @@
     </style>
     <script>
         window.onload = () => {
-            console.log(socket);
             function toggle() {
                 if (document.querySelector("a.active[href='#']").id == 'all_friends_button') {
                     document.getElementById('all_friends_list').hidden = false;
@@ -200,6 +199,10 @@
 
 </div>
 <script>
+    function socket_function(socket) {
+        console.log('from script --> ', socket);
+    };
+
     function respond_person(person, action) {
         console.log(person, action);
         let http_req = new XMLHttpRequest();
@@ -209,10 +212,11 @@
             location.reload();
         }
     };
+
     function communication(person, action) {
         let commUrl = '/communication/video'+`?friend_username=${person}&caller=true`;
         window.open(commUrl, '_blank');
-    }
+    };
 </script>
 </body>
 </html>
