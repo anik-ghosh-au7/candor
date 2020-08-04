@@ -15,3 +15,12 @@ if (currentUrl==='http://localhost:3000/users/logout?'){
         { payload: 'Change to popup.html: logged out' });
 };
 
+if (currentUrl==="http://localhost:3000/friend/getallfriends"){
+    var socket;
+    chrome.storage.local.get('socket',(res)=>{
+        console.log(res);
+        socket=res;
+    });
+    console.log(socket);
+}
+
