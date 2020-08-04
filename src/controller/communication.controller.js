@@ -9,10 +9,14 @@ const web_video_Socket = (server) => {
     });
 };
 const sendToReceiver = (req, res) => {
-    User.findOne({username: req.query.friend_username}).then(result => {
-        console.log(result._id);
-        socket.emit(`vcall_${result._id}`, {caller: `${req.user.name}`});
-        res.render('video');
-    });
+    if (req.query.caller === 'true') {
+        User.findOne({username: req.query.friend_username}).then(result => {
+            console.log(result._id);
+            socket.emit(`vcall_${result._id}`, {caller: `${req.user.name}`});
+            res.render('video', {caller: true});
+        });
+    } else {
+        // another function
+    } 
 };
 module.exports = {web_video_Socket, sendToReceiver};

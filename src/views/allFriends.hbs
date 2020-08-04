@@ -209,7 +209,7 @@
         }
     };
     function communication(person, action) {
-        let commUrl = '/communication/video'+`?action=${action}&friend_username=${person}`;
+        let commUrl = '/communication/video'+`?friend_username=${person}&caller=true`;
         window.open(commUrl, '_blank');
     }
 </script>
