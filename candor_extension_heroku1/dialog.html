@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <script src="dialog.js"></script>
+    <title>Candor</title>
+</head>
+<body>
+<div id="myModal" class="modal fade show" aria-modal="true"
+     style="margin:auto; display: block; height:fit-content; width:fit-content; box-shadow: 1px 1px 12px 3px rgba(0,0,0,0.75); border-radius: 2%;">
+    <div class="modal-dialog modal-confirm" style="margin: 0;">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box">
+                </div>
+                <span>
+                        <h4 class="modal-title w-100">Video Call </h4>
+                    </span>
+            </div>
+            <div class="modal-body">
+                <p id="caller_name" style="text-align: center;">
+                </p>
+                <img class="logo-icon my-auto" id="profile_img" alt="Profile picture"
+                     style="display:block; border-radius: 50%; margin-left: auto; margin-right: auto; width: 150px; height: 150px; padding:1px; border:1px solid #AFAFAF;"
+                     />
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button id="accept"  type="button" class="fas fa-video btn btn-success"> Accept</button>
+                <button id="reject" type="button" class="fas fa-video-slash btn btn-danger" data-dismiss="modal"> Reject</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

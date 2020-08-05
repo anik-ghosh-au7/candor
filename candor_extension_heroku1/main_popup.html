@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Candor</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <script src="main_popup.js"></script>
+    <style>
+        body {
+            padding: 20px;
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+        }
+
+        a {
+            color: #00B7FF;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="float-left">
+            <i type="button" class="fa fa-list" id="list_element" title="favourites list"></i>
+            <i type="button" class="far fa-envelope" id="msg_element" style="padding-left: 10px;" title="messages"></i>
+            <i type="button" class="fas fa-user-friends" id="friend_element" style="padding-left: 10px;" title="friends"></i>
+            <!-- <i type="button" class="far fa-envelope-open" id="notification_element" style="padding-left: 10px;"></i> -->
+            <!-- <span id="notifications" style="font-size: x-small;"> (0 new msgs)</span> -->
+        </div>
+        <div class="float-right">
+            <!-- <i type="button" class="fas fa-comments" id="chat_element"></i>
+            <i type="button" class="fas fa-share-alt-square" id="share_element" style="padding-left: 10px;"></i> -->
+            <!-- <i type="button" hidden class="fas fa-star" id="star_element" style="padding-left: 10px;"></i> -->
+            <i type="button" class="far fa-comments" id="chat_element" title="live forum"></i>
+            <i type="button" class="fas fa-share-alt" id="share_element" style="padding-left: 10px;" title="share"></i>
+            <i type="button" class="far fa-star" id="star_element" style="padding-left: 10px;" title="add/remove favourites"></i>
+        </div>
+    </div>
+    <dialog id="myDialog">
+        <h6 class="card-title">Share URL with : </h6>
+        <form id="form_submit">
+            <div>
+                <input type="text" name="share_username" id="share_username" placeholder="username">
+            </div><br>
+            <div>
+                <textarea name="comments" id="comments" placeholder="comments..."></textarea>
+            </div>
+            <span id="shared_status"></span><br>
+            <input hidden type="text" id="context" name="context">
+            <input hidden type="text" id="user" name="user">
+            <div>
+                <button type="submit">Share</button>
+                <button type="button" id="closeDialog">Close</button>
+            </div>
+    </form>
+    </dialog>
+
+    <dialog id="newDialog">
+        <form id="form_friends">
+            <div>
+                <input type="text" name="friend_username" id="friend_username" placeholder="username">
+                <!-- <input hidden type="text" id="user" name="user"> -->
+                <button type="submit" class="btn fas fa-user-plus" style="padding-left: 10px;" title="addFriend"></button>
+            </div><br>
+            <div>
+                <div id="friend_status"></div>
+                <button type="button" id="showFriends">Show all friends</button>
+                <button type="button" id="closeNewDialog">Close</button>
+            </div>
+        </form>
+    </dialog>
+    <img class="logo-icon" src="images/logo_full.png" style="width: 15rem;"/><br>
+<div class="modal-header" style="padding-top: 0px">
+    <img class="logo-icon my-auto" id="profile_img" alt="Profile picture"
+         style="display:block; border-radius: 8px; margin-left: auto; margin-right: auto; width: 30%; padding:1px; border:1px solid #AFAFAF;"/>
+    <h6 class='col-8 text-center my-auto'>
+        <span id="username" style="display: inline-block; vertical-align: middle;"></span>
+    </h6>
+</div>
+<div class="card" style="width: 15rem;">
+    <div class="card-body">
+        <B><h6 class="card-title">Context URL:</h6></B>
+        <p class="card-text" id="context_url"></p>
+    </div>
+</div>
+<div class="modal-icons">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th style="text-align:center">CONTEXT</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style="text-align:center">
+                <a href="#" id="question">Question : </a> <span id="question_data"></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center">
+                <a href="#" id="admin">Admin : </a> <span id="admin_data"></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center">
+                <a href="#" id="related">Related : </a> <span id="related_data"></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center">
+                <a href="#" id="others">Others : </a> <span id="others_data"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div id="post_form"></div>
+    <div class="flex-container">
+        <form action="https://candor-app.herokuapp.com/users/logout" method="GET" target="_blank">
+            <input type="submit" class="btn btn-primary btn-lg btn-block" value="Log Out">
+        </form>
+    </div>
+</div>
+</body>
+</html>

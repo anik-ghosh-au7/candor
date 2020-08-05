@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Candor</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="popup.js"></script>
+    <style>
+        body {
+            padding: 20px;
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+        }
+
+        a {
+            color: #00B7FF;
+        }
+
+    </style>
+</head>
+
+<body>
+    <img class="logo-icon" src="images/logo_full.png" style="width: 15rem;"/><br>
+<div class="modal-header">
+    <h4 class='col-12 text-center my-auto'>
+        <span id="username" style="display: inline-block; vertical-align: middle;"></span>
+    </h4>
+</div>
+<div class="modal-icons">
+    <div class="flex-container">
+        <div class="flex">
+            <form action="https://candor-app.herokuapp.com/users/login" method="POST" target="_blank">
+                <div class="form-group">
+                    <label for="exampleInputEmail1" style="padding-top: 10px">Username</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" name="username">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+                </div>
+
+                <button  type="submit" class="btn btn-primary btn-lg btn-block">LogIn</button>
+
+            </form>
+        </div>
+        <hr style="width:100%;text-align:left;margin-left:0">
+        <div style='margin-top: 0px;'>
+            <form action="https://candor-app.herokuapp.com/users/signPage" method="GET" target="_blank">
+                <input type="submit" class="btn btn-primary btn-lg btn-block" value="Sign up">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
