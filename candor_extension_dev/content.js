@@ -17,7 +17,7 @@ if (currentUrl==='http://localhost:3000/users/logout?'){
 
 var socket;
 
-if (currentUrl==="http://localhost:3000/friend/getallfriends"){
+if (currentUrl.includes("http://localhost:3000/communication/video")){
     chrome.storage.local.get('socket',(res)=>{
         console.log(res);
         assign_socket(res);

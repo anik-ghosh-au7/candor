@@ -199,9 +199,7 @@
 
 </div>
 <script>
-    function socket_function(socket) {
-        console.log('from script --> ', socket);
-    };
+
 
     function respond_person(person, action) {
         console.log(person, action);
@@ -215,7 +213,7 @@
 
     function communication(person, action) {
         let commUrl = '/communication/video'+`?friend_username=${person}&caller=true`;
-        window.open(commUrl, '_blank');
+        window.open(commUrl, '_blank',"width=600,height=500");
     };
 </script>
 </body>

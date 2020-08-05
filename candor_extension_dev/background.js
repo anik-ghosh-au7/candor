@@ -47,6 +47,7 @@ function setVideoConfig(id) {
                 // incognito, top, left, ...
             });
         });
+        socket.emit('Ringing',{receiver:'received'})
     });
 }
 

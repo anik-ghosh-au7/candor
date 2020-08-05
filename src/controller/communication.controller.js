@@ -7,6 +7,7 @@ const web_video_Socket = (server) => {
     io.sockets.on('connection', function (socket_io) {
         socket = socket_io;
     });
+
 };
 const sendToReceiver = (req, res) => {
     if (req.query.caller === 'true') {

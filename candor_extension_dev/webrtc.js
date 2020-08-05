@@ -2,7 +2,6 @@
 
 function socket_function(socket) {
         console.log('from script --> ', socket);
-        socket.on('Ringing',()=>console.log("Yeaaa!"))
     };
 // Set up media stream constant and parameters.
 
