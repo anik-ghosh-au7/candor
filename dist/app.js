@@ -30,6 +30,10 @@ var _chat = _interopRequireDefault(require("./routes/chat"));
 
 var _message = _interopRequireDefault(require("./routes/message"));
 
+var _friend = _interopRequireDefault(require("./routes/friend"));
+
+var _communication = _interopRequireDefault(require("./routes/communication.route"));
+
 _dotenv["default"].config();
 
 _hbs["default"].registerHelper('URL', function () {
@@ -86,6 +90,10 @@ _hbs["default"].registerHelper("inc", function (value) {
   return parseInt(value) + 1;
 });
 
+_hbs["default"].registerHelper("len", function (value) {
+  return value.length;
+});
+
 _hbs["default"].registerHelper("shorten", function (value) {
   return value.length < 50 ? value : value.slice(0, 47) + '...';
 });
@@ -114,7 +122,9 @@ app.use('/', _home["default"]);
 app.use('/users', _users["default"]);
 app.use('/post', _post["default"]);
 app.use('/chat', _chat["default"]);
-app.use('/messages', _message["default"]); // catch 404 and forward to error handler
+app.use('/messages', _message["default"]);
+app.use('/friend', _friend["default"]);
+app.use('/communication', _communication["default"]); // catch 404 and forward to error handler
 
 app.use(function (req, res, next) {
   next((0, _httpErrors["default"])(404));

@@ -13,14 +13,32 @@ var _webPush = _interopRequireDefault(require("web-push"));
 var message_controller = {
   handle_messages: function () {
     var _handle_messages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-      var flag;
+      var isReceiver, isFriend;
       return _regenerator["default"].wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              flag = false; // console.log('body',req.body);
+              isReceiver = false;
+              isFriend = false;
+              _context.next = 4;
+              return _user["default"].findOne({
+                username: req.body.share_username
+              }).then(function (result) {
+                if (result) {
+                  isReceiver = true;
+                  result.friend_list.forEach(function (friend) {
+                    if (friend === req.body.user) isFriend = true;
+                  }); // console.log(result.friend_list,req.body.share_username);
+                }
+              });
 
-              _context.next = 3;
+            case 4:
+              if (!isFriend) {
+                _context.next = 9;
+                break;
+              }
+
+              _context.next = 7;
               return _user["default"].findOneAndUpdate({
                 username: req.body.share_username
               }, {
@@ -51,18 +69,37 @@ var message_controller = {
                   })["catch"](function (err) {
                     return console.error(err);
                   });
-
-                  flag = true;
-                } else {
-                  // res.status(400).send("Username doesn't exist");
-                  flag = false;
                 }
               })["catch"](function (err) {
                 return console.log(err);
               });
 
-            case 3:
-              if (flag) {
+            case 7:
+              _context.next = 11;
+              break;
+
+            case 9:
+              _context.next = 11;
+              return _user["default"].findOneAndUpdate({
+                username: req.body.share_username
+              }, {
+                "$push": {
+                  "other_messages": {
+                    sender: req.body.user,
+                    shared_url: req.body.context,
+                    msg_body: req.body.comments
+                  }
+                }
+              }).then(function () {
+                return console.log('msg saved in others');
+              })["catch"](function (err) {
+                return console.log(err);
+              });
+
+            case 11:
+              ;
+
+              if (isReceiver) {
                 _user["default"].findOneAndUpdate({
                   username: req.body.user
                 }, {
@@ -83,7 +120,7 @@ var message_controller = {
                 res.status(400).send("Username doesn't exist");
               }
 
-            case 4:
+            case 13:
             case "end":
               return _context.stop();
           }
@@ -132,6 +169,24 @@ var message_controller = {
       return console.log(err);
     });
   },
+  handle_requests: function handle_requests(receiver, body, title) {
+    _user["default"].findOne({
+      username: receiver
+    }).then(function (result) {
+      if (result.subscription) {
+        var message = body;
+        var payload = JSON.stringify({
+          title: title,
+          msg_body: message
+        });
+        result.subscription.forEach(function (elem) {
+          _webPush["default"].sendNotification(JSON.parse(elem), payload);
+        });
+      }
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  },
   getmsg: function getmsg(req, res) {
     var messages = {};
 
@@ -142,6 +197,7 @@ var message_controller = {
       messages.received = result.received_messages;
       messages.sent = result.sent_messages;
       messages.username = req.user.name;
+      messages.others = result.other_messages;
       res.render('msg_inbox_outbox', {
         messages: messages
       });

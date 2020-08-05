@@ -6,6 +6,7 @@ import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import cloudinary from '../utils/cloudinary';
 import buff2Str from '../utils/convertBuffToStr';
+import messageController from '../controller/message.controller';
 dotenv.config();
 
 let dict = {};
@@ -85,7 +86,8 @@ const user_controller = {
                                 name: username,
                                 img: data.image_url,
                                 email: data.email,
-                                phone: data.phone
+                                phone: data.phone,
+                                id:data._id
                             }, process.env.jwt_key);
                             // res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
                             res.cookie('awtToken', accessToken);
@@ -93,7 +95,7 @@ const user_controller = {
                         } else {
                             res.status(401).send('Unauthorized access');
                         }
-                    } catch (err) {
+                    } catch (err){
                         console.log(err);
                         res.status(400).send('Bad request');
                     }
@@ -219,7 +221,9 @@ const user_controller = {
         User.findOne({username: req.user}).then(result => {
             res.render('favourites', {username:  req.user, favourites: result.favourite_urls});
         }).catch(err => console.error(err));
-    }
+    },
+
+
 };
 
 

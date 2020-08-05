@@ -19,6 +19,7 @@ const authenticateToken = (req, res, next) => {
 
 /* GET home page. */
 router.get('/',authenticateToken, (req, res, next) => {
+  console.log(req.user);
   res.render('home',req.user);
 });
 

@@ -22,6 +22,8 @@ var _cloudinary = _interopRequireDefault(require("../utils/cloudinary"));
 
 var _convertBuffToStr = _interopRequireDefault(require("../utils/convertBuffToStr"));
 
+var _message = _interopRequireDefault(require("../controller/message.controller"));
+
 _dotenv["default"].config();
 
 var dict = {};
@@ -186,9 +188,7 @@ var user_controller = {
                   phone: data.phone
                 }, process.env.jwt_key); // res.cookie('awtToken', accessToken, {maxAge: 9000000, httpOnly: true});
 
-                res.cookie('awtToken', accessToken, {
-                  maxAge: 9000000
-                });
+                res.cookie('awtToken', accessToken);
                 return _context2.abrupt("return", res.redirect('/'));
 
               case 14:

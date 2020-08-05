@@ -42,4 +42,5 @@ router.post('/subscribe', authenticateToken, user_controller.setSubscription);
 router.get('/favourites', authenticateToken, user_controller.getFavourites);
 
 
+
 module.exports = router;
