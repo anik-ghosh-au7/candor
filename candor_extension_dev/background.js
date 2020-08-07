@@ -30,8 +30,30 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
 let socket;
 function setVideoConfig(id) {
     socket = io.connect('http://localhost:3000', {transports: ['polling']});
-    chrome.storage.local.set({socket});
-    socket.on(`vcall_${id}`, data => {
+    // chrome.storage.local.set({socket});
+    chrome.storage.local.set({id});
+    socket.emit('user_id_for_receiving', id);
+
+    // socket.on(`vcall_${id}`, data => {
+    //     console.log('caller',data.caller,'receiverID',id);
+    //     chrome.tabs.create({
+    //         url: chrome.runtime.getURL(`dialog.html?caller=${data.caller}&caller_img=${data.caller_img}`),
+    //         active: false
+    //     }, function (tab) {
+    //         // After the tab has been created, open a window to inject the tab
+    //         chrome.windows.create({
+    //             tabId: tab.id,
+    //             type: 'popup',
+    //             focused: true,
+    //             width:500,
+    //             height:750,
+    //             // incognito, top, left, ...
+    //         });
+    //     });
+    //     socket.emit('Ringing',{receiver:'received'})
+    // });
+
+    socket.on(`video_call`, data => {
         console.log('caller',data.caller,'receiverID',id);
         chrome.tabs.create({
             url: chrome.runtime.getURL(`dialog.html?caller=${data.caller}&caller_img=${data.caller_img}`),

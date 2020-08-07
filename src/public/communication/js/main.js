@@ -1,8 +1,10 @@
 'use strict';
 
-function socket_function(socket) {
-        console.log('from script --> ', socket);
-        socket.on('Ringing',()=>console.log("Yeaaa!"))
+function socket_function(id) {
+      console.log('from script id 3--> ', id);
+      let socket = io.connect('http://localhost:3000', {transports: ['polling']});
+      socket.emit('user_id_for_sending', id);
+      socket.emit('call_user', 'call user');
     };
 // Set up media stream constant and parameters.
 

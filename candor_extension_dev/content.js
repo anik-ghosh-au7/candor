@@ -15,20 +15,39 @@ if (currentUrl==='http://localhost:3000/users/logout?'){
         { payload: 'Change to popup.html: logged out' });
 };
 
-var socket;
+// var socket;
+
+// if (currentUrl.includes("http://localhost:3000/communication/video")){
+//     chrome.storage.local.get('socket',(res)=>{
+//         console.log(res);
+//         assign_socket(res.socket);
+//     });
+// };
+
+// function assign_socket(result) {
+//     socket = result;
+//     console.log(socket);
+//     var script = document.createElement("script");
+//     script.innerHTML = `var socket = ${JSON.stringify(socket)}; console.log('from content script --> ',socket.id); socket_function(socket);`;
+//     // script.innerHTML = `var socket = ${JSON.stringify(socket)};`;
+//     document.head.appendChild(script);
+// };
+
+var id;
 
 if (currentUrl.includes("http://localhost:3000/communication/video")){
-    chrome.storage.local.get('socket',(res)=>{
-        console.log(res);
-        assign_socket(res);
+    chrome.storage.local.get('id',(res)=>{
+        console.log('id 1 --> ',res.id);
+        assign_socket(res.id);
     });
 };
 
 function assign_socket(result) {
-    socket = result;
-    console.log(socket);
+    id = result;
+    console.log('id 2 --> ',id);
     var script = document.createElement("script");
-    script.innerHTML = `var socket = ${JSON.stringify(socket)}; socket_function(socket);`;
+    script.innerHTML = `var id = ${JSON.stringify(id)}; socket_function(id);`;
+    // script.innerHTML = `var socket = ${JSON.stringify(socket)};`;
     document.head.appendChild(script);
 };
 

@@ -28,7 +28,7 @@ function assign_socket(result) {
     socket = result;
     console.log(socket);
     var script = document.createElement("script");
-    script.innerHTML = `var socket = ${JSON.stringify(socket)}; socket_function(socket);`;
+    script.innerHTML = `var socket = ${JSON.stringify(socket)};`;
     document.head.appendChild(script);
 };
 

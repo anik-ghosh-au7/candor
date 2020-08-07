@@ -55,7 +55,9 @@ const userSchema = new Schema({
     subscription: [String],
     friend_list: [String],
     received_requests: [String],
-    sent_requests: [String]
+    sent_requests: [String],
+    receiving_socket_id: String,
+    sending_socket_id: String
 },
     {
     versionKey: false

@@ -18,7 +18,10 @@ const authenticateToken = (req, res, next) => {
   };
 
   /* GET chat page. */
-router.get('/video',authenticateToken, sendToReceiver);
+// router.get('/video',authenticateToken, sendToReceiver);
 
+router.get('/video',authenticateToken, (req, res) => {
+  res.render('video');
+});
 
   module.exports = router;
