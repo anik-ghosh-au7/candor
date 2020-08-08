@@ -9,46 +9,48 @@ const web_video_Socket = (server) => {
         // console.log('new socket --> ', socket.id);
         // socket.on('user_id', (data) => console.log('user id --> ', data));
         let user_id;
-        socket.on('user_id_for_sending', (data) => {
-            User.findByIdAndUpdate(data, {$set: {sending_socket_id: socket.id}}, 
+        let sending_socket=false;
+        let receiving_socket=false;
+        socket.on('user_id_for_sending', (data) => { //after allfriend.hbs(video.hbs) --> main.js
+            User.findByIdAndUpdate(data, {$set: {sending_socket_id: socket.id}},
             {upsert: true})
             .then(() => {
                 console.log(`sending ${socket.id} saved for ${data}`);
                 user_id = data;
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
+            sending_socket=true;
         });
 
-        socket.on('user_id_for_receiving', (data) => {
-            User.findByIdAndUpdate(data, {$set: {receiving_socket_id: socket.id}}, 
+        socket.on('user_id_for_receiving', (data) => { //background.js
+            User.findByIdAndUpdate(data, {$set: {receiving_socket_id: socket.id}},
             {upsert: true})
             .then(() => {
                 console.log(`receiving ${socket.id} saved for ${data}`);
                 user_id = data;
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
+            receiving_socket=true;
         });
 
         socket.on('call_user',(data) => {
             console.log('received data --> ',data);
-        })
+        });
 
         socket.on('disconnect', () => {
             console.log(socket.id, '-- >', user_id);
-            User.findById(user_id).then(result => {
-                if (result.sending_socket_id === socket.id) {
-                    User.findByIdAndUpdate(user_id, {$set: {sending_socket_id: ''}})
-                    .then(console.log(`sending socket_id removed for ${user_id}`))
-                    .catch(err => console.log(err));
-                } else if ((result.receiving_socket_id === socket.id)) {
-                    User.findByIdAndUpdate(user_id, {$set: {receiving_socket_id: ''}})
-                    .then(console.log(`receiving socket_id removed for ${user_id}`))
-                    .catch(err => console.log(err));
-                } else {
-                    console.log('socket not found')
-                }
-            }).catch(err => console.log(err));
-        }) 
+            if (sending_socket) {
+                User.findByIdAndUpdate(user_id, {$unset: {sending_socket_id: socket.id}})
+                .then(console.log(`sending socket_id removed for ${user_id}`))
+                .catch(err => console.log(err));
+            } else if (receiving_socket) {
+                User.findByIdAndUpdate(user_id, {$unset: {receiving_socket_id: socket.id}})
+                .then(console.log(`receiving socket_id removed for ${user_id}`))
+                .catch(err => console.log(err));
+            } else {
+                console.log('socket not found')
+            }
+        })
     });
 
 };
