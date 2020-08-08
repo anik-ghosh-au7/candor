@@ -32,7 +32,7 @@ function setVideoConfig(id) {
     socket = io.connect('http://localhost:3000', {transports: ['polling']});
     // chrome.storage.local.set({socket});
     chrome.storage.local.set({id});
-    socket.emit('user_id_for_receiving', id);
+    socket.emit('setting_receiving_socketID', id);
 
     // socket.on(`vcall_${id}`, data => {
     //     console.log('caller',data.caller,'receiverID',id);
@@ -53,7 +53,7 @@ function setVideoConfig(id) {
     //     socket.emit('Ringing',{receiver:'received'})
     // });
 
-    socket.on(`video_call`, data => {
+    socket.on(`new_incoming_vcall`, data => {
         console.log('caller',data.caller,'receiverID',id);
         chrome.tabs.create({
             url: chrome.runtime.getURL(`dialog.html?caller=${data.caller}&caller_img=${data.caller_img}`),
@@ -69,7 +69,7 @@ function setVideoConfig(id) {
                 // incognito, top, left, ...
             });
         });
-        socket.emit('Ringing',{receiver:'received'})
+        socket.emit('ringing_started',{receiver:'received'})
     });
 }
 

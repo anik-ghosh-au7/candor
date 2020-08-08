@@ -1,10 +1,13 @@
 'use strict';
 
-function socket_function(id) {
+async function socket_function(id) {
       console.log('from script id 3--> ', id);
       let socket = io.connect('http://localhost:3000', {transports: ['polling']});
-      socket.emit('user_id_for_sending', id);
-      socket.emit('call_user', 'call user');
+      let friend_name = new URLSearchParams(window.location.search).get('friend_username')
+      console.log('---c-->',friend_name);
+      // await socket.emit('setting_sending_socketID', id);
+      // await socket.emit('call_user', friend_username);
+      await socket.emit('call_to', {id,friend_name});
     };
 // Set up media stream constant and parameters.
 
