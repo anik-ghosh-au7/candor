@@ -1,7 +1,7 @@
 window.onload=()=>{
-    chrome.storage.local.get('socket',(socket)=> {
-         console.log(socket)
-    });
+    // chrome.storage.local.get('socket',(socket)=> {
+    //      console.log(socket)
+    // });
     let url = window.location.href;
     let caller = new URL(url).searchParams.get("caller");
     let caller_img = new URL(url).searchParams.get("caller_img");
@@ -11,4 +11,5 @@ window.onload=()=>{
     document.getElementById('accept').onclick="window.open('http://localhost:3000/communication/video?friend_username=king&caller=true')"
     document.getElementById('reject').onclick=()=>{
     }
+    chrome.send
 };

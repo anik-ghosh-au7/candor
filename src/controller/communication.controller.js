@@ -27,7 +27,6 @@ const web_video_Socket = (server) => {
                 })
                 .catch(err => console.log(err));
 
-            console.log('surprise', user_id);
             await User.findById(user_id).then(result => {
                 user_name = result.username;
                 user_img = result.image_url;
@@ -40,11 +39,14 @@ const web_video_Socket = (server) => {
             if (isFriend) {
                 await User.findOne({username: data.friend_name}).then(result => {
                     if (result.receiving_socket_id) {
-                        console.log({'caller': user_name, 'receiver': data.friend_name})
+                        console.log({'caller': user_name, 'receiver': data.friend_name});
                         socket.broadcast.to(result.receiving_socket_id).emit('new_incoming_vcall', {
                             caller: user_name,
-                            caller_img: user_img
+                            caller_img: user_img,
+                            offer:data.offer
                         });
+                    }else {
+                        socket.broadcast.to(user_id).emit('not_reachable',{'friend_name':data.friend_name});
                     }
                 })
             }
